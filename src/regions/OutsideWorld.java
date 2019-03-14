@@ -1,12 +1,30 @@
 package regions;
 
+import entities.CustomerState;
+import entities.ManagerState;
+
 public class OutsideWorld {
 
     /**
+     * Variável de condição (waitForCarRepair)
      *
+     * Assinala se o {@link entities.Customer} está à espera de reparação da viatura
      */
     private boolean[] waitForCarRepair;
 
+    /**
+     * Repositório Geral de dados
+     */
+    private GeneralRepository repository;
+
+    public OutsideWorld(int nCustomers, GeneralRepository repo) {
+        if(repo != null) this.repository = repo;
+        if(nCustomers > 0) this.waitForCarRepair = new boolean[nCustomers];
+
+        for (int i = 0; i < nCustomers; i++) {
+            waitForCarRepair[i] = false;
+        }
+    }
 
     /**
      * Operação backToWorkByBus (chamada pelo {@link entities.Customer})
@@ -21,9 +39,7 @@ public class OutsideWorld {
         waitForCarRepair[customerId] = true;
 
         // change customer state
-
-
-        // update repository
+        repository.setCustomerState(customerId, CustomerState.NORMAL_LIFE_WITHOUT_CAR);
 
         // block on condition variable
         while (waitForCarRepair[customerId]) {
@@ -46,9 +62,8 @@ public class OutsideWorld {
         waitForCarRepair[customerId] = true;
 
         // change customer state
-
-
-        // update repository
+        repository.setCustomerState(customerId, CustomerState.NORMAL_LIFE_WITH_CAR);
+        repository.setReplacementCar(replaceCarId, customerId);
 
         // block on condition variable
         while (waitForCarRepair[customerId]) {
@@ -57,7 +72,6 @@ public class OutsideWorld {
             } catch (InterruptedException e) { }
         }
     }
-
 
     /**
      * Operação phoneCustomer (chamada pelo {@link entities.Manager})
@@ -69,9 +83,9 @@ public class OutsideWorld {
      */
     public synchronized void phoneCustomer(int customerId) {
         // change manager state
-        // update repository
+        repository.setManagerState(ManagerState.ALERTING_CUSTOMER);
 
-        // block on condition variable
+        // signal condition variable
         waitForCarRepair[customerId] = false;
         notifyAll();
     }
