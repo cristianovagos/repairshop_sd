@@ -113,115 +113,115 @@ public class GeneralRepository {
         }
     }
 
-    public CustomerState getCustomersState(int i) {
+    public synchronized CustomerState getCustomersState(int i) {
         return this.customersState[i];
     }
 
-    public void setCustomerState(int i, CustomerState customerState) {
+    public synchronized void setCustomerState(int i, CustomerState customerState) {
         this.customersState[i] = customerState;
     }
 
-    public ManagerState getManagerState() {
+    public synchronized ManagerState getManagerState() {
         return this.managerState;
     }
 
-    public void setManagerState(ManagerState managerState) {
+    public synchronized void setManagerState(ManagerState managerState) {
         this.managerState = managerState;
     }
 
-    public MechanicState getMechanicState(int i) {
+    public synchronized MechanicState getMechanicState(int i) {
         return this.mechanicsState[i];
     }
 
-    public void setMechanicsState(int i, MechanicState mechanicState) {
+    public synchronized void setMechanicsState(int i, MechanicState mechanicState) {
         this.mechanicsState[i] = mechanicState;
     }
 
-    public boolean getRequireReplacementVehicle(int i) {
+    public synchronized boolean getRequireReplacementVehicle(int i) {
         return requireReplacementVehicle[i];
     }
 
-    public void setRequireReplacementVehicle(int i, boolean require) {
+    public synchronized void setRequireReplacementVehicle(int i, boolean require) {
         this.requireReplacementVehicle[i] = require;
     }
 
-    public CarState getCarsState(int i) {
+    public synchronized CarState getCarsState(int i) {
         return this.carsState[i];
     }
 
-    public void setCarsState(int i, CarState carState) {
+    public synchronized void setCarsState(int i, CarState carState) {
         this.carsState[i] = carState;
     }
 
-    public int getCustomerCar(int i) {
+    public synchronized int getCustomerCar(int i) {
         return this.customerCars[i];
     }
 
-    public void setCustomerCar(int i, int val) {
+    public synchronized void setCustomerCar(int i, int val) {
         this.customerCars[i] = val;
     }
 
-    public int getReplacementCar(int i) {
+    public synchronized int getReplacementCar(int i) {
         return this.replacementCars[i];
     }
 
-    public void setReplacementCar(int i, int val) {
+    public synchronized void setReplacementCar(int i, int val) {
         this.replacementCars[i] = val;
     }
 
-    public MemFIFO getCustomersQueue() {
+    public synchronized MemFIFO getCustomersQueue() {
         return customersQueue;
     }
 
-    public void setCustomersQueue(MemFIFO customersQueue) {
+    public synchronized void setCustomersQueue(MemFIFO customersQueue) {
         this.customersQueue = customersQueue;
     }
 
-    public MemFIFO getMechanicsQueue() {
+    public synchronized MemFIFO getMechanicsQueue() {
         return mechanicsQueue;
     }
 
-    public void setMechanicsQueue(MemFIFO mechanicsQueue) {
+    public synchronized void setMechanicsQueue(MemFIFO mechanicsQueue) {
         this.mechanicsQueue = mechanicsQueue;
     }
 
-    public MemFIFO getCustomerFirstRepairQueue() {
+    public synchronized MemFIFO getCustomerFirstRepairQueue() {
         return customerFirstRepairQueue;
     }
 
-    public void setCustomerFirstRepairQueue(MemFIFO customerFirstRepairQueue) {
+    public synchronized void setCustomerFirstRepairQueue(MemFIFO customerFirstRepairQueue) {
         this.customerFirstRepairQueue = customerFirstRepairQueue;
     }
 
-    public List<List<Integer>> getCustomerMissingPartQueue() {
+    public synchronized List<List<Integer>> getCustomerMissingPartQueue() {
         return customerMissingPartQueue;
     }
 
-    public void setCustomerMissingPartQueue(List<List<Integer>> customerMissingPartQueue) {
+    public synchronized void setCustomerMissingPartQueue(List<List<Integer>> customerMissingPartQueue) {
         this.customerMissingPartQueue = customerMissingPartQueue;
     }
 
-    public int getTask(int i) {
+    public synchronized int getTask(int i) {
         return this.taskDescription[i];
     }
 
-    public void setTask(int i, int val) {
+    public synchronized void setTask(int i, int val) {
         this.taskDescription[i] = val;
     }
 
-    public int getStockPart(int i) {
+    public synchronized int getStockPart(int i) {
         return this.stockParts[i];
     }
 
-    public void setStockPart(int i, int val) {
+    public synchronized void setStockPart(int i, int val) {
         this.stockParts[i] = val;
     }
 
-    public int getSoldPart(int i) {
+    public synchronized int getSoldPart(int i) {
         return this.soldParts[i];
     }
 
-    public void setSoldParts(int i, int val) {
+    public synchronized void setSoldParts(int i, int val) {
         this.soldParts[i] = val;
     }
 }

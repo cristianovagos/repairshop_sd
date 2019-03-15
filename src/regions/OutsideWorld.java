@@ -1,6 +1,8 @@
 package regions;
 
+import entities.Customer;
 import entities.CustomerState;
+import entities.Manager;
 import entities.ManagerState;
 
 public class OutsideWorld {
@@ -32,14 +34,16 @@ public class OutsideWorld {
      * Aqui, o cliente vai fazer a sua vida normal, ficando à espera
      * de novidades por parte do {@link entities.Manager}, que irá notificá-lo quando
      * o seu carro pessoal estiver pronto.
-     *
-     * @param customerId o id do {@link entities.Customer}
      */
-    public synchronized void backToWorkByBus(int customerId) {
+    public synchronized void backToWorkByBus() {
+        int customerId = ((Customer) Thread.currentThread()).getCustomerId();
+
         waitForCarRepair[customerId] = true;
 
         // change customer state
-        repository.setCustomerState(customerId, CustomerState.NORMAL_LIFE_WITHOUT_CAR);
+        ((Customer) Thread.currentThread()).setState(CustomerState.NORMAL_LIFE_WITHOUT_CAR);
+
+        // todo update repository
 
         // block on condition variable
         while (waitForCarRepair[customerId]) {
@@ -55,15 +59,16 @@ public class OutsideWorld {
      * Aqui, o cliente vai fazer a sua vida normal, ficando à espera
      * de novidades por parte do {@link entities.Manager}, que irá notificá-lo quando
      * o seu carro pessoal estiver pronto.
-     *
-     * @param customerId o id do {@link entities.Customer}
      */
-    public synchronized void backToWorkByCar(int customerId, int replaceCarId) {
+    public synchronized void backToWorkByCar() {
+        int customerId = ((Customer) Thread.currentThread()).getCustomerId();
+
         waitForCarRepair[customerId] = true;
 
         // change customer state
-        repository.setCustomerState(customerId, CustomerState.NORMAL_LIFE_WITH_CAR);
-        repository.setReplacementCar(replaceCarId, customerId);
+        ((Customer) Thread.currentThread()).setState(CustomerState.NORMAL_LIFE_WITH_CAR);
+
+        // todo update repository
 
         // block on condition variable
         while (waitForCarRepair[customerId]) {
@@ -83,7 +88,9 @@ public class OutsideWorld {
      */
     public synchronized void phoneCustomer(int customerId) {
         // change manager state
-        repository.setManagerState(ManagerState.ALERTING_CUSTOMER);
+        ((Manager) Thread.currentThread()).setState(ManagerState.ALERTING_CUSTOMER);
+
+        // todo update repository
 
         // signal condition variable
         waitForCarRepair[customerId] = false;
