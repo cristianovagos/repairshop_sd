@@ -11,23 +11,19 @@ import java.util.Queue;
  */
 public class Lounge {
 
-   /**
-   *  Indica se a tarefa atual está completa
-   *
-   *    @serialField isCurrentTaskCompleted
-   */
-  int keyToHandle;    
-   /**
-   *  Indica se a tarefa atual está completa
-   *
-   *    @serialField isCurrentTaskCompleted
-   */
-    int [] replacementKeys = {101, 102, 103};
-   /**
-   *  Indica se a tarefa atual está completa
-   *
-   *    @serialField isCurrentTaskCompleted
-   */
+    /**
+     * Indicia o numero total de carros reparados no dia
+     * @serialField nTotalRepairedCars
+     */
+    int nTotalRepairedCars;
+
+    /**
+     * Repositorio que armazena informação atual do sistema
+     * @serialField repository
+     */
+    GeneralRepository repository;
+
+  
   boolean isCurrentTaskCompleted;
     /**
    *  Cliente a ser atendido
@@ -54,28 +50,106 @@ public class Lounge {
    *
    *    @serialField customerRegistry
    */
-   List <ClientRegistry> customerRegisters;
+   Queue <Integer> repairedCars;
    
-    /**
-   *  Customer Phone Queue 
+   /**
+   *  Number of Requests
    *
-   *    @serialField customerPhoneQueue
+   *    @serialField nRequests
    */
-   Queue <Integer> customerPhoneQueue;
-    
+  int nRequests;
+   
+  /**
+   *  Customer Requests
+   *
+   *    @serialField costumerInQueue
+   */
+  int costumerInQueue;
+
+   /**
+   *  Customer waiting for keys
+   *
+   *    @serialField nCostumerForKey
+   */
+  int nCostumerForKey;   
+
+  /**
+   *  Indica se há algum carro de substituição disponivel.
+   *
+   *    @serialField replacementCarAvailable
+   */
+  boolean replacementCarAvailable;
+
+   /**
+   *  Indica se há peças que necessitem de supply.
+   *
+   *    @serialField replacementCarAvailable
+   */
+  boolean ressuplyParts;
+
+   /**
+   *  Indica o numero de carros reparados.
+   *
+   *    @serialField nRepairArea
+   */
+  int nRepairedCar;
+
   /**
    *  Instanciação do Lounge.
    *
-   *    @param barberId identificação do barbeiro
-   *    @param customerId identificação do cliente
-   *    @param bShop barbearia
    */
-    public Lounge()
+    public Lounge(GeneralRepository _repository)
     {
         nextCostumer = 0;
         isCurrentTaskCompleted = false;
+        repository = _repository;
+        replacementCarAvailable = true;
+        ressuplyParts = false;
     }
-    
+    /**
+     * Chamado pelo {@link entities.Manager})
+     * Aqui o manager fica à espera da próxima tarefa.
+     */
+    public synchronized void getNextTask()
+    {
+        //TODO: UPDATE THE STATE
+        //TODO: UPDATE REPOS
+
+        // block on condition variable
+        while (nRequests == 0) {
+            try {
+                wait();
+            } catch (InterruptedException e) { }
+        }
+        nRequests--;
+    }
+
+    /**
+     * Chamado pelo {@link entities.Manager})
+     * Aqui o manager verifica qual a sua próxima tarefa a realizar.
+     * Prioridade: 1º atribuir chave, 2º reabastecer stock, 3º atender cliente
+     */
+    public synchronized int appraiseSit()
+    {
+        //TODO: UPDATE THE STATE
+        //TODO: UPDATE REPOS
+
+        if(ressuplyParts)
+        {
+            return 1;
+        }
+        else if (nCostumerForKey >= 1 && replacementCarAvailable)
+        {
+            nCostumerForKey--;
+            return 0;
+        }
+        else if(nRepairedCar > 0)
+        {
+            return 2;
+        }
+        return -1;
+    }
+
    /**
    *  called by the Manager. 
    * Manda um sinal ao próximo cliente para ser atendido. 
@@ -83,7 +157,7 @@ public class Lounge {
    */
     public synchronized int talkToCostumer()
     {
-        int clientID = 0;
+        int clientID = -1;
         if (costumerQueue.isEmpty())
             //you are not supposed to be here
             return clientID;
@@ -123,13 +197,12 @@ public class Lounge {
    * 
    * @param clientID identificação do cliente
    */
-    public synchronized void receivePayment(int clientID)
+    public synchronized void receivePayment()
     {
         isCurrentTaskCompleted = false;
 
-        // change manager state
-
         // update repository
+        repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
 
         // block on condition variable
         while (!isCurrentTaskCompleted) {
@@ -139,7 +212,7 @@ public class Lounge {
         }
     }
     
-    /**
+   /**
    *  Devolve a chave ao cliente
    * 
    * @param clientID identificação do cliente que recebe a chave
@@ -148,6 +221,7 @@ public class Lounge {
     public synchronized void handCarKey(int clientID, int carKey)
     {
         //TODO: CONTINUE HERE
+
 
     }
     
@@ -172,9 +246,17 @@ public class Lounge {
    /**
    *  Chamado pelo Customer. Cliente entra na fila
    */
-    public synchronized void queueIn()
+    public synchronized void queueIn(int clientID)
     {
-        
+        // update repository
+        repository.setManagerState(CostumerState.RECEPTION);
+
+        // block on condition variable
+        while (clientID != nextCostumer) {
+            try {
+                wait();
+            } catch (InterruptedException e) { }
+        }
     }
     
    /**
@@ -185,7 +267,7 @@ public class Lounge {
         
     }
     
-   /**
+  /**
    *  Chamado pelo mecanico. Para avisar que é necessário peças.
    * @param partRequired peça necessária para ressuply
    */
