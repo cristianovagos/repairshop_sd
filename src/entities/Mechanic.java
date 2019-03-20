@@ -82,6 +82,9 @@ public class Mechanic extends Thread {
      * O Mecânico irá arranjar a viatura durante um período aleatório de tempo.
      */
     private void fixIt() {
+        // update the state
+        setState(MechanicState.FIXING_THE_CAR);
+
         try {
             sleep ((long) (1 + 10 * Math.random()));
         }

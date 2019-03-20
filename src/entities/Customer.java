@@ -51,6 +51,9 @@ public class Customer extends Thread {
     }
 
     private void decideOnRepair() {
+        // update state
+        setState(CustomerState.NORMAL_LIFE_WITH_CAR);
+
         try {
             sleep ((long) (1 + 40 * Math.random()));
         }
