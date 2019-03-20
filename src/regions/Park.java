@@ -49,15 +49,22 @@ public class Park {
     /**
      * Operação goToRepairShop (chamada pelo {@link Customer})
      *
-     * O Cliente chega à RepairShop, e estaciona a sua viatura no Park.
+     * O Cliente chega à RepairShop, e estaciona a sua viatura ou
+     * a viatura de substituição que lhe foi atribuída no Park.
      */
     public synchronized void goToRepairShop() {
         // update Customer state
         ((Customer) Thread.currentThread()).setState(CustomerState.PARK);
 
-        // Customer car is now on the Park
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
-        customerCars[customerId] = true;
+        int carId = ((Customer) Thread.currentThread()).getCarId();
+
+        if(customerId != carId)
+            // replacement car is on park
+            replacementCars[100 - carId] = true;
+        else
+            // customer car is on park
+            customerCars[customerId] = true;
 
         // todo update repository
     }
@@ -70,6 +77,9 @@ public class Park {
     public synchronized void findCar(int replacementCar) {
         // update Customer state
         ((Customer) Thread.currentThread()).setState(CustomerState.PARK);
+
+        // update Customer current car ID
+        ((Customer) Thread.currentThread()).setCarId(100 + replacementCar);
 
         // Replacement car is not on Park
         replacementCars[replacementCar] = false;
@@ -86,8 +96,9 @@ public class Park {
         // update Customer state
         ((Customer) Thread.currentThread()).setState(CustomerState.PARK);
 
-        // Customer car is not on Park
+        // Customer car is not on Park, updating values
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
+        ((Customer) Thread.currentThread()).setCarId(customerId);
         customerCars[customerId] = false;
 
         // todo update repository
