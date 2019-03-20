@@ -33,16 +33,23 @@ public class Manager extends Thread {
                     repairArea.storePart(partsBasket);
                     break;
                 case "phoneCustomer":
-                    outsideWorld.phoneCustomer();
+                    outsideWorld.phoneCustomer(lounge.getClientNumber());
                     break;
                 case "talkCustomer":
-                    customer = lounge.talkToCustomer();
-                    if (customer.getState() == CustomerState.RECEPTION_REPAIR) {
+                    Customer customer = lounge.talkToCustomer("talkCustomer");
+                    if (customer.getCustomerState()== CustomerState.RECEPTION_REPAIR) {
+                        if (customer.getWantsReplacementCar())
+                            lounge.handCarKey(customer,false);
                         repairArea.registerService(customer);
-                    } else if (customer.getState() == CustomerState.RECEPTION_PAYING) {
+                    } else if (customer.getCustomerState() == CustomerState.RECEPTION_PAYING) {
                         lounge.receivePayment(customer);
-                        lounge.handCarKey(customer);
+                        lounge.handCarKey(customer, false);
                     }
+                    break;
+                case "handReplacement":
+                    customer = lounge.talkToCustomer("handReplacement");
+                    lounge.handCarKey(customer, true);
+                break;
             }
         }
         repairArea.markEndOfDay();

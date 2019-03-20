@@ -11,6 +11,8 @@ public class Customer extends Thread {
     private CustomerState state;
     private boolean wantsReplacementCar;
 
+    int key;
+
     private Lounge lounge;
     private Park park;
     private OutsideWorld outsideWorld;
@@ -56,9 +58,20 @@ public class Customer extends Thread {
         return this.carId;
     }
 
+    public boolean getWantsReplacementCar()
+    {
+        return this.wantsReplacementCar;
+    } 
+
     public void setState(CustomerState state) {
         this.state = state;
     }
+
+    public CustomerState getCustomerState()
+    {
+        return this.state;
+    }
+
 
     private void decideOnRepair() {
         // update state
