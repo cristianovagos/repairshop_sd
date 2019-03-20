@@ -149,24 +149,26 @@ public class RepairArea {
      * {@link SupplierSite}, adicionar de novo os carros que tinham peças em
      * falta para reparação na lista de espera, e acordar o {@link Mechanic}.
      */
-    public synchronized void storePart(int partId) {
+    public synchronized void storePart(int[] newParts) {
         // update Manager state
         ((Manager) Thread.currentThread()).setState(ManagerState.REPLENISH_STOCK);
 
-        // replenishing stock of part
-        stockParts[partId] = (int) (10 * Math.random());
+        for (int part : stockParts) {
+            // replenishing stock of parts
+            stockParts[part] += newParts[part];
 
-        /* traverse the queue of Cars waiting for this part, add them
-           into the work queue, and notify Mechanics there's work to do
-         */
-        while (!customerMissingPartQueue[partId].empty()) {
-            int customerId = (int) customerMissingPartQueue[partId].read();
-            customerFirstRepairQueue.write(customerId);
-            nRequestedServices++;
+            /* traverse the queue of Cars waiting for each part, add them
+               into the repair queue, and notify Mechanics there's work to do
+             */
+            while (!customerMissingPartQueue[part].empty()) {
+                int customerId = (int) customerMissingPartQueue[part].read();
+                customerFirstRepairQueue.write(customerId);
+                nRequestedServices++;
+            }
         }
 
         // todo update repository
-        
+
         notifyAll();
     }
 

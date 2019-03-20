@@ -12,13 +12,15 @@ public class Manager extends Thread {
     private RepairArea repairArea;
     private OutsideWorld outsideWorld;
     private SupplierSite supplierSite;
+    private int[] partsBasket;
 
-    public Manager(Lounge lounge, RepairArea repairArea, OutsideWorld outsideWorld, SupplierSite supplierSite) {
+    public Manager(int nParts, Lounge lounge, RepairArea repairArea, OutsideWorld outsideWorld, SupplierSite supplierSite) {
         this.state = ManagerState.CHECKING_WHAT_TO_DO;
         this.lounge = lounge;
         this.repairArea = repairArea;
         this.outsideWorld = outsideWorld;
         this.supplierSite = supplierSite;
+        this.partsBasket = new int[nParts];
     }
 
     @Override
@@ -27,8 +29,8 @@ public class Manager extends Thread {
             String task = lounge.appraiseSit();
             switch (task) {
                 case "getNewParts":
-                    supplierSite.goToSupplier();
-                    repairArea.storePart();
+                    partsBasket = supplierSite.goToSupplier();
+                    repairArea.storePart(partsBasket);
                     break;
                 case "phoneCustomer":
                     outsideWorld.phoneCustomer();
