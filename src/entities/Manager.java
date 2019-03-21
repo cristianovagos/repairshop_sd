@@ -1,6 +1,7 @@
 package entities;
 
 import regions.Lounge;
+import regions.ManagerTask;
 import regions.OutsideWorld;
 import regions.RepairArea;
 import regions.SupplierSite;
@@ -26,29 +27,31 @@ public class Manager extends Thread {
     @Override
     public void run() {
         while (lounge.getNextTask()) {
-            String task = lounge.appraiseSit();
+            ManagerTask task = lounge.appraiseSit();
             switch (task) {
-                case "getNewParts":
+                case GET_PARTS:
                     partsBasket = supplierSite.goToSupplier();
                     repairArea.storePart(partsBasket);
                     break;
-                case "phoneCustomer":
+                case PHONE_CUSTOMER:
                     outsideWorld.phoneCustomer(lounge.getClientNumber());
                     break;
-                case "talkCustomer":
+                case TALK_CUSTOMER:
                     Customer customer = lounge.talkToCustomer("talkCustomer");
                     if (customer.getCustomerState()== CustomerState.RECEPTION_REPAIR) {
                         if (customer.getWantsReplacementCar())
                             lounge.handCarKey(customer,false);
-                        repairArea.registerService(customer);
+                        repairArea.registerService(customer.getCustomerId());
                     } else if (customer.getCustomerState() == CustomerState.RECEPTION_PAYING) {
                         lounge.receivePayment(customer);
                         lounge.handCarKey(customer, false);
                     }
                     break;
-                case "handReplacement":
+                case HAND_CAR_KEY:
                     customer = lounge.talkToCustomer("handReplacement");
                     lounge.handCarKey(customer, true);
+                break;
+                case NONE:
                 break;
             }
         }

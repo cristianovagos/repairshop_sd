@@ -329,7 +329,7 @@ public class Lounge {
      * Aqui o manager verifica qual a sua próxima tarefa a realizar.
      * Prioridade: 1º reabastecer stock, 2º atribuir chave, 3º atender cliente
      */             
-    public synchronized String appraiseSit()
+    public synchronized ManagerTask appraiseSit()
     {
         //TODO: UPDATE THE STATE
         ((Manager) Thread.currentThread()).setState(ManagerState.CHECKING_WHAT_TO_DO);
@@ -338,21 +338,21 @@ public class Lounge {
 
         if(ressuplyParts)
         {
-            return "getNewParts";
+            return ManagerTask.GET_PARTS;
         }
         else if (nCostumerForKey >= 1 && nReplacementCarAvailable>0)
         {
             //nCostumerForKey--;
-            return "handReplacement";
+            return ManagerTask.HAND_CAR_KEY;
         }
         else if(nRepairedCar > 0)
         {
-            return "phoneCustomer";
+            return ManagerTask.PHONE_CUSTOMER;
         }
         else if (nCostumerInQueue>0){
-            return "talkCustomer";
+            return ManagerTask.TALK_CUSTOMER;
         }
-        return "";
+        return ManagerTask.NONE;
     }
 
     /**
