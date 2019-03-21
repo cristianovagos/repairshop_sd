@@ -37,19 +37,19 @@ public class Manager extends Thread {
                     outsideWorld.phoneCustomer(lounge.getClientNumber());
                     break;
                 case TALK_CUSTOMER:
-                    Customer customer = lounge.talkToCustomer("talkCustomer");
-                    if (customer.getCustomerState()== CustomerState.RECEPTION_REPAIR) {
-                        if (customer.getWantsReplacementCar())
-                            lounge.handCarKey(customer,false);
-                        repairArea.registerService(customer.getCustomerId());
-                    } else if (customer.getCustomerState() == CustomerState.RECEPTION_PAYING) {
-                        lounge.receivePayment(customer);
-                        lounge.handCarKey(customer, false);
+                    CustomerState customer = lounge.talkToCustomer(ManagerTask.TALK_CUSTOMER);
+                    if (customer == CustomerState.RECEPTION_REPAIR) {
+                        if (lounge.wantReplacementCar())
+                            lounge.handCarKey(false);
+                        repairArea.registerService(lounge.getCurrentCustomerID());
+                    } else if (customer == CustomerState.RECEPTION_PAYING) {
+                        lounge.receivePayment();
+                        lounge.handCarKey(false);
                     }
                     break;
                 case HAND_CAR_KEY:
-                    customer = lounge.talkToCustomer("handReplacement");
-                    lounge.handCarKey(customer, true);
+                    lounge.talkToCustomer(ManagerTask.HAND_CAR_KEY);
+                    lounge.handCarKey(true);
                 break;
                 case NONE:
                 break;
