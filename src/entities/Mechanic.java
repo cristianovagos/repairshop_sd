@@ -34,10 +34,10 @@ public class Mechanic extends Thread {
             }
 
             repairArea.partAvailable(partRequired);
-            repairArea.resumeRepairProcedure();
+            repairArea.resumeRepairProcedure(1);
             fixIt();
             park.returnVehicle();
-            lounge.repairConcluded();
+//            lounge.repairConcluded();
         }
     }
 
