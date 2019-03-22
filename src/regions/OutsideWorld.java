@@ -109,7 +109,6 @@ public class OutsideWorld {
 
         // update repository
         repository.setManagerState(ManagerState.ALERTING_CUSTOMER);
-        // TODO - change repository (customersRepairConcluded) here or not?
 
         // signal condition variable
         waitForCarRepair[customerId] = false;

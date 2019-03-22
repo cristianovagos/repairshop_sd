@@ -209,6 +209,7 @@ public class RepairArea {
             stockParts[part] += newParts[part];
 
             // update repository
+            repository.setPartMissingAlert(part, false);
             for (int i = 0; i < newParts[part]; i++)
                 repository.removeMissingPart(part);
 

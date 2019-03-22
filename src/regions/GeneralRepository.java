@@ -27,32 +27,27 @@ public class GeneralRepository {
     /**
      * Nome do ficheiro de Logging
      */
-    private String fileName;
+    private String FILE_NAME;
 
     /**
      * Número de Clientes {@link Customer}
      */
-    private int nCustomers;
+    private final int N_CUSTOMERS;
 
     /**
      * Número de Mecânicos {@link Mechanic}
      */
-    private int nMechanics;
+    private final int N_MECHANICS;
 
     /**
      * Número de tipos de peças disponíveis
      */
-    private int nParts;
-
-    /**
-     * Número de viaturas de substituição
-     */
-    private int nReplacementCars;
+    private final int N_PARTS;
 
     /**
      * Formatação de números com dois números decimais
      */
-    private DecimalFormat format;
+    private final DecimalFormat FORMAT;
 
     /**
      * Estado para cada um dos clientes existentes
@@ -110,14 +105,6 @@ public class GeneralRepository {
     private int replacementCarsInPark;
 
     /**
-     * Lounge
-     *
-     * customersInQueue               - número de clientes à espera para serem atendidos pelo manager
-     * customersInQueueForKey         - número de clientes à espera de chave de carro de substituição
-     * totalRepairedCars              - total de carros reparados
-     */
-
-    /**
      * Número de clientes na fila da Recepção {@link Lounge}
      * para serem atendidos pelo Manager
      */
@@ -132,15 +119,6 @@ public class GeneralRepository {
      * Número de viaturas reparadas
      */
     private int totalRepairedCars;
-
-    /**
-     * Repair Area
-     *
-     * requestedServices            - número de serviços pedidos pelo Manager
-     * stockParts                   - número de peças em stock
-     * customersMissingParts        - número de clientes à espera de uma peça para reparação
-     * partMissingAlert             - indicação se o Manager já foi alertado para a falta de uma peça
-     */
 
     /**
      * Número de serviços pedidos pelo Gerente {@link Manager}
@@ -182,18 +160,26 @@ public class GeneralRepository {
      */
     public GeneralRepository(String fileName, int nCustomers, int nMechanics, int nParts, int nReplacementCars) {
         if ((fileName != null) && !("".equals(fileName)))
-            this.fileName = fileName;
+            this.FILE_NAME = fileName;
 
-        this.nCustomers = nCustomers;
-        this.nMechanics = nMechanics;
-        this.nParts = nParts;
-        this.nReplacementCars = nReplacementCars;
+        this.N_CUSTOMERS = nCustomers;
+        this.N_MECHANICS = nMechanics;
+        this.N_PARTS = nParts;
 
-        this.customersState = new CustomerState[nCustomers];
-        this.mechanicsState = new MechanicState[nMechanics];
-        this.customersReqReplVehicle = new boolean[nCustomers];
-        this.customersCars = new int[nCustomers];
-        this.customersRepairConcluded = new boolean[nCustomers];
+        this.customersState = new CustomerState[N_CUSTOMERS];
+        this.customersReqReplVehicle = new boolean[N_CUSTOMERS];
+        this.customersCars = new int[N_CUSTOMERS];
+        this.customersRepairConcluded = new boolean[N_CUSTOMERS];
+        for (int i = 0; i < N_CUSTOMERS; i++) {
+            this.customersState[i] = CustomerState.NORMAL_LIFE_WITH_CAR;
+            this.customersReqReplVehicle[i] = false;
+            this.customersCars[i] = i;
+            this.customersRepairConcluded[i] = false;
+        }
+
+        this.mechanicsState = new MechanicState[N_MECHANICS];
+        for (int i = 0; i < N_MECHANICS; i++)
+            this.mechanicsState[i] = MechanicState.WAITING_FOR_WORK;
 
         this.customerCarsInPark = 0;
         this.replacementCarsInPark = nReplacementCars;
@@ -203,13 +189,19 @@ public class GeneralRepository {
         this.totalRepairedCars = 0;
 
         this.requestedServices = 0;
-        this.stockParts = new int[nParts];
-        this.customersMissingParts = new int[nParts];
-        this.partMissingAlert = new boolean[nParts];
+        this.stockParts = new int[N_PARTS];
+        this.customersMissingParts = new int[N_PARTS];
+        this.partMissingAlert = new boolean[N_PARTS];
+        this.soldParts = new int[N_PARTS];
 
-        this.soldParts = new int[nParts];
+        for (int i = 0; i < N_PARTS; i++) {
+            this.stockParts[i] = 0;
+            this.customersMissingParts[i] = 0;
+            this.partMissingAlert[i] = false;
+            this.soldParts[i] = 0;
+        }
 
-        this.format = new DecimalFormat("00");
+        this.FORMAT = new DecimalFormat("00");
 
         printHeader();
     }
@@ -229,8 +221,8 @@ public class GeneralRepository {
         TextFile log = new TextFile();
 
         // open file for writing
-        if (!log.openForWriting (".", fileName)) {
-            GenericIO.writelnString ("Failed to create file " + fileName + " !");
+        if (!log.openForWriting (".", FILE_NAME)) {
+            GenericIO.writelnString ("Failed to create file " + FILE_NAME + " !");
             System.exit(1);
         }
 
@@ -243,8 +235,8 @@ public class GeneralRepository {
         log.writeFormString(5, "Stat");
         log.writeFormString(4, "St0", "St1");
 
-        for (int i = 0; i < nCustomers; i++) {
-            log.writeFormString(4, "S" + format.format(i), "C" + format.format(i), "P" + format.format(i), "R" + format.format(i));
+        for (int i = 0; i < N_CUSTOMERS; i++) {
+            log.writeFormString(4, "S" + FORMAT.format(i), "C" + FORMAT.format(i), "P" + FORMAT.format(i), "R" + FORMAT.format(i));
             if(i != 0 && (i+1) % 10 == 0){
                 log.writeString("\n ");
                 log.writeFormString(12, "");
@@ -264,7 +256,7 @@ public class GeneralRepository {
         log.writeFormString(4, " InQ", " WtK", " NRV", "", "NCV", " NPV");
         log.writeFormString(6, "", " NSRQ   ");
 
-        for (int i = 0; i < nParts; i++) {
+        for (int i = 0; i < N_PARTS; i++) {
             log.writeFormString(4, "Prt" + i + " ", " NV" + i + " ", " S" + i);
         }
 
@@ -274,7 +266,7 @@ public class GeneralRepository {
 
         // closing file
         if (!log.close()) {
-            GenericIO.writelnString ("Failed to close file " + fileName + " !");
+            GenericIO.writelnString ("Failed to close file " + FILE_NAME + " !");
             System.exit (1);
         }
     }
@@ -295,8 +287,8 @@ public class GeneralRepository {
         TextFile log = new TextFile();
 
         // open file to append data
-        if (!log.openForAppending (".", fileName)) {
-            GenericIO.writelnString ("Failed to create file " + fileName + " !");
+        if (!log.openForAppending (".", FILE_NAME)) {
+            GenericIO.writelnString ("Failed to create file " + FILE_NAME + " !");
             System.exit(1);
         }
 
@@ -304,19 +296,19 @@ public class GeneralRepository {
         log.writeFormString(5, managerState.state());
 
         // Mechanic state
-        for (int i = 0; i < nMechanics; i++)
+        for (int i = 0; i < N_MECHANICS; i++)
             log.writeFormString(4, mechanicsState[i].state());
 
         /* Customer */
-        for (int i = 0; i < nCustomers; i++) {
+        for (int i = 0; i < N_CUSTOMERS; i++) {
             // Customer state
             log.writeFormString(4, customersState[i].state());
 
             // Vehicle driven by customer: own car (customer ID), replacement car (R0, etc), none "-"
             if(customersCars[i] == -1)
                 log.writeFormString(4, " " + "--");
-            else if (customersCars[i] >= 0 || customersCars[i] < nCustomers)
-                log.writeFormString(4, " " + format.format(customersCars[i]));
+            else if (customersCars[i] >= 0 || customersCars[i] < N_CUSTOMERS)
+                log.writeFormString(4, " " + FORMAT.format(customersCars[i]));
             else if (customersCars[i] == 100)
                 log.writeFormString(4, " " + "R0");
             else if (customersCars[i] == 101)
@@ -333,7 +325,7 @@ public class GeneralRepository {
             // Customer vehicle has already been repaired (T or F)
             log.writeFormString(4, " " + (customersRepairConcluded[i] ? "T" : "F"));
 
-            if(i != 0 && (i+1) % 10 == 0 && i < nCustomers-1){
+            if(i != 0 && (i+1) % 10 == 0 && i < N_CUSTOMERS-1){
                 log.writeString("\n ");
                 log.writeFormString(12, "");
             }
@@ -343,48 +335,48 @@ public class GeneralRepository {
         log.writelnString();
         log.writeFormString(13, "");
         // Number of customers in queue to talk with manager
-        log.writeFormString(4, " " + format.format(customersInQueue));
+        log.writeFormString(4, " " + FORMAT.format(customersInQueue));
         // Number of customers waiting for a replacement vehicle
-        log.writeFormString(4, " " + format.format(customersInQueueForKey));
+        log.writeFormString(4, " " + FORMAT.format(customersInQueueForKey));
         // Number of cars that have already been repaired
-        log.writeFormString(4, " " + format.format(totalRepairedCars));
+        log.writeFormString(4, " " + FORMAT.format(totalRepairedCars));
 
 
         /* Park */
         log.writeFormString(4, "");
         // Number of customer vehicles currently parked
-        log.writeFormString(4, format.format(customerCarsInPark));
+        log.writeFormString(4, FORMAT.format(customerCarsInPark));
         // Number of replacement vehicles currently parked
-        log.writeFormString(4, " " + format.format(replacementCarsInPark));
+        log.writeFormString(4, " " + FORMAT.format(replacementCarsInPark));
 
 
         /* Repair Area */
         log.writeFormString(6, "");
         // Number of service requests made by the manager to the repair area
-        log.writeFormString(6," " + format.format(requestedServices));
+        log.writeFormString(6," " + FORMAT.format(requestedServices));
         log.writeString("  ");
 
-        for (int i = 0; i < nParts; i++) {
+        for (int i = 0; i < N_PARTS; i++) {
             // Number of parts of type i presently in storage at repair area
-            log.writeFormString(4, format.format(stockParts[i]) + " ");
+            log.writeFormString(4, FORMAT.format(stockParts[i]) + " ");
             // Number of customer vehicles waiting for part i
-            log.writeFormString(4, "  " + format.format(customersMissingParts[i]) + "  ");
+            log.writeFormString(4, "  " + FORMAT.format(customersMissingParts[i]) + "  ");
             // Flag signaling the manager has been adviced that part i is missing at repair area (T or F)
             log.writeFormString(4, " " + (partMissingAlert[i] ? "T" : "F") + " ");
         }
 
         /* Supplier Site */
         log.writeFormString(22, "");
-        for (int i = 0; i < nParts; i++) {
+        for (int i = 0; i < N_PARTS; i++) {
             // Number of parts of type i which have been purchased so far by the manager
-            log.writeFormString(6, "  " + format.format(soldParts[i]));
+            log.writeFormString(6, "  " + FORMAT.format(soldParts[i]));
         }
 
         log.writelnString();
 
         // closing file
         if (!log.close()) {
-            GenericIO.writelnString ("Failed to close file " + fileName + " !");
+            GenericIO.writelnString ("Failed to close file " + FILE_NAME + " !");
             System.exit (1);
         }
     }
@@ -630,6 +622,21 @@ public class GeneralRepository {
      */
     public synchronized void setMissingPartIndex(int partIndex, int value) {
         this.customersMissingParts[partIndex] = value;
+
+        // update state line
+        printStateLine();
+    }
+
+    /**
+     * Operação setPartMissingAlert
+     *
+     * Altera o valor de um dado índice do array de alerta de peças em falta
+     *
+     * @param partIndex o índice da peça
+     * @param value o novo valor
+     */
+    public synchronized void setPartMissingAlert(int partIndex, boolean value) {
+        this.partMissingAlert[partIndex] = value;
 
         // update state line
         printStateLine();

@@ -40,6 +40,8 @@ public class Manager extends Thread {
      */
     private int[] partsBasket;
 
+    private int currentCustomerAttending;
+
     /**
      * Referência para o Repositório Geral
      * @see GeneralRepository
@@ -86,6 +88,7 @@ public class Manager extends Thread {
      */
     public Manager(int nParts, GeneralRepository repo, Lounge lounge, RepairArea repairArea, OutsideWorld outsideWorld, SupplierSite supplierSite) {
         this.state = ManagerState.CHECKING_WHAT_TO_DO;
+        this.currentCustomerAttending = -1;
         this.repository = repo;
         this.lounge = lounge;
         this.repairArea = repairArea;
@@ -112,14 +115,17 @@ public class Manager extends Thread {
                     outsideWorld.phoneCustomer(lounge.getClientNumber());
                     break;
                 case TALK_CUSTOMER:
-                    CustomerState customer = lounge.talkToCustomer(ManagerTask.TALK_CUSTOMER);
-                    if (customer == CustomerState.RECEPTION_REPAIR) {
-                        if (lounge.wantReplacementCar())
+                    CustomerState customerState = lounge.talkToCustomer(ManagerTask.TALK_CUSTOMER);
+                    switch (customerState) {
+                        case RECEPTION_REPAIR:
+                            if (lounge.wantReplacementCar(currentCustomerAttending))
+                                lounge.handCarKey(false);
+                            repairArea.registerService(lounge.getCurrentCustomerID());
+                            break;
+                        case RECEPTION_PAYING:
+                            lounge.receivePayment();
                             lounge.handCarKey(false);
-                        repairArea.registerService(lounge.getCurrentCustomerID());
-                    } else if (customer == CustomerState.RECEPTION_PAYING) {
-                        lounge.receivePayment();
-                        lounge.handCarKey(false);
+                            break;
                     }
                     break;
                 case HAND_CAR_KEY:
@@ -142,5 +148,16 @@ public class Manager extends Thread {
      */
     public void setState(ManagerState state) {
         this.state = state;
+    }
+
+    /**
+     * Operação setCurrentlyAttendingCustomer
+     *
+     * Altera o id do cliente a ser atendido no momento
+     *
+     * @param customerId id do Cliente
+     */
+    public void setCurrentlyAttendingCustomer(int customerId) {
+        this.currentCustomerAttending = customerId;
     }
 }
