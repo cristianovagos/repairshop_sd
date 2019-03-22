@@ -112,15 +112,15 @@ public class Park {
         ((Customer) Thread.currentThread()).setState(CustomerState.PARK);
 
         // update Customer current car ID
-        ((Customer) Thread.currentThread()).setCarId(100 + replacementCar);
+        ((Customer) Thread.currentThread()).setCarId(replacementCar);
 
         // Replacement car is not on Park
-        replacementCars[replacementCar] = false;
+        replacementCars[100 - replacementCar] = false;
 
         // update repository
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
         repository.setCustomerState(customerId, CustomerState.PARK);
-        repository.setCustomerCar(customerId, 100 + replacementCar);
+        repository.setCustomerCar(customerId, replacementCar);
         repository.replacementCarLeavesPark();
     }
 

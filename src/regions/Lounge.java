@@ -384,6 +384,7 @@ public class Lounge {
 
         // avisa os customers que estão em fila
         ((Manager) Thread.currentThread()).setCurrentlyAttendingCustomer(nextCustomer);
+        isManagerTaskComplete = true;
         notifyAll();
 
         if(clientWantsToRepair) {

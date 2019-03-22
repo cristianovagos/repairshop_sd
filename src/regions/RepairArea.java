@@ -86,6 +86,11 @@ public class RepairArea {
      * @return estado do dia de trabalho
      */
     public synchronized boolean readThePaper() {
+        // update mechanic state and repository
+        int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
+        ((Mechanic) Thread.currentThread()).setState(MechanicState.WAITING_FOR_WORK);
+        repository.setMechanicState(mechanicId, MechanicState.WAITING_FOR_WORK);
+
         if(!endOfDay){
             while (nRequestedServices == 0) {
                 try {
@@ -169,7 +174,10 @@ public class RepairArea {
     public synchronized void partAvailable(int partId) {
         stockParts[partId]--;
 
-        // update repository
+        // update state and repository
+        int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
+        ((Mechanic) Thread.currentThread()).setState(MechanicState.CHECKING_STOCK);
+        repository.setMechanicState(mechanicId, MechanicState.CHECKING_STOCK);
         repository.setStockParts(stockParts);
     }
 
@@ -204,7 +212,7 @@ public class RepairArea {
         // update repository
         repository.setManagerState(ManagerState.REPLENISH_STOCK);
 
-        for (int part : stockParts) {
+        for (int part = 0; part < stockParts.length; part++) {
             // replenishing stock of parts
             stockParts[part] += newParts[part];
 
