@@ -1,227 +1,651 @@
 package regions;
 
-import entities.CarState;
-import entities.CustomerState;
-import entities.ManagerState;
-import entities.MechanicState;
-import utils.MemFIFO;
+import entities.*;
+import genclass.GenericIO;
+import genclass.TextFile;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.DecimalFormat;
 
+/**
+ * Classe GeneralRepository (Repositório Geral)
+ *
+ * Esta classe é reponsável pela criação e posterior atualização de um ficheiro
+ * de logging que irá permitir visualizar os diferentes estados e valores
+ * decorrentes da execução do problema.
+ *
+ * Assim que necessário e pedido pelas diferentes entidades e regiões partilhadas
+ * de dados deste problema, será acrescentado ao ficheiro de logging os valores
+ * mais recentes para posterior acompanhamento, que serão atualizados nas variáveis
+ * e estruturas de dados que nada mais são de que "fotocópias" dos dados que estão
+ * a ser alterados e atualizados nas diferentes entidades ativas e passivas do problema.
+ *
+ * @author Miguel Bras
+ * @author Cristiano Vagos
+ */
 public class GeneralRepository {
 
     /**
-     * Repository
-     *
-     * repositoryState              - estado interno do repositorio
+     * Nome do ficheiro de Logging
      */
-//    public int repositoryState;
+    private String fileName;
 
     /**
-     * ------------------------------------------
-     * ENTIDADES
-     * ------------------------------------------
+     * Número de Clientes {@link Customer}
      */
+    private int nCustomers;
 
     /**
-     * Customer
-     *
-     * customersState               - estado dos clientes
-     * requireReplacementVehicle    - se cada cliente requer uma viatura de substituição
-     * carsState                    - estado das viaturas dos clientes
+     * Número de Mecânicos {@link Mechanic}
+     */
+    private int nMechanics;
+
+    /**
+     * Número de tipos de peças disponíveis
+     */
+    private int nParts;
+
+    /**
+     * Número de viaturas de substituição
+     */
+    private int nReplacementCars;
+
+    /**
+     * Formatação de números com dois números decimais
+     */
+    private DecimalFormat format;
+
+    /**
+     * Estado para cada um dos clientes existentes
+     * @see CustomerState
      */
     private CustomerState[] customersState;
-    private boolean[] requireReplacementVehicle;
-    private CarState[] carsState;
 
     /**
-     * Manager
-     *
-     * managerState                 - estado do Manager
+     * Indicação se um dado cliente vai requerer viatura de substituição ou não
+     */
+    private boolean[] customersReqReplVehicle;
+
+    /**
+     * Viatura que cada cliente está a conduzir de momento
+     * <ul>
+     *  <li>o id do cliente {@link Customer}</li>
+     *  <li>uma das viaturas de substituição</li>
+     *  <ul>
+     *      <li>100, se viatura de substituição 0</li>
+     *      <li>101, se viatura de substituição 1</li>
+     *      <li>etc...</li>
+     *  </ul>
+     *  <li>-1, se nenhuma</li>
+     * </ul>
+     */
+    private int[] customersCars;
+
+    /**
+     * Indicação se a reparação da viatura do cliente foi concluída ou não
+     */
+    private boolean[] customersRepairConcluded;
+
+    /**
+     * Estado interno do Manager
+     * @see ManagerState
      */
     private ManagerState managerState;
 
     /**
-     * Mechanics
-     *
-     * mechanicsState               - estado dos mecânicos
+     * Estado interno de cada um dos Mecânicos
+     * @see MechanicState
      */
     private MechanicState[] mechanicsState;
 
     /**
-     * ------------------------------------------
-     * REGIÕES PARTILHADAS DE INFORMAÇÃO
-     * ------------------------------------------
+     * Número de viaturas de clientes no Parque de Estacionamento
+     * {@link Park}
      */
+    private int customerCarsInPark;
 
     /**
-     * Park
-     *
-     * customerCars                 - viaturas dos clientes
-     * replacementCars              - viaturas de substituição
+     * Número de viaturas de substituição no Parque de Estacionamento
+     * {@link Park}
      */
-    private int[] customerCars;
-    private int[] replacementCars;
-
+    private int replacementCarsInPark;
 
     /**
      * Lounge
      *
-     * customersQueue               - fila de espera de clientes
-     * mechanicsQueue               - fila de espera de mecânicos
+     * customersInQueue               - número de clientes à espera para serem atendidos pelo manager
+     * customersInQueueForKey         - número de clientes à espera de chave de carro de substituição
+     * totalRepairedCars              - total de carros reparados
      */
-    private MemFIFO customersQueue;
-    private MemFIFO mechanicsQueue;
+
+    /**
+     * Número de clientes na fila da Recepção {@link Lounge}
+     * para serem atendidos pelo Manager
+     */
+    private int customersInQueue;
+
+    /**
+     * Número de clientes na fila à espera de chave para viatura de substituição
+     */
+    private int customersInQueueForKey;
+
+    /**
+     * Número de viaturas reparadas
+     */
+    private int totalRepairedCars;
 
     /**
      * Repair Area
      *
-     * customerFirstRepairQueue     - fila de espera de clientes à espera de reparação (primeira fila)
-     * customerMissingPartQueue     - lista de clientes à espera de uma peça para reparação
-     * taskDescription              - lista de tarefas a decorrer para cada mecânico (viatura a ser reparada, etc)
+     * requestedServices            - número de serviços pedidos pelo Manager
      * stockParts                   - número de peças em stock
+     * customersMissingParts        - número de clientes à espera de uma peça para reparação
+     * partMissingAlert             - indicação se o Manager já foi alertado para a falta de uma peça
      */
-    private MemFIFO customerFirstRepairQueue;
-    private List<List<Integer>> customerMissingPartQueue;
-    private int[] taskDescription;
+
+    /**
+     * Número de serviços pedidos pelo Gerente {@link Manager}
+     */
+    private int requestedServices;
+
+    /**
+     * Número de peças em stock na Área de Reparação {@link RepairArea}
+     */
     private int[] stockParts;
 
     /**
-     * Supplier Site
-     *
-     * soldParts                    - número de peças vendidas
+     * Número de clientes/viaturas à espera de peças para reparação
+     */
+    private int[] customersMissingParts;
+
+    /**
+     * Indicação se o Gerente {@link Manager} já foi alertado para a falta
+     * de uma dada peça
+     */
+    private boolean[] partMissingAlert;
+
+    /**
+     * Número de peças vendidas pelo Fornecedor {@link SupplierSite}
      */
     private int[] soldParts;
 
+    /**
+     * Construtor do Repositório
+     *
+     * Aqui serão inicializadas as variáveis e estruturas de dados que serão
+     * posteriormente atualizadas durante a execução do problema.
+     *
+     * @param fileName nome do ficheiro de logging
+     * @param nCustomers número de clientes
+     * @param nMechanics número de mecânicos
+     * @param nParts número de tipos de peças
+     * @param nReplacementCars número de viaturas de substituição
+     */
+    public GeneralRepository(String fileName, int nCustomers, int nMechanics, int nParts, int nReplacementCars) {
+        if ((fileName != null) && !("".equals(fileName)))
+            this.fileName = fileName;
 
-    public GeneralRepository(int nCustomers, int nMechanics, int nParts, int nReplacementCars) {
-        if(nCustomers > 0 && nMechanics > 0 && nParts > 0 && nReplacementCars > 0) {
-            this.customersState = new CustomerState[nCustomers];
-            this.mechanicsState = new MechanicState[nMechanics];
-            this.requireReplacementVehicle = new boolean[nCustomers];
-            this.carsState = new CarState[nCustomers];
-            this.customerCars = new int[nCustomers];
-            this.replacementCars = new int[nReplacementCars];
-            this.customersQueue = new MemFIFO(nCustomers);
-            this.mechanicsQueue = new MemFIFO(nMechanics);
-            this.customerFirstRepairQueue = new MemFIFO(nCustomers);
-            this.customerMissingPartQueue = new ArrayList<>();
-            this.taskDescription = new int[nMechanics];
-            this.stockParts = new int[nParts];
-            this.soldParts = new int[nParts];
+        this.nCustomers = nCustomers;
+        this.nMechanics = nMechanics;
+        this.nParts = nParts;
+        this.nReplacementCars = nReplacementCars;
+
+        this.customersState = new CustomerState[nCustomers];
+        this.mechanicsState = new MechanicState[nMechanics];
+        this.customersReqReplVehicle = new boolean[nCustomers];
+        this.customersCars = new int[nCustomers];
+        this.customersRepairConcluded = new boolean[nCustomers];
+
+        this.customerCarsInPark = 0;
+        this.replacementCarsInPark = nReplacementCars;
+
+        this.customersInQueue = 0;
+        this.customersInQueueForKey = 0;
+        this.totalRepairedCars = 0;
+
+        this.requestedServices = 0;
+        this.stockParts = new int[nParts];
+        this.customersMissingParts = new int[nParts];
+        this.partMissingAlert = new boolean[nParts];
+
+        this.soldParts = new int[nParts];
+
+        this.format = new DecimalFormat("00");
+
+        printHeader();
+    }
+
+    /**
+     * Operação printHeader
+     *
+     * Aqui será escrito no ficheiro de logging o cabeçalho da tabela referente
+     * a cada um dos valores que serão posteriormente escritos durante a execução
+     * do problema.
+     *
+     * O ficheiro de logging é criado de acordo com o nome que foi fornecido
+     * no construtor, e irá ser escrito o cabeçalho da tabela.
+     */
+    private void printHeader() {
+        // initialize file writer
+        TextFile log = new TextFile();
+
+        // open file for writing
+        if (!log.openForWriting (".", fileName)) {
+            GenericIO.writelnString ("Failed to create file " + fileName + " !");
+            System.exit(1);
+        }
+
+        log.writeFormString(37, "");
+        log.writelnString("REPAIR SHOP ACTIVITIES - Description of the internal state of the problem\n");
+        log.writeFormString(5, " MAN", "MECHANIC");
+        log.writeFormString(64, "");
+        log.writelnString("CUSTOMER");
+
+        log.writeFormString(5, "Stat");
+        log.writeFormString(4, "St0", "St1");
+
+        for (int i = 0; i < nCustomers; i++) {
+            log.writeFormString(4, "S" + format.format(i), "C" + format.format(i), "P" + format.format(i), "R" + format.format(i));
+            if(i != 0 && (i+1) % 10 == 0){
+                log.writeString("\n ");
+                log.writeFormString(12, "");
+            }
+        }
+
+        log.writeFormString(3, "");
+        log.writeString("LOUNGE");
+        log.writeFormString(8, "");
+        log.writeString("PARK");
+        log.writeFormString(29, "");
+        log.writeString("REPAIR AREA");
+        log.writeFormString(43, "");
+        log.writelnString("SUPPLIERS SITE");
+
+        log.writeFormString(12, "");
+        log.writeFormString(4, " InQ", " WtK", " NRV", "", "NCV", " NPV");
+        log.writeFormString(6, "", " NSRQ   ");
+
+        for (int i = 0; i < nParts; i++) {
+            log.writeFormString(4, "Prt" + i + " ", " NV" + i + " ", " S" + i);
+        }
+
+        log.writeFormString(23, "");
+        log.writeFormString(6, " PP0", " PP1", " PP2");
+        log.writelnString();
+
+        // closing file
+        if (!log.close()) {
+            GenericIO.writelnString ("Failed to close file " + fileName + " !");
+            System.exit (1);
         }
     }
 
-    public synchronized CustomerState getCustomersState(int i) {
-        return this.customersState[i];
+    /**
+     * Operação printStateLine
+     *
+     * Aqui serão escritos os valores dos diferentes estados das entidades,
+     * bem como os valores referentes às diferentes operações que serão executadas
+     * durante a execução do problema.
+     *
+     * O ficheiro de logging já foi previamente criado em {@link #printHeader()} e
+     * agora os valores mais recentes serão colocados imediatamente abaixo do que
+     * foi previamente escrito no ficheiro.
+     */
+    private void printStateLine() {
+        // initialize file writer
+        TextFile log = new TextFile();
+
+        // open file to append data
+        if (!log.openForAppending (".", fileName)) {
+            GenericIO.writelnString ("Failed to create file " + fileName + " !");
+            System.exit(1);
+        }
+
+        // Manager state values
+        log.writeFormString(5, managerState.state());
+
+        // Mechanic state
+        for (int i = 0; i < nMechanics; i++)
+            log.writeFormString(4, mechanicsState[i].state());
+
+        /* Customer */
+        for (int i = 0; i < nCustomers; i++) {
+            // Customer state
+            log.writeFormString(4, customersState[i].state());
+
+            // Vehicle driven by customer: own car (customer ID), replacement car (R0, etc), none "-"
+            if(customersCars[i] == -1)
+                log.writeFormString(4, " " + "--");
+            else if (customersCars[i] >= 0 || customersCars[i] < nCustomers)
+                log.writeFormString(4, " " + format.format(customersCars[i]));
+            else if (customersCars[i] == 100)
+                log.writeFormString(4, " " + "R0");
+            else if (customersCars[i] == 101)
+                log.writeFormString(4, " " + "R1");
+            else if (customersCars[i] == 102)
+                log.writeFormString(4, " " + "R2");
+            else
+                // ERROR!!!
+                log.writeFormString(4, " " + "!!");
+
+            // Customer requires replacement vehicle (T or F)
+            log.writeFormString(4, " " + (customersReqReplVehicle[i] ? "T" : "F"));
+            
+            // Customer vehicle has already been repaired (T or F)
+            log.writeFormString(4, " " + (customersRepairConcluded[i] ? "T" : "F"));
+
+            if(i != 0 && (i+1) % 10 == 0 && i < nCustomers-1){
+                log.writeString("\n ");
+                log.writeFormString(12, "");
+            }
+        }
+
+        /* Lounge */
+        log.writelnString();
+        log.writeFormString(13, "");
+        // Number of customers in queue to talk with manager
+        log.writeFormString(4, " " + format.format(customersInQueue));
+        // Number of customers waiting for a replacement vehicle
+        log.writeFormString(4, " " + format.format(customersInQueueForKey));
+        // Number of cars that have already been repaired
+        log.writeFormString(4, " " + format.format(totalRepairedCars));
+
+
+        /* Park */
+        log.writeFormString(4, "");
+        // Number of customer vehicles currently parked
+        log.writeFormString(4, format.format(customerCarsInPark));
+        // Number of replacement vehicles currently parked
+        log.writeFormString(4, " " + format.format(replacementCarsInPark));
+
+
+        /* Repair Area */
+        log.writeFormString(6, "");
+        // Number of service requests made by the manager to the repair area
+        log.writeFormString(6," " + format.format(requestedServices));
+        log.writeString("  ");
+
+        for (int i = 0; i < nParts; i++) {
+            // Number of parts of type i presently in storage at repair area
+            log.writeFormString(4, format.format(stockParts[i]) + " ");
+            // Number of customer vehicles waiting for part i
+            log.writeFormString(4, "  " + format.format(customersMissingParts[i]) + "  ");
+            // Flag signaling the manager has been adviced that part i is missing at repair area (T or F)
+            log.writeFormString(4, " " + (partMissingAlert[i] ? "T" : "F") + " ");
+        }
+
+        /* Supplier Site */
+        log.writeFormString(22, "");
+        for (int i = 0; i < nParts; i++) {
+            // Number of parts of type i which have been purchased so far by the manager
+            log.writeFormString(6, "  " + format.format(soldParts[i]));
+        }
+
+        log.writelnString();
+
+        // closing file
+        if (!log.close()) {
+            GenericIO.writelnString ("Failed to close file " + fileName + " !");
+            System.exit (1);
+        }
     }
 
-    public synchronized void setCustomerState(int i, CustomerState customerState) {
-        this.customersState[i] = customerState;
+    /**
+     * Operação initializeCustomer
+     *
+     * Inicializa o estado de cada um dos Customers
+     *
+     * @param index índice do cliente
+     * @param requiresReplacement indicação se requer viatura de substituição
+     */
+    public synchronized void initializeCustomer(int index, boolean requiresReplacement) {
+        this.customersState[index] = CustomerState.NORMAL_LIFE_WITH_CAR;
+        this.customersReqReplVehicle[index] = requiresReplacement;
+        this.customersCars[index] = index;
+        this.customersRepairConcluded[index] = false;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized ManagerState getManagerState() {
-        return this.managerState;
+    /**
+     * Operação setCustomerState
+     *
+     * Altera o estado de um cliente em específico
+     *
+     * @param index o índice do cliente em questão
+     * @param newState o estado novo do cliente
+     */
+    public synchronized void setCustomerState(int index, CustomerState newState) {
+        this.customersState[index] = newState;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized void setManagerState(ManagerState managerState) {
-        this.managerState = managerState;
+    /**
+     * Operação setCustomerCar
+     *
+     * Altera a viatura atual de um cliente em específico
+     *
+     * @param index o índice do cliente em questão
+     * @param carId o identificador da viatura
+     *              (-1 se nenhuma, id do customer se a própria, ou 100..102 para viatura de substituição)
+     */
+    public synchronized void setCustomerCar(int index, int carId) {
+        this.customersCars[index] = carId;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized MechanicState getMechanicState(int i) {
-        return this.mechanicsState[i];
+    /**
+     * Operação setCustomerRepairConcluded
+     *
+     * Altera o estado de conclusão da reparação da viatura
+     *
+     * @param index o índice do cliente em questão
+     * @param isRepairConcluded se a reparação foi concluída
+     */
+    public synchronized void setCustomerRepairConcluded(int index, boolean isRepairConcluded) {
+        this.customersRepairConcluded[index] = isRepairConcluded;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized void setMechanicsState(int i, MechanicState mechanicState) {
-        this.mechanicsState[i] = mechanicState;
+    /**
+     * Operação setManagerState
+     *
+     * Altera o estado do Manager
+     *
+     * @param state estado do Manager
+     */
+    public synchronized void setManagerState(ManagerState state) {
+        this.managerState = state;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized boolean getRequireReplacementVehicle(int i) {
-        return requireReplacementVehicle[i];
+    /**
+     * Operação setMechanicState
+     *
+     * Altera o estado de um mecânico em específico
+     *
+     * @param index o índice do mecânico em questão
+     * @param newState o estado novo do mecânico
+     */
+    public synchronized void setMechanicState(int index, MechanicState newState) {
+        this.mechanicsState[index] = newState;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized void setRequireReplacementVehicle(int i, boolean require) {
-        this.requireReplacementVehicle[i] = require;
+    /**
+     * Operação customerCarEntersPark
+     *
+     * Indica que uma viatura de um cliente entrou no park
+     */
+    public synchronized void customerCarEntersPark() {
+        this.customerCarsInPark++;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized CarState getCarsState(int i) {
-        return this.carsState[i];
+    /**
+     * Operação customerCarLeavesPark
+     *
+     * Indica que uma viatura de um cliente saiu do park
+     */
+    public synchronized void customerCarLeavesPark() {
+        this.customerCarsInPark--;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized void setCarsState(int i, CarState carState) {
-        this.carsState[i] = carState;
+    /**
+     * Operação replacementCarEntersPark
+     *
+     * Indica que uma viatura de substituição entrou no park
+     */
+    public synchronized void replacementCarEntersPark() {
+        this.replacementCarsInPark++;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized int getCustomerCar(int i) {
-        return this.customerCars[i];
+    /**
+     * Operação replacementCarLeavesPark
+     *
+     * Indica que uma viatura de substituição saiu do park
+     */
+    public synchronized void replacementCarLeavesPark() {
+        this.replacementCarsInPark--;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized void setCustomerCar(int i, int val) {
-        this.customerCars[i] = val;
+    /**
+     * Operação setCustomersInQueue
+     *
+     * Altera o valor dos clientes na fila no Lounge
+     */
+    public synchronized void setCustomersInQueue(int customersInQueue) {
+        this.customersInQueue = customersInQueue;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized int getReplacementCar(int i) {
-        return this.replacementCars[i];
+    /**
+     * Operação setCustomersInQueueForKey
+     *
+     * Altera o valor dos clientes na fila para obter uma chave para viatura de substituição no Lounge
+     */
+    public synchronized void setCustomersInQueueForKey(int customersInQueueForKey) {
+        this.customersInQueueForKey = customersInQueueForKey;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized void setReplacementCar(int i, int val) {
-        this.replacementCars[i] = val;
+    /**
+     * Operação setTotalRepairedCars
+     *
+     * Altera o valor do total de carros reparados
+     */
+    public synchronized void setTotalRepairedCars(int repairedCars) {
+        this.totalRepairedCars = repairedCars;
+
+        // print state line
+        printStateLine();
     }
 
-    public synchronized MemFIFO getCustomersQueue() {
-        return customersQueue;
+    /**
+     * Operação managerRequestedService
+     *
+     * Incrementa o número de serviços pedidos pelo {@link Manager} na {@link RepairArea}
+     */
+    public synchronized void managerRequestedService() {
+        requestedServices++;
+
+        // update state line
+        printStateLine();
     }
 
-    public synchronized void setCustomersQueue(MemFIFO customersQueue) {
-        this.customersQueue = customersQueue;
+    /**
+     * Operação setStockParts
+     *
+     * Altera o array referente ao número de peças em stock na {@link RepairArea}
+     */
+    public synchronized void setStockParts(int[] stockParts) {
+        this.stockParts = stockParts;
+
+        // update state line
+        printStateLine();
     }
 
-    public synchronized MemFIFO getMechanicsQueue() {
-        return mechanicsQueue;
+    /**
+     * Operação addMissingPart
+     *
+     * Marca uma dada peça como inexistente no stock da {@link RepairArea}
+     *
+     * @param partIndex o índice da peça
+     */
+    public synchronized void addMissingPart(int partIndex) {
+        this.customersMissingParts[partIndex]++;
+
+        // update state line
+        printStateLine();
     }
 
-    public synchronized void setMechanicsQueue(MemFIFO mechanicsQueue) {
-        this.mechanicsQueue = mechanicsQueue;
+    /**
+     * Operação removeMissingPart
+     *
+     * Marca uma dada peça como existente no stock da {@link RepairArea}
+     *
+     * @param partIndex o índice da peça
+     */
+    public synchronized void removeMissingPart(int partIndex) {
+        if(this.customersMissingParts[partIndex] > 0) {
+            this.customersMissingParts[partIndex]--;
+
+            // update state line
+            printStateLine();
+        }
     }
 
-    public synchronized MemFIFO getCustomerFirstRepairQueue() {
-        return customerFirstRepairQueue;
+    /**
+     * Operação setMissingPartIndex
+     *
+     * Altera o valor de um dado índice do array de peças em falta
+     *
+     * @param partIndex o índice da peça
+     * @param value o novo valor
+     */
+    public synchronized void setMissingPartIndex(int partIndex, int value) {
+        this.customersMissingParts[partIndex] = value;
+
+        // update state line
+        printStateLine();
     }
 
-    public synchronized void setCustomerFirstRepairQueue(MemFIFO customerFirstRepairQueue) {
-        this.customerFirstRepairQueue = customerFirstRepairQueue;
-    }
+    /**
+     * Operação setSoldParts
+     *
+     * Altera o valor do array referente ao número de peças vendidas pela {@link SupplierSite}
+     *
+     * @param soldParts array com o total de peças vendidas
+     */
+    public synchronized void setSoldParts(int[] soldParts) {
+        this.soldParts = soldParts;
 
-    public synchronized List<List<Integer>> getCustomerMissingPartQueue() {
-        return customerMissingPartQueue;
-    }
-
-    public synchronized void setCustomerMissingPartQueue(List<List<Integer>> customerMissingPartQueue) {
-        this.customerMissingPartQueue = customerMissingPartQueue;
-    }
-
-    public synchronized int getTask(int i) {
-        return this.taskDescription[i];
-    }
-
-    public synchronized void setTask(int i, int val) {
-        this.taskDescription[i] = val;
-    }
-
-    public synchronized int getStockPart(int i) {
-        return this.stockParts[i];
-    }
-
-    public synchronized void setStockPart(int i, int val) {
-        this.stockParts[i] = val;
-    }
-
-    public synchronized int getSoldPart(int i) {
-        return this.soldParts[i];
-    }
-
-    public synchronized void setSoldParts(int i, int val) {
-        this.soldParts[i] = val;
+        // update state line
+        printStateLine();
     }
 }

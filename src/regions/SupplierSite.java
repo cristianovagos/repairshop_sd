@@ -1,8 +1,27 @@
 package regions;
 
+import entities.Mechanic;
 import entities.Manager;
 import entities.ManagerState;
 
+/**
+ * Classe SupplierSite (Fornecedor)
+ *
+ * Esta classe é responsável pela criação do Fornecedor, uma das entidades
+ * passivas do problema.
+ *
+ * O Fornecedor é o local onde o Gerente {@link Manager} irá obter novas peças
+ * para serem posteriormente disponibilizadas na Área de Reparação {@link RepairArea},
+ * para que os Mecânicos {@link Mechanic} possam continuar a reparação das viaturas.
+ *
+ * A abordagem que decidimos adotar neste caso foi ter um máximo para cada tipo de
+ * peças que serão todas compradas assim que o Gerente venha comprar caso um tipo de
+ * peças se esgote na Área de Reparação. Assim, o Gerente quando vem comprar um tipo
+ * de peças leva no seu cesto de compras um número "máximo" de peças de todos os tipos.
+ *
+ * @author Miguel Bras
+ * @author Cristiano Vagos
+ */
 public class SupplierSite {
 
     /**
@@ -12,25 +31,40 @@ public class SupplierSite {
     private int typeOfPartsAvailable;
 
     /**
-     * Maximum number of parts to be filled in the shopping cart
+     * Número máximo de peças unitárias a serem
+     * incluídas no carrinho de compras
      */
     private int numMaxOfParts;
 
     /**
-     * Number of Parts sold by the Supplier Site
+     * Número de peças vendidas
      */
-    private int numOfPartsSold;
+    private int[] numOfPartsSold;
 
     /**
-     * Reference to the {@link GeneralRepository}
+     * Referência para o Repositório
+     * @see GeneralRepository
      */
     private GeneralRepository repository;
 
+    /**
+     * Construtor do Fornecedor (Supplier Site)
+     *
+     * Aqui será construído o objeto referente ao Fornecedor
+     *
+     * @param nParts número de tipos de peças
+     * @param nMaxParts número máximo de peças unitárias a serem
+     *                  incluídas no carrinho de compras
+     * @param repo referência para o Repositório {@link GeneralRepository}
+     */
     public SupplierSite (int nParts, int nMaxParts, GeneralRepository repo) {
         this.repository = repo;
         this.typeOfPartsAvailable = nParts;
         this.numMaxOfParts = nMaxParts;
-        this.numOfPartsSold = 0;
+        this.numOfPartsSold = new int[nParts];
+
+        for (int i = 0; i < numOfPartsSold.length; i++)
+            numOfPartsSold[i] = 0;
     }
 
     /**
@@ -43,18 +77,21 @@ public class SupplierSite {
         // Update Manager state
         ((Manager) Thread.currentThread()).setState(ManagerState.GETTING_NEW_PARTS);
 
+        // update repository
+        repository.setManagerState(ManagerState.GETTING_NEW_PARTS);
+
         /* Fill up the Manager shopping cart with parts.
            In our case, we chose to always fill it up with a fixed number for each part.
          */
         int[] shoppingCart = new int[typeOfPartsAvailable];
         for (int part : shoppingCart) {
             shoppingCart[part] = numMaxOfParts;
-            numOfPartsSold += numMaxOfParts;
+            numOfPartsSold[part] += numMaxOfParts;
         }
 
-        // todo update repository
+        // update repository
+        repository.setSoldParts(numOfPartsSold);
 
         return shoppingCart;
     }
-
 }

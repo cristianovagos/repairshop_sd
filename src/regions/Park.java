@@ -7,28 +7,56 @@ import entities.MechanicState;
 
 import java.util.Random;
 
+/**
+ * Classe Park (Parque de Estacionamento)
+ *
+ * Esta classe é responsável pela criação do Parque de Estacionamento, uma
+ * das entidades passivas do problema.
+ *
+ * É aqui que estão inicialmente localizadas as viaturas de substituição, a
+ * serem disponibilizadas aos Clientes {@link Customer} que queiram. Também
+ * é o local onde os Clientes vão estacionar as suas próprias viaturas quando
+ * se dirigem à Oficina para posterior reparação, onde após estar concluída
+ * será novamente estacionada pelo Mecânico {@link Mechanic}.
+ *
+ * @author Miguel Bras
+ * @author Cristiano Vagos
+ */
 public class Park {
 
     /**
-     * Customer cars at the Park
+     * Indicação de existência dos carros dos Clientes
+     * {@link Customer} no Parque de Estacionamento da Oficina.
      */
     private boolean[] customerCars;
 
     /**
-     * Replacement cars at the Park
+     * Indicação de existência de carros de substituição
+     * no Parque de Estacionamento da Oficina.
      */
     private boolean[] replacementCars;
 
     /**
-     * Reference to {@link GeneralRepository}
+     * Número de tipos de peças disponíveis
+     */
+    private int numOfPartsAvailable;
+
+    /**
+     * Referência para o Repositório
+     * @see GeneralRepository
      */
     private GeneralRepository repository;
 
     /**
-     * Number of different parts available
+     * Construtor de um Parque de Estacionamento
+     *
+     * Aqui será construído o objeto referente a um Parque de Estacionamento.
+     *
+     * @param nCustomers número de clientes
+     * @param nReplacementCars número de viaturas de substituição
+     * @param nParts número de tipos de peças
+     * @param repo referência para o Repositório {@link GeneralRepository}
      */
-    private int numOfPartsAvailable;
-
     public Park(int nCustomers, int nReplacementCars, int nParts, GeneralRepository repo) {
         this.customerCars = new boolean[nCustomers];
         this.replacementCars = new boolean[nReplacementCars];
@@ -36,14 +64,12 @@ public class Park {
         this.numOfPartsAvailable = nParts;
 
         // initially all replacementCars are at the shop
-        for (int i = 0; i < replacementCars.length; i++) {
+        for (int i = 0; i < replacementCars.length; i++)
             replacementCars[i] = true;
-        }
 
         // initially there are no customerCars at the shop
-        for (int i = 0; i < customerCars.length; i++) {
+        for (int i = 0; i < customerCars.length; i++)
             customerCars[i] = false;
-        }
     }
 
     /**
@@ -59,20 +85,27 @@ public class Park {
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
         int carId = ((Customer) Thread.currentThread()).getCarId();
 
-        if(customerId != carId)
+        // update repository
+        repository.setCustomerState(customerId, CustomerState.PARK);
+
+        if(customerId != carId) {
             // replacement car is on park
             replacementCars[100 - carId] = true;
-        else
+            repository.replacementCarEntersPark();
+        }
+        else {
             // customer car is on park
             customerCars[customerId] = true;
-
-        // todo update repository
+            repository.customerCarEntersPark();
+        }
     }
 
     /**
      * Operação findCar (chamada pelo {@link Customer})
      *
      * O Cliente recolhe a viatura de substituição do Park.
+     *
+     * @param replacementCar viatura de substituição
      */
     public synchronized void findCar(int replacementCar) {
         // update Customer state
@@ -84,7 +117,11 @@ public class Park {
         // Replacement car is not on Park
         replacementCars[replacementCar] = false;
 
-        // todo update repository
+        // update repository
+        int customerId = ((Customer) Thread.currentThread()).getCustomerId();
+        repository.setCustomerState(customerId, CustomerState.PARK);
+        repository.setCustomerCar(customerId, 100 + replacementCar);
+        repository.replacementCarLeavesPark();
     }
 
     /**
@@ -101,7 +138,10 @@ public class Park {
         ((Customer) Thread.currentThread()).setCarId(customerId);
         customerCars[customerId] = false;
 
-        // todo update repository
+        // update repository
+        repository.setCustomerState(customerId, CustomerState.PARK);
+        repository.setCustomerCar(customerId, customerId);
+        repository.customerCarLeavesPark();
     }
 
     /**
@@ -109,6 +149,8 @@ public class Park {
      *
      * O Mecânico dirige-se ao Park para obter a viatura do {@link Customer}
      * e avalia qual a peça que deve substituir para a reparar.
+     *
+     * @return a peça que necessita de substituição
      */
     public synchronized int getVehicle() {
         // update Mechanic state
@@ -118,7 +160,10 @@ public class Park {
         int customerId = ((Mechanic) Thread.currentThread()).getCurrentCarFixingId();
         customerCars[customerId] = false;
 
-        // todo update repository
+        // update repository
+        int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
+        repository.setMechanicState(mechanicId, MechanicState.FIXING_THE_CAR);
+        repository.customerCarLeavesPark();
 
         // select randomly the part that needs to be replaced
         return new Random().nextInt(numOfPartsAvailable);
@@ -137,6 +182,9 @@ public class Park {
         int customerId = ((Mechanic) Thread.currentThread()).getCurrentCarFixingId();
         customerCars[customerId] = true;
 
-        // todo update repository
+        // update repository
+        int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
+        repository.setMechanicState(mechanicId, MechanicState.FIXING_THE_CAR);
+        repository.customerCarEntersPark();
     }
 }
