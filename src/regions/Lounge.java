@@ -134,6 +134,8 @@ public class Lounge {
 
     private boolean customerReceivedKey;
 
+    private MemFIFO replacementKeysFifo;
+
     /**
     *  Instanciação do Lounge.
     *
@@ -155,6 +157,10 @@ public class Lounge {
         customerPaid = false;
         managerReceivedPayment = false;
         customerReceivedKey = false;
+        for (int i = 0; i <nReplacementCars; i++)
+        {
+            replacementKeysFifo.write(100+i);
+        }
     }
 
     /**
@@ -221,12 +227,8 @@ public class Lounge {
             } catch (InterruptedException e) { }
         }
         managerFoundAKey[customerId] = false;
-        carKey = carKeyToHandle;
-        carKeyToHandle = -1;
-
-        customerReceivedKey = true;
-        notifyAll();
-
+        carKey = (int)replacementKeysFifo.read();
+        
         return carKey;
     }
 
@@ -282,13 +284,13 @@ public class Lounge {
         // if the customer used a replacement car, it's now available
         int tempCarID = ((Customer) Thread.currentThread()).getCarId();
         if(tempCarID != customerId && tempCarID != -1) {
-            nReplacementCarAvailable++;
-            replacementKeys[tempCarID - 100] = tempCarID;
+            //nReplacementCarAvailable++;
+            replacementKeysFifo.write(tempCarID);
         }
         
         ((Customer) Thread.currentThread()).setCarId(customerId);
         repository.setCustomerCar(customerId, customerId);
-        
+
         // block until manager confirms payment
         while (!managerReceivedPayment) {
             try {
@@ -335,7 +337,7 @@ public class Lounge {
             needsResupplyParts = false;
             return ManagerTask.GET_PARTS;
         }
-        else if (nCustomerForKey > 0 && nReplacementCarAvailable > 0){
+        else if (nCustomerForKey > 0 && !replacementKeysFifo.empty()){
             nCustomerForKey--;
             return ManagerTask.HAND_CAR_KEY;
         }
@@ -423,29 +425,13 @@ public class Lounge {
         repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
         
         //client wants a replacement car
-        int temp = -1;
-        if(nReplacementCarAvailable > 0) {
-            for (int i = 0; i < replacementKeys.length; i++) {
-                if(replacementKeys[i] != -1) {
-                    temp = replacementKeys[i];
-                    replacementKeys[i] = -1;
-                    nReplacementCarAvailable--;
-                    break;
-                }
-            }
+        if (!replacementKeysFifo.empty())
+        {
+            //Manager signals that he found the key.
+            
+            managerFoundAKey[nextCustomer] = true;
+            notifyAll();
         }
-        carKeyToHandle = temp;
-        
-        //Manager signals that he found the key.
-        managerFoundAKey[nextCustomer] = true;
-        notifyAll();
-        // waits for customer to receivekey
-        while (!customerReceivedKey) {
-            try {
-                wait();
-            } catch (InterruptedException e) { }
-        }
-        customerReceivedKey = false;
     }
 
     /**
