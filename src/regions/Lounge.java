@@ -132,6 +132,8 @@ public class Lounge {
 
     private boolean managerReceivedPayment;
 
+    private boolean customerReceivedKey;
+
     /**
     *  Instanciação do Lounge.
     *
@@ -151,6 +153,8 @@ public class Lounge {
         this.customerWantsReplacementCar = new boolean[nCustomers];
         if(nCustomers > 0) this.managerFoundAKey = new boolean[nCustomers];
         customerPaid = false;
+        managerReceivedPayment = false;
+        customerReceivedKey = false;
     }
 
     /**
@@ -204,8 +208,10 @@ public class Lounge {
         ((Customer) Thread.currentThread()).setState(CustomerState.WAITING_FOR_REPLACE_CAR);
         repository.setCustomerState(customerId, CustomerState.WAITING_FOR_REPLACE_CAR);
 
+
         nRequests++;
         nCustomerForKey++;
+        customersWaitingForKey.write(customerId);
         notifyAll();
 
         // client wait until manager searches for keys
@@ -217,6 +223,10 @@ public class Lounge {
         managerFoundAKey[customerId] = false;
         carKey = carKeyToHandle;
         carKeyToHandle = -1;
+
+        customerReceivedKey = true;
+        notifyAll();
+
         return carKey;
     }
 
@@ -428,6 +438,13 @@ public class Lounge {
         //Manager signals that he found the key.
         managerFoundAKey[nextCustomer] = true;
         notifyAll();
+        // waits for customer to receivekey
+        while (!customerReceivedKey) {
+            try {
+                wait();
+            } catch (InterruptedException e) { }
+        }
+        customerReceivedKey = false;
     }
 
     /**
