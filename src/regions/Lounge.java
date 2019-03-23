@@ -226,7 +226,7 @@ public class Lounge {
         notifyAll();
 
         // block on condition variable, waiting for a replacement car key
-        while ((nextCustomer != customerId) && (carKeyToHandle == -1)) {
+        while ((nextCustomer == customerId) && (carKeyToHandle == -1)) {
             try {
                 wait();
             } catch (InterruptedException e) { }
@@ -304,7 +304,7 @@ public class Lounge {
         int tempCarID = ((Customer) Thread.currentThread()).getCarId();
         if(tempCarID != customerId && tempCarID != -1) {
             nReplacementCarAvailable++;
-            replacementKeys[100-tempCarID] = tempCarID;
+            replacementKeys[tempCarID - 100] = tempCarID;
         }
 
         ((Customer) Thread.currentThread()).setCarId(carKeyToHandle);
@@ -428,7 +428,7 @@ public class Lounge {
      *
      *  @param returningKey identificação do cliente que recebe a chave
      */
-    public void handCarKey(boolean returningKey) {
+    public synchronized void handCarKey(boolean returningKey) {
         ((Manager) Thread.currentThread()).setState(ManagerState.ATTENDING_CUSTOMER);
         repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
 
@@ -490,7 +490,7 @@ public class Lounge {
     *  Operação repairConcluded Chamada pelo {@link entities.Mechanic})
     *  Notifica o manager que a reparação de um carro foi concluida.
     */
-    public void repairConcluded() {
+    public synchronized void repairConcluded() {
         // update Mechanic state and repository
         int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
         ((Mechanic) Thread.currentThread()).setState(MechanicState.ALERTING_MANAGER);

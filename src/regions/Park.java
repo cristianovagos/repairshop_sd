@@ -90,7 +90,7 @@ public class Park {
 
         if(customerId != carId) {
             // replacement car is on park
-            replacementCars[100 - carId] = true;
+            replacementCars[carId - 100] = true;
             repository.replacementCarEntersPark();
         }
         else {
@@ -115,7 +115,7 @@ public class Park {
         ((Customer) Thread.currentThread()).setCarId(replacementCar);
 
         // Replacement car is not on Park
-        replacementCars[100 - replacementCar] = false;
+        replacementCars[replacementCar - 100] = false;
 
         // update repository
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();

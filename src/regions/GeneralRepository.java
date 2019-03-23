@@ -307,7 +307,7 @@ public class GeneralRepository {
             // Vehicle driven by customer: own car (customer ID), replacement car (R0, etc), none "-"
             if(customersCars[i] == -1)
                 log.writeFormString(4, " " + "--");
-            else if (customersCars[i] >= 0 || customersCars[i] < N_CUSTOMERS)
+            else if (customersCars[i] >= 0 && customersCars[i] < N_CUSTOMERS)
                 log.writeFormString(4, " " + FORMAT.format(customersCars[i]));
             else if (customersCars[i] == 100)
                 log.writeFormString(4, " " + "R0");

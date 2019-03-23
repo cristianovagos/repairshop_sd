@@ -84,9 +84,9 @@ public class SupplierSite {
            In our case, we chose to always fill it up with a fixed number for each part.
          */
         int[] shoppingCart = new int[typeOfPartsAvailable];
-        for (int part : shoppingCart) {
-            shoppingCart[part] = numMaxOfParts;
-            numOfPartsSold[part] += numMaxOfParts;
+        for (int i = 0; i < typeOfPartsAvailable; i++) {
+            shoppingCart[i] = numMaxOfParts;
+            numOfPartsSold[i] += numMaxOfParts;
         }
 
         // update repository
