@@ -25,6 +25,11 @@ import java.util.Random;
 public class Park {
 
     /**
+     * Número de tipos de peças disponíveis
+     */
+    private final int N_PARTS;
+
+    /**
      * Indicação de existência dos carros dos Clientes
      * {@link Customer} no Parque de Estacionamento da Oficina.
      */
@@ -35,11 +40,6 @@ public class Park {
      * no Parque de Estacionamento da Oficina.
      */
     private boolean[] replacementCars;
-
-    /**
-     * Número de tipos de peças disponíveis
-     */
-    private int numOfPartsAvailable;
 
     /**
      * Referência para o Repositório
@@ -58,17 +58,17 @@ public class Park {
      * @param repo referência para o Repositório {@link GeneralRepository}
      */
     public Park(int nCustomers, int nReplacementCars, int nParts, GeneralRepository repo) {
+        this.N_PARTS = nParts;
         this.customerCars = new boolean[nCustomers];
         this.replacementCars = new boolean[nReplacementCars];
         this.repository = repo;
-        this.numOfPartsAvailable = nParts;
 
         // initially all replacementCars are at the shop
-        for (int i = 0; i < replacementCars.length; i++)
+        for (int i = 0; i < nReplacementCars; i++)
             replacementCars[i] = true;
 
         // initially there are no customerCars at the shop
-        for (int i = 0; i < customerCars.length; i++)
+        for (int i = 0; i < nCustomers; i++)
             customerCars[i] = false;
     }
 
@@ -166,7 +166,7 @@ public class Park {
         repository.customerCarLeavesPark();
 
         // select randomly the part that needs to be replaced
-        return new Random().nextInt(numOfPartsAvailable);
+        return new Random().nextInt(N_PARTS);
     }
 
     /**

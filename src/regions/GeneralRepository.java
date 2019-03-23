@@ -372,7 +372,7 @@ public class GeneralRepository {
             log.writeFormString(6, "  " + FORMAT.format(soldParts[i]));
         }
 
-        log.writelnString();
+        log.writelnString("\n");
 
         // closing file
         if (!log.close()) {

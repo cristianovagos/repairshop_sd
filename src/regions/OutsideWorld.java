@@ -72,20 +72,24 @@ public class OutsideWorld {
     /**
      * Operação backToWorkByCar (chamada pelo {@link Customer})
      *
-     * Aqui, o cliente vai fazer a sua vida normal, ficando à espera
+     * Aqui, o cliente vai fazer a sua vida normal.
+     * No caso de ter colocado a sua viatura para reparação na Oficina, fica à espera
      * de novidades por parte do {@link Manager}, que irá notificá-lo quando
      * o seu carro pessoal estiver pronto.
+     *
+     * @param carRepaired indicação se a sua viatura já foi reparada
      */
-    public synchronized void backToWorkByCar() {
+    public synchronized void backToWorkByCar(boolean carRepaired) {
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
 
-        waitForCarRepair[customerId] = true;
-
-        // change customer state
+        // change customer state, and repository
         ((Customer) Thread.currentThread()).setState(CustomerState.NORMAL_LIFE_WITH_CAR);
-
-        // update repository
         repository.setCustomerState(customerId, CustomerState.NORMAL_LIFE_WITH_CAR);
+
+        if(carRepaired)
+            return;
+
+        waitForCarRepair[customerId] = true;
 
         // block on condition variable
         while (waitForCarRepair[customerId]) {

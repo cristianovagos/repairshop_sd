@@ -124,14 +124,14 @@ public class Customer extends Thread {
         if(wantsReplacementCar) {
             key = lounge.collectKey();
             park.findCar(key);
-            outsideWorld.backToWorkByCar();
+            outsideWorld.backToWorkByCar(false);
             park.goToRepairShop();
         } else
             outsideWorld.backToWorkByBus();
         lounge.queueIn();
         lounge.payForTheService();
         park.collectCar();
-        outsideWorld.backToWorkByCar();
+        outsideWorld.backToWorkByCar(true);
     }
 
     /**

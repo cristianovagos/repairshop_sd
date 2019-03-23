@@ -5,8 +5,20 @@ import genclass.FileOp;
 import genclass.GenericIO;
 import regions.*;
 
+/**
+ * Classe RepairShop (Oficina)
+ *
+ * Este tipo de dados simula o problema descrito no âmbito deste projeto,
+ * que é as actividades de uma Oficina de Reparação de Automóveis.
+ * Aqui foi implementada uma solução concorrente baseada em monitores como
+ * elementos de sincronização entre as entidades ativas (Cliente {@link Customer},
+ * Mecânico {@link Mechanic} e Gerente {@link Manager}) e as entidades passivas
+ * (Mundo Exterior {@link OutsideWorld},
+ *
+ */
 public class RepairShop {
 
+    private static final boolean DEBUG_MODE = true;
     private static final int N_CUSTOMERS = 30;
     private static final int N_MECHANICS = 2;
     private static final int N_PARTS = 3;
@@ -31,23 +43,27 @@ public class RepairShop {
 
         /* inicialização */
 
-        GenericIO.writelnString ("\n" + "      Repair Shop Activities\n");
-        do {
-            GenericIO.writeString ("Nome do ficheiro de armazenamento da simulação? ");
-            fileName = GenericIO.readlnString ();
-            if (FileOp.exists (".", fileName)) {
-                do {
-                    GenericIO.writeString ("Já existe um directório/ficheiro com esse nome. Quer apagá-lo (s - sim; n - não)? ");
-                    opt = GenericIO.readlnChar ();
-                } while ((opt != 's') && (opt != 'n'));
-                if (opt == 's')
+        GenericIO.writeString ("\n" + "      Repair Shop Activities ");
+        if(!DEBUG_MODE) {
+            do {
+                GenericIO.writeString("Nome do ficheiro de armazenamento da simulação? ");
+                fileName = GenericIO.readlnString();
+                if (FileOp.exists(".", fileName)) {
+                    do {
+                        GenericIO.writeString("Já existe um directório/ficheiro com esse nome. Quer apagá-lo (s - sim; n - não)? ");
+                        opt = GenericIO.readlnChar();
+                    } while ((opt != 's') && (opt != 'n'));
+                    if (opt == 's')
+                        success = true;
+                    else
+                        success = false;
+                } else
                     success = true;
-                else
-                    success = false;
-            }
-            else
-                success = true;
-        } while (!success);
+            } while (!success);
+        } else {
+            fileName = "log-debug.txt";
+            GenericIO.writelnString("(DEBUG MODE)\n");
+        }
 
         repository = new GeneralRepository(fileName, N_CUSTOMERS, N_MECHANICS, N_PARTS, N_REPLACEMENT_CARS);
 
