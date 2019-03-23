@@ -119,18 +119,17 @@ public class Manager extends Thread {
                     switch (customerState) {
                         case RECEPTION_REPAIR:
                             if (lounge.wantReplacementCar(currentCustomerAttending))
-                                lounge.handCarKey(false);
+                                lounge.handCarKey();
                             repairArea.registerService(lounge.getCurrentCustomerID());
                             break;
                         case RECEPTION_PAYING:
                             lounge.receivePayment();
-                            lounge.handCarKey(false);
                             break;
                     }
                     break;
                 case HAND_CAR_KEY:
                     lounge.talkToCustomer(ManagerTask.HAND_CAR_KEY);
-                    lounge.handCarKey(true);
+                    lounge.handCarKey();
                     break;
                 case NONE:
                     break;

@@ -124,6 +124,14 @@ public class Lounge {
 
     private boolean[] customerWantsReplacementCar;
 
+
+    
+    private boolean[] managerFoundAKey;
+
+    private boolean customerPaid;
+
+    private boolean managerReceivedPayment;
+
     /**
     *  Instanciação do Lounge.
     *
@@ -141,6 +149,8 @@ public class Lounge {
         this.customersWaitingForKey = new MemFIFO(nCustomers);
         this.repairedCars = new MemFIFO(nCustomers);
         this.customerWantsReplacementCar = new boolean[nCustomers];
+        if(nCustomers > 0) this.managerFoundAKey = new boolean[nCustomers];
+        customerPaid = false;
     }
 
     /**
@@ -194,53 +204,19 @@ public class Lounge {
         ((Customer) Thread.currentThread()).setState(CustomerState.WAITING_FOR_REPLACE_CAR);
         repository.setCustomerState(customerId, CustomerState.WAITING_FOR_REPLACE_CAR);
 
-        // client wait until manager searches for keys
-        while (!isManagerTaskComplete) {
-            try {
-                wait();
-            } catch (InterruptedException e) { }
-        }
-
-        if(carKeyToHandle != -1) {
-            // manager has already a replacement car key
-            carKey = carKeyToHandle;
-            carKeyToHandle = -1;
-
-            isCustomerTaskComplete = true;
-            notifyAll();
-
-            return carKey;
-        }
-
-        /* client needs to wait for a replacement car key
-           there are no replacement cars available
-         */
-
-        // add customer to the queue waiting for key, update repository
-        customersWaitingForKey.write(customerId);
-        nCustomerForKey++;
-        repository.setCustomersInQueueForKey(nCustomerForKey);
-
-        //increase the number of requests and notify
         nRequests++;
+        nCustomerForKey++;
         notifyAll();
 
-        // block on condition variable, waiting for a replacement car key
-        while ((nextCustomer == customerId) && (carKeyToHandle == -1)) {
+        // client wait until manager searches for keys
+        while (!managerFoundAKey[customerId]) {
             try {
                 wait();
             } catch (InterruptedException e) { }
         }
-
-        // client has a replacement key, updating repository and notify manager
-        nCustomerForKey--;
-        repository.setCustomersInQueueForKey(nCustomerForKey);
+        managerFoundAKey[customerId] = false;
         carKey = carKeyToHandle;
         carKeyToHandle = -1;
-
-        isCustomerTaskComplete = true;
-        notifyAll();
-
         return carKey;
     }
 
@@ -285,7 +261,7 @@ public class Lounge {
 	public synchronized void payForTheService() {
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
         // Customer pays
-        isCustomerTaskComplete = true;
+        customerPaid = true;
         notifyAll();
 
         // update customer state and repository
@@ -293,7 +269,7 @@ public class Lounge {
         repository.setCustomerState(customerId, CustomerState.RECEPTION_PAYING);
 
         // block until manager confirms payment
-        while (!isManagerTaskComplete) {
+        while (!managerReceivedPayment) {
             try {
                 wait();
             } catch (InterruptedException e) { }
@@ -306,9 +282,9 @@ public class Lounge {
             nReplacementCarAvailable++;
             replacementKeys[tempCarID - 100] = tempCarID;
         }
-
-        ((Customer) Thread.currentThread()).setCarId(carKeyToHandle);
-        repository.setCustomerCar(customerId, carKeyToHandle);
+        
+        ((Customer) Thread.currentThread()).setCarId(customerId);
+        repository.setCustomerCar(customerId, customerId);
 	}
 
     /**
@@ -348,8 +324,10 @@ public class Lounge {
             needsResupplyParts = false;
             return ManagerTask.GET_PARTS;
         }
-        else if (nCustomerForKey > 0 && nReplacementCarAvailable > 0)
+        else if (nCustomerForKey > 0 && nReplacementCarAvailable > 0){
+            nCustomerForKey--;
             return ManagerTask.HAND_CAR_KEY;
+        }
         else if (nRepairedCar > 0) {
             nRepairedCar--;
             return ManagerTask.PHONE_CUSTOMER;
@@ -410,16 +388,17 @@ public class Lounge {
         repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
 
         // waits for customer to pay
-        while (!isCustomerTaskComplete) {
+        while (!customerPaid) {
             try {
                 wait();
             } catch (InterruptedException e) { }
         }
-        isCustomerTaskComplete = false;
+        customerPaid = false;
 
         //Manager confirms receivement of payment
-        isManagerTaskComplete = true;
+        managerReceivedPayment = true;
         notifyAll();
+
     }
 
     /**
@@ -428,44 +407,27 @@ public class Lounge {
      *
      *  @param returningKey identificação do cliente que recebe a chave
      */
-    public synchronized void handCarKey(boolean returningKey) {
+    public synchronized void handCarKey() {
         ((Manager) Thread.currentThread()).setState(ManagerState.ATTENDING_CUSTOMER);
         repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
-
-        //Manager searches for keys
-        if (returningKey) {
-            //Manager wants to return the car to its owner
-            carKeyToHandle = nextCustomer;
-            nTotalRepairedCars++;
-            repository.setTotalRepairedCars(nTotalRepairedCars);
-        }
-        else {
-            //client wants a replacement car
-            int temp = -1;
-            if(nReplacementCarAvailable > 0) {
-                for (int i = 0; i < replacementKeys.length; i++) {
-                    if(replacementKeys[i] != -1) {
-                        temp = replacementKeys[i];
-                        replacementKeys[i] = -1;
-                        nReplacementCarAvailable--;
-                        break;
-                    }
+        
+        //client wants a replacement car
+        int temp = -1;
+        if(nReplacementCarAvailable > 0) {
+            for (int i = 0; i < replacementKeys.length; i++) {
+                if(replacementKeys[i] != -1) {
+                    temp = replacementKeys[i];
+                    replacementKeys[i] = -1;
+                    nReplacementCarAvailable--;
+                    break;
                 }
             }
-            carKeyToHandle = temp;
         }
-
+        carKeyToHandle = temp;
+        
         //Manager signals that he found the key.
-        isManagerTaskComplete = true;
+        managerFoundAKey[nextCustomer] = true;
         notifyAll();
-
-        //waits until client receives the key
-        while (!isCustomerTaskComplete) {
-            try {
-                wait();
-            } catch (InterruptedException e) { }
-        }
-        isCustomerTaskComplete = false;
     }
 
     /**
