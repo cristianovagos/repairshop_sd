@@ -272,10 +272,7 @@ public class Lounge {
      */
 	public synchronized void payForTheService() {
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
-        // Customer pays
-        customerPaid = true;
-        notifyAll();
-
+        
         // update customer state and repository
         ((Customer) Thread.currentThread()).setState(CustomerState.RECEPTION_PAYING);
         repository.setCustomerState(customerId, CustomerState.RECEPTION_PAYING);
@@ -290,14 +287,10 @@ public class Lounge {
         
         ((Customer) Thread.currentThread()).setCarId(customerId);
         repository.setCustomerCar(customerId, customerId);
+        // Customer pays
+        customerPaid = true;
+        notifyAll();
 
-        // block until manager confirms payment
-        while (!managerReceivedPayment) {
-            try {
-                wait();
-            } catch (InterruptedException e) { }
-        }
-        managerReceivedPayment = false;
 	}
 
     /**
@@ -407,10 +400,6 @@ public class Lounge {
             } catch (InterruptedException e) { }
         }
         customerPaid = false;
-
-        //Manager confirms receivement of payment
-        managerReceivedPayment = true;
-        notifyAll();
 
     }
 
