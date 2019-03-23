@@ -358,7 +358,7 @@ public class Lounge {
      * Aqui o manager verifica qual o próximo cliente a chamar.
      * Devolve o próximo "customer"
      */
-    public synchronized CustomerState talkToCustomer(ManagerTask task) {
+    public synchronized CustomerState talkToCustomer() {
         // update Manager state and repository
         ((Manager) Thread.currentThread()).setState(ManagerState.ATTENDING_CUSTOMER);
         repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);

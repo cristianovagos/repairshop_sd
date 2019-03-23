@@ -115,7 +115,7 @@ public class Manager extends Thread {
                     outsideWorld.phoneCustomer(lounge.getClientNumber());
                     break;
                 case TALK_CUSTOMER:
-                    CustomerState customerState = lounge.talkToCustomer(ManagerTask.TALK_CUSTOMER);
+                    CustomerState customerState = lounge.talkToCustomer();
                     switch (customerState) {
                         case RECEPTION_REPAIR:
                             if (lounge.wantReplacementCar(currentCustomerAttending))
@@ -128,7 +128,7 @@ public class Manager extends Thread {
                     }
                     break;
                 case HAND_CAR_KEY:
-                    lounge.talkToCustomer(ManagerTask.HAND_CAR_KEY);
+                    lounge.talkToCustomer();
                     lounge.handCarKey();
                     break;
                 case NONE:
