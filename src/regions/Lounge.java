@@ -278,13 +278,6 @@ public class Lounge {
         ((Customer) Thread.currentThread()).setState(CustomerState.RECEPTION_PAYING);
         repository.setCustomerState(customerId, CustomerState.RECEPTION_PAYING);
 
-        // block until manager confirms payment
-        while (!managerReceivedPayment) {
-            try {
-                wait();
-            } catch (InterruptedException e) { }
-        }
-        isManagerTaskComplete = false;
 
         // if the customer used a replacement car, it's now available
         int tempCarID = ((Customer) Thread.currentThread()).getCarId();
@@ -295,6 +288,14 @@ public class Lounge {
         
         ((Customer) Thread.currentThread()).setCarId(customerId);
         repository.setCustomerCar(customerId, customerId);
+        
+        // block until manager confirms payment
+        while (!managerReceivedPayment) {
+            try {
+                wait();
+            } catch (InterruptedException e) { }
+        }
+        managerReceivedPayment = false;
 	}
 
     /**
