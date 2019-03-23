@@ -23,7 +23,7 @@ public class Lounge {
     /**
      * The current customer state
      */
-    private CustomerState currentCustomerState;
+    private CustomerState [] currentCustomerState;
 
     /**
      * Indicia a chave da viatura de substituição que está a ser dada
@@ -136,6 +136,8 @@ public class Lounge {
 
     private MemFIFO replacementKeysFifo;
 
+    private boolean managerTalked;
+
     /**
     *  Instanciação do Lounge.
     *
@@ -157,10 +159,13 @@ public class Lounge {
         customerPaid = false;
         managerReceivedPayment = false;
         customerReceivedKey = false;
+        this.replacementKeysFifo  = new MemFIFO(nCustomers);
         for (int i = 0; i <nReplacementCars; i++)
         {
             replacementKeysFifo.write(100+i);
         }
+        this.currentCustomerState = new CustomerState [nCustomers];
+        this.managerTalked = false;
     }
 
     /**
@@ -184,6 +189,8 @@ public class Lounge {
         repository.setCustomerState(customerId, currentCarID == customerId ?
                 CustomerState.RECEPTION_REPAIR : CustomerState.RECEPTION_PAYING);
         repository.setCustomersInQueue(nCustomerInQueue);
+
+        currentCustomerState[customerId] = ((Customer) Thread.currentThread()).getCustomerState();
 
         //increase the number of requests and notify
         nRequests++;
@@ -239,28 +246,25 @@ public class Lounge {
      */
     public synchronized void talkWithManager() {
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
-        currentCustomerState = ((Customer) Thread.currentThread()).getCustomerState();
         customerWantsReplacementCar[customerId] = ((Customer) Thread.currentThread()).getWantsReplacementCar();
 
         // update customer state
         ((Customer) Thread.currentThread()).setState(CustomerState.RECEPTION_TALK_WITH_MANAGER);
         repository.setCustomerState(customerId, CustomerState.RECEPTION_TALK_WITH_MANAGER);
 
+        
+        ((Customer) Thread.currentThread()).setCarId(-1); //customer hands over the key
+        repository.setCustomerCar(customerId, -1);
+
+
         // block on condition variable
-        while (!isManagerTaskComplete) {
+        while (!managerTalked) {
             try {
                 wait();
             } catch (InterruptedException e) { }
         }
 
-        isManagerTaskComplete = false;
-
-        ((Customer) Thread.currentThread()).setCarId(-1); //customer hands over the key
-        repository.setCustomerCar(customerId, -1);
-
-        //Customer hands key
-        isCustomerTaskComplete = true;
-        notifyAll();
+        managerTalked = false;
     }
 
 
@@ -332,6 +336,8 @@ public class Lounge {
         }
         else if (nCustomerForKey > 0 && !replacementKeysFifo.empty()){
             nCustomerForKey--;
+            nextCustomer = (int) customersWaitingForKey.read();
+            notifyAll();
             return ManagerTask.HAND_CAR_KEY;
         }
         else if (nRepairedCar > 0) {
@@ -339,7 +345,11 @@ public class Lounge {
             return ManagerTask.PHONE_CUSTOMER;
         }
         else if (nCustomerInQueue > 0)
+        {
+            nextCustomer = (int) customerQueue.read();
+            notifyAll();
             return ManagerTask.TALK_CUSTOMER;
+        }
         return ManagerTask.NONE;
     }
 
@@ -353,35 +363,12 @@ public class Lounge {
         ((Manager) Thread.currentThread()).setState(ManagerState.ATTENDING_CUSTOMER);
         repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
 
-        boolean clientWantsToRepair = false;
-
-        switch (task) {
-            case TALK_CUSTOMER:
-                nextCustomer = (int) customerQueue.read();
-                clientWantsToRepair = true;
-                break;
-            case HAND_CAR_KEY:
-                nextCustomer = (int) customersWaitingForKey.read();
-                clientWantsToRepair = false;
-                break;
-        }
 
         // avisa os customers que estão em fila
         ((Manager) Thread.currentThread()).setCurrentlyAttendingCustomer(nextCustomer);
-        isManagerTaskComplete = true;
+        managerTalked = true;
         notifyAll();
-
-        if(clientWantsToRepair) {
-            // wait for customer to respond
-            while (!isCustomerTaskComplete) {
-                try {
-                    wait();
-                } catch (InterruptedException e) { }
-            }
-            isCustomerTaskComplete = false;
-            return currentCustomerState;
-        }
-        return null;
+        return currentCustomerState[nextCustomer];
     }
 
     /**
