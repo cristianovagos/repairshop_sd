@@ -114,6 +114,28 @@ public class NewLounge {
     private boolean[] waitForReplacementCarKey;
 
     /**
+     * Lista de clientes com chave de substituição
+     * e chave respetiva
+     */
+    private int [] customerWithReplacementKey;
+
+    /**
+     * Numero de clientes servidos hoje
+     */
+    private int numCustomersServedToday;
+
+    /**
+     * Numero de clientes que existem no total.
+     */
+    private final int NCUSTOMERS;
+
+    /**
+     * Clientes que pagaram.
+     * Variável de bloqueio para confirmação de pagamento
+     */
+    private boolean[] customerPaid;
+
+    /**
      * Construtor de uma Recepção
      *
      * Aqui será construído o objeto referente a uma Recepção.
@@ -149,6 +171,17 @@ public class NewLounge {
         // initially all replacement cars and keys are available
         for (int i = 0; i < nReplacementCars; i++)
             this.replacementCarKeys.write(100 + i);
+
+        this.customerWithReplacementKey = new int[nCustomers];
+        //NEW
+        for(int i = 0; i<nCustomers;i++)
+        {
+            customerWithReplacementKey[i] = -1;
+        }
+        this.numCustomersServedToday = 0;
+        this.NCUSTOMERS = nCustomers;
+
+        this.customerPaid = new boolean[nCustomers];
     }
 
     /* CUSTOMER */
@@ -245,16 +278,18 @@ public class NewLounge {
         notifyAll();
 
         // wait until manager has a replacement car key available
-        waitForReplacementCarKey[customerId] = true;
-        while (waitForReplacementCarKey[customerId]) {
+        //waitForReplacementCarKey[customerId] = true;
+        while (customerWithReplacementKey[customerId]==-1) {
             try {
                 wait();
             } catch (InterruptedException e) {}
         }
 
         // get the first replacement car available
-        int replacementCarKey = (int) replacementCarKeys.read();
-        numReplacementCarsAvailable--;
+        //int replacementCarKey = (int) replacementCarKeys.read();
+        //NEW
+        int replacementCarKey = customerWithReplacementKey[customerId];
+        //numReplacementCarsAvailable--;
         ((Customer) Thread.currentThread()).setCarId(replacementCarKey);
         repository.setCustomerCar(customerId, replacementCarKey);
 
@@ -274,12 +309,7 @@ public class NewLounge {
         ((Customer) Thread.currentThread()).setState(CustomerState.RECEPTION_PAYING);
         repository.setCustomerState(customerId, CustomerState.RECEPTION_PAYING);
 
-        int customerCar = ((Customer) Thread.currentThread()).getCarId();
-        if (customerCar >= 100) {
-            // its a replacement car, customer will return it
-            replacementCarKeys.write(customerCar);
-            numReplacementCarsAvailable++;
-        }
+        customerPaid[customerId] = true;
     }
 
     /* MANAGER */
@@ -299,16 +329,22 @@ public class NewLounge {
         ((Manager) Thread.currentThread()).setState(ManagerState.CHECKING_WHAT_TO_DO);
         repository.setManagerState(ManagerState.CHECKING_WHAT_TO_DO);
 
+
+        //manager will mark end of the day
+        if(numCustomersServedToday >= NCUSTOMERS)
+            return false;
+
         while (managerRequests == 0) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 // manager will mark end of the day
-                return false;
+                //return false;
             }
         }
         if (managerRequests > 0)
             managerRequests--;
+
 
         // there is still work left to do
         return true;
@@ -338,7 +374,7 @@ public class NewLounge {
 
         if (mechanicsNeedParts.getAndSet(false))
             return ManagerTask.GET_PARTS;
-        else if (numCustomerReplacementCarKeyQueue > 0)
+        else if (numCustomerReplacementCarKeyQueue > 0 && numReplacementCarsAvailable > 0)
             return ManagerTask.TALK_CUSTOMER;
         else if (numCarsRepairedQueue > 0) {
             int customerToCall = (int) carsRepairedQueue.read();
@@ -348,6 +384,7 @@ public class NewLounge {
         }
         else if (numCustomerQueue > 0)
             return ManagerTask.TALK_CUSTOMER;
+        managerRequests++;
         return ManagerTask.NONE;
     }
 
@@ -416,7 +453,11 @@ public class NewLounge {
         repository.setCustomersInQueueForKey(numCustomerReplacementCarKeyQueue);
 
         // let customer know there is a key available
-        waitForReplacementCarKey[customerToAttend] = false;
+        //waitForReplacementCarKey[customerToAttend] = false;
+
+        customerWithReplacementKey[customerToAttend] = (int)replacementCarKeys.read();
+
+        numReplacementCarsAvailable--;
         notifyAll();
     }
 
@@ -434,7 +475,25 @@ public class NewLounge {
 
         // let customer know that he needs to pay
         waitForPayment[customerToAttend] = false;
+        if (customerWithReplacementKey[customerToAttend] != -1)
+        {
+            replacementCarKeys.write(customerWithReplacementKey[customerToAttend]);
+            numReplacementCarsAvailable++;
+
+            customerWithReplacementKey[customerToAttend] = -1;
+        }
+
         notifyAll();
+        while (customerPaid[customerToAttend]) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                // manager will mark end of the day
+                //return false;
+            }
+        }
+        numCustomersServedToday++;
+
     }
 
     /* MECHANIC */
@@ -480,8 +539,11 @@ public class NewLounge {
         carsRepairedQueue.write(carFixed);
         numCarsRepairedQueue++;
 
+
         // update number of total repaired cars
         numCarsRepaired++;
+
+
         repository.setTotalRepairedCars(numCarsRepaired);
 
         // manager has work to do

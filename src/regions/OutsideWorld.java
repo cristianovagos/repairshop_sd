@@ -40,7 +40,7 @@ public class OutsideWorld {
         if(nCustomers > 0) this.waitForCarRepair = new boolean[nCustomers];
 
         for (int i = 0; i < nCustomers; i++)
-            waitForCarRepair[i] = false;
+            waitForCarRepair[i] = true;
     }
 
     /**
@@ -52,8 +52,6 @@ public class OutsideWorld {
      */
     public synchronized void backToWorkByBus() {
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
-
-        waitForCarRepair[customerId] = true;
 
         // change customer state
         ((Customer) Thread.currentThread()).setState(CustomerState.NORMAL_LIFE_WITHOUT_CAR);
@@ -89,14 +87,13 @@ public class OutsideWorld {
         if(carRepaired)
             return;
 
-        waitForCarRepair[customerId] = true;
-
         // block on condition variable
         while (waitForCarRepair[customerId]) {
             try {
                 wait();
             } catch (InterruptedException e) { }
         }
+
     }
 
     /**
@@ -113,6 +110,7 @@ public class OutsideWorld {
 
         // update repository
         repository.setManagerState(ManagerState.ALERTING_CUSTOMER);
+
 
         // signal condition variable
         waitForCarRepair[customerId] = false;
