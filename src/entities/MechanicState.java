@@ -11,7 +11,8 @@ package entities;
 public enum MechanicState {
     WAITING_FOR_WORK ("WAI"),
     FIXING_THE_CAR ("FIX"),
-    ALERTING_MANAGER ("AMN"),
+    ALERTING_MANAGER_FOR_PARTS ("ALP"),
+    ALERTING_MANAGER_REPAIR_CONCLUDED("ARP"),
     CHECKING_STOCK ("CHK");
 
     /**

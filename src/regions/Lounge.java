@@ -166,6 +166,7 @@ public class Lounge {
         }
         this.currentCustomerState = new CustomerState [nCustomers];
         this.managerTalked = false;
+        this.nCustomerForKey = 0;
     }
 
     /**
@@ -225,6 +226,8 @@ public class Lounge {
         nRequests++;
         nCustomerForKey++;
         customersWaitingForKey.write(customerId);
+        repository.setCustomersInQueueForKey(nCustomerForKey);
+
         notifyAll();
 
         // client wait until manager searches for keys
@@ -336,6 +339,7 @@ public class Lounge {
         }
         else if (nCustomerForKey > 0 && !replacementKeysFifo.empty()){
             nCustomerForKey--;
+            repository.setCustomersInQueueForKey(nCustomerForKey);
             nextCustomer = (int) customersWaitingForKey.read();
             notifyAll();
             return ManagerTask.HAND_CAR_KEY;
@@ -394,7 +398,7 @@ public class Lounge {
      *  Operação handCarKey (chamada pelo {@link Manager})
      *  Devolve a chave ao cliente
      *
-     *  @param returningKey identificação do cliente que recebe a chave
+//     *  @param returningKey identificação do cliente que recebe a chave
      */
     public synchronized void handCarKey() {
         ((Manager) Thread.currentThread()).setState(ManagerState.ATTENDING_CUSTOMER);
@@ -418,8 +422,8 @@ public class Lounge {
     public synchronized void letManagerKnow(int partRequired) {
         // update Mechanic state and repository
         int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
-        ((Mechanic) Thread.currentThread()).setState(MechanicState.ALERTING_MANAGER);
-        repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER);
+//        ((Mechanic) Thread.currentThread()).setState(MechanicState.ALERTING_MANAGER);
+//        repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER);
         repository.setPartMissingAlert(partRequired, true);
 
         // notify Manager that needs to resupply parts
@@ -435,8 +439,8 @@ public class Lounge {
     public synchronized void repairConcluded() {
         // update Mechanic state and repository
         int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
-        ((Mechanic) Thread.currentThread()).setState(MechanicState.ALERTING_MANAGER);
-        repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER);
+//        ((Mechanic) Thread.currentThread()).setState(MechanicState.ALERTING_MANAGER);
+//        repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER);
 
         // add repaired car to queue of repaired cars, update repository
         int repairedCarId = ((Mechanic) Thread.currentThread()).getCurrentCarFixingId();

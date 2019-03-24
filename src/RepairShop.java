@@ -33,7 +33,7 @@ public class RepairShop {
         GeneralRepository repository;
         OutsideWorld outsideWorld;
         Park park;
-        Lounge lounge;
+        NewLounge lounge;
         RepairArea repairArea;
         SupplierSite supplierSite;
 
@@ -69,7 +69,7 @@ public class RepairShop {
 
         park = new Park(N_CUSTOMERS, N_REPLACEMENT_CARS, N_PARTS, repository);
         outsideWorld = new OutsideWorld(N_CUSTOMERS, repository);
-        lounge = new Lounge(N_CUSTOMERS, N_REPLACEMENT_CARS, repository);
+        lounge = new NewLounge(N_CUSTOMERS, N_REPLACEMENT_CARS, repository);
         repairArea = new RepairArea(N_CUSTOMERS, N_PARTS, repository);
         supplierSite = new SupplierSite(N_PARTS, N_MAX_PARTS, repository);
 
@@ -100,6 +100,10 @@ public class RepairShop {
         GenericIO.writelnString();
 
         for (int i = 0; i < N_MECHANICS; i++) {
+            while (mechanics[i].isAlive()) {
+                mechanics[i].interrupt();
+                Thread.yield();
+            }
             try {
                 mechanics[i].join();
             } catch (InterruptedException e) { }
@@ -109,6 +113,7 @@ public class RepairShop {
 
         while (manager.isAlive()) {
             manager.interrupt();
+            Thread.yield();
         }
         try {
             manager.join();

@@ -1,9 +1,6 @@
 package entities;
 
-import regions.GeneralRepository;
-import regions.Lounge;
-import regions.Park;
-import regions.RepairArea;
+import regions.*;
 
 /**
  * Classe Mechanic (Mecânico)
@@ -71,7 +68,7 @@ public class Mechanic extends Thread {
      * Referência para a Recepção (Lounge)
      * @see Lounge
      */
-    private Lounge lounge;
+    private NewLounge lounge;
 
     /**
      * Construtor de um Mecânico
@@ -86,7 +83,7 @@ public class Mechanic extends Thread {
      * @param park referência para o {@link Park}
      * @param lounge referência para o {@link Lounge}
      */
-    public Mechanic(int id, GeneralRepository repo, RepairArea repairArea, Park park, Lounge lounge) {
+    public Mechanic(int id, GeneralRepository repo, RepairArea repairArea, Park park, NewLounge lounge) {
         this.mechanicId = id;
         this.state = MechanicState.WAITING_FOR_WORK;
         this.repository = repo;
@@ -174,7 +171,7 @@ public class Mechanic extends Thread {
      */
     private void fixIt() {
         try {
-            sleep ((long) (1 + 10 * Math.random()));
+            sleep ((long) (1 + 30 * Math.random()));
         }
         catch (InterruptedException e) {}
     }

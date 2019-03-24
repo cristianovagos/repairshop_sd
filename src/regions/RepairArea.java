@@ -95,7 +95,9 @@ public class RepairArea {
             while (nRequestedServices == 0) {
                 try {
                     wait();
-                } catch (InterruptedException e) { }
+                } catch (InterruptedException e) {
+                    return false;
+                }
             }
             nRequestedServices--;
         }
@@ -109,6 +111,8 @@ public class RepairArea {
      */
     public synchronized void markEndOfDay() {
         endOfDay = true;
+        nRequestedServices = 1;
+        notifyAll();
     }
 
     /**

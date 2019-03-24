@@ -40,6 +40,9 @@ public class Manager extends Thread {
      */
     private int[] partsBasket;
 
+    /**
+     * O cliente que o Gerente está a atender no momento.
+     */
     private int currentCustomerAttending;
 
     /**
@@ -52,7 +55,7 @@ public class Manager extends Thread {
      * Referência para a Recepção (Lounge)
      * @see Lounge
      */
-    private Lounge lounge;
+    private NewLounge lounge;
 
     /**
      * Referência para a Área de Reparação (Repair Area)
@@ -86,7 +89,7 @@ public class Manager extends Thread {
      * @param outsideWorld referência para o {@link OutsideWorld}
      * @param supplierSite referência para o {@link SupplierSite}
      */
-    public Manager(int nParts, GeneralRepository repo, Lounge lounge, RepairArea repairArea, OutsideWorld outsideWorld, SupplierSite supplierSite) {
+    public Manager(int nParts, GeneralRepository repo, NewLounge lounge, RepairArea repairArea, OutsideWorld outsideWorld, SupplierSite supplierSite) {
         this.state = ManagerState.CHECKING_WHAT_TO_DO;
         this.currentCustomerAttending = -1;
         this.repository = repo;
@@ -112,26 +115,22 @@ public class Manager extends Thread {
                     repairArea.storePart(partsBasket);
                     break;
                 case PHONE_CUSTOMER:
-                    outsideWorld.phoneCustomer(lounge.getClientNumber());
+                    outsideWorld.phoneCustomer(currentCustomerAttending);
                     break;
                 case TALK_CUSTOMER:
-                    CustomerState customerState = lounge.talkToCustomer();
-                    switch (customerState) {
-                        case RECEPTION_REPAIR:
-                            if (lounge.wantReplacementCar(currentCustomerAttending))
-                                lounge.handCarKey();
-                            repairArea.registerService(lounge.getCurrentCustomerID());
+                    switch (lounge.talkToCustomer()) {
+                        case WAITING_FOR_REPLACE_CAR:
+                            lounge.handCarKey();
                             break;
                         case RECEPTION_PAYING:
-                            lounge.receivePayment();
+                            lounge.receivePayment(currentCustomerAttending);
                             break;
+                        case RECEPTION_REPAIR:
+                            repairArea.registerService(currentCustomerAttending);
+                            break;
+                        default:
+                            continue;
                     }
-                    break;
-                case HAND_CAR_KEY:
-                    lounge.talkToCustomer();
-                    lounge.handCarKey();
-                    break;
-                case NONE:
                     break;
             }
         }

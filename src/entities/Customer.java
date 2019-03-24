@@ -1,9 +1,6 @@
 package entities;
 
-import regions.GeneralRepository;
-import regions.Lounge;
-import regions.OutsideWorld;
-import regions.Park;
+import regions.*;
 
 /**
  * Classe Customer (Cliente)
@@ -72,7 +69,7 @@ public class Customer extends Thread {
      * Referência para a Recepção (Lounge)
      * @see Lounge
      */
-    private Lounge lounge;
+    private NewLounge lounge;
 
     /**
      * Referência para o Parque de Estacionamento (Park)
@@ -99,7 +96,7 @@ public class Customer extends Thread {
      * @param park referência para o Park {@link Park}
      * @param outsideWorld referência para o Outside World {@link OutsideWorld}
      */
-    public Customer(int id, GeneralRepository repo, Lounge lounge, Park park, OutsideWorld outsideWorld) {
+    public Customer(int id, GeneralRepository repo, NewLounge lounge, Park park, OutsideWorld outsideWorld) {
         this.customerId = id;
         this.carId = id;
         this.state = CustomerState.NORMAL_LIFE_WITH_CAR;
@@ -119,7 +116,7 @@ public class Customer extends Thread {
     public void run() {
         decideOnRepair();
         park.goToRepairShop();
-        lounge.queueIn();
+        lounge.queueIn(false);
         lounge.talkWithManager();
         if(wantsReplacementCar) {
             key = lounge.collectKey();
@@ -128,7 +125,7 @@ public class Customer extends Thread {
             park.goToRepairShop();
         } else
             outsideWorld.backToWorkByBus();
-        lounge.queueIn();
+        lounge.queueIn(true);
         lounge.payForTheService();
         park.collectCar();
         outsideWorld.backToWorkByCar(true);
