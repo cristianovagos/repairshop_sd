@@ -8,16 +8,16 @@ import entities.MechanicState;
 import java.util.Random;
 
 /**
- * Classe Park (Parque de Estacionamento)
+ * Classe Park (Parque de Estacionamento)<br>
  *
  * Esta classe é responsável pela criação do Parque de Estacionamento, uma
- * das entidades passivas do problema.
+ * das entidades passivas do problema.<br>
  *
  * É aqui que estão inicialmente localizadas as viaturas de substituição, a
- * serem disponibilizadas aos Clientes {@link Customer} que queiram. Também
+ * serem disponibilizadas aos Clientes ({@link Customer}) que queiram. Também
  * é o local onde os Clientes vão estacionar as suas próprias viaturas quando
  * se dirigem à Oficina para posterior reparação, onde após estar concluída
- * será novamente estacionada pelo Mecânico {@link Mechanic}.
+ * será novamente estacionada pelo Mecânico ({@link Mechanic}).<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -31,7 +31,7 @@ public class Park {
 
     /**
      * Indicação de existência dos carros dos Clientes
-     * {@link Customer} no Parque de Estacionamento da Oficina.
+     * ({@link Customer}) no Parque de Estacionamento da Oficina.
      */
     private boolean[] customerCars;
 
@@ -48,9 +48,9 @@ public class Park {
     private GeneralRepository repository;
 
     /**
-     * Construtor de um Parque de Estacionamento
+     * Construtor de um Parque de Estacionamento<br>
      *
-     * Aqui será construído o objeto referente a um Parque de Estacionamento.
+     * Aqui será construído o objeto referente a um Parque de Estacionamento.<br>
      *
      * @param nCustomers número de clientes
      * @param nReplacementCars número de viaturas de substituição
@@ -73,10 +73,10 @@ public class Park {
     }
 
     /**
-     * Operação goToRepairShop (chamada pelo {@link Customer})
+     * Operação goToRepairShop (chamada pelo {@link Customer})<br>
      *
      * O Cliente chega à RepairShop, e estaciona a sua viatura ou
-     * a viatura de substituição que lhe foi atribuída no Park.
+     * a viatura de substituição que lhe foi atribuída no Park.<br>
      */
     public synchronized void goToRepairShop() {
         // update Customer state
@@ -101,9 +101,9 @@ public class Park {
     }
 
     /**
-     * Operação findCar (chamada pelo {@link Customer})
+     * Operação findCar (chamada pelo {@link Customer})<br>
      *
-     * O Cliente recolhe a viatura de substituição do Park.
+     * O Cliente recolhe a viatura de substituição do Park.<br>
      *
      * @param replacementCar viatura de substituição
      */
@@ -125,9 +125,9 @@ public class Park {
     }
 
     /**
-     * Operação collectCar (chamada pelo {@link Customer})
+     * Operação collectCar (chamada pelo {@link Customer})<br>
      *
-     * O Cliente recolhe a sua viatura própria do Park.
+     * O Cliente recolhe a sua viatura própria do Park.<br>
      */
     public synchronized void collectCar() {
         // update Customer state
@@ -145,10 +145,10 @@ public class Park {
     }
 
     /**
-     * Operação getVehicle (chamada pelo {@link Mechanic})
+     * Operação getVehicle (chamada pelo {@link Mechanic})<br>
      *
      * O Mecânico dirige-se ao Park para obter a viatura do {@link Customer}
-     * e avalia qual a peça que deve substituir para a reparar.
+     * e avalia qual a peça que deve substituir para a reparar.<br>
      *
      * @return a peça que necessita de substituição
      */
@@ -170,9 +170,9 @@ public class Park {
     }
 
     /**
-     * Operação returnVehicle (chamada pelo {@link Mechanic})
+     * Operação returnVehicle (chamada pelo {@link Mechanic})<br>
      *
-     * O Mecânico devolve a viatura já reparada ao Park.
+     * O Mecânico devolve a viatura já reparada ao Park.<br>
      */
     public synchronized void returnVehicle() {
         // update Mechanic state

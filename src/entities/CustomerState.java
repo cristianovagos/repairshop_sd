@@ -1,9 +1,9 @@
 package entities;
 
 /**
- * Enumerado CustomerState
+ * Enumerado CustomerState<br>
  *
- * Estado interno do Cliente {@link Customer}.
+ * Estado interno do Cliente ({@link Customer}).
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -25,9 +25,9 @@ public enum CustomerState {
     private final String state;
 
     /**
-     * Construtor privado do estado interno do cliente
+     * Construtor privado do estado interno do cliente<br>
      *
-     * Será criado um objeto referente ao estado interno do cliente.
+     * Será criado um objeto referente ao estado interno do cliente.<br>
      *
      * @param state a descrição do estado interno do cliente
      */
@@ -36,9 +36,9 @@ public enum CustomerState {
     }
 
     /**
-     * Operação state
+     * Operação state<br>
      *
-     * Obtém a descrição do estado interno do cliente
+     * Obtém a descrição do estado interno do cliente<br>
      *
      * @return a descrição do estado interno do cliente
      */

@@ -6,25 +6,67 @@ import genclass.GenericIO;
 import regions.*;
 
 /**
- * Classe RepairShop (Oficina)
+ * Classe RepairShop (Oficina)<br>
  *
  * Este tipo de dados simula o problema descrito no âmbito deste projeto,
- * que é as actividades de uma Oficina de Reparação de Automóveis.
+ * que é as actividades de uma Oficina de Reparação de Automóveis.<br>
  * Aqui foi implementada uma solução concorrente baseada em monitores como
- * elementos de sincronização entre as entidades ativas (Cliente {@link Customer},
- * Mecânico {@link Mechanic} e Gerente {@link Manager}) e as entidades passivas
- * (Mundo Exterior {@link OutsideWorld},
+ * elementos de sincronização entre as entidades ativas (Cliente ({@link Customer}),
+ * Mecânico ({@link Mechanic}) e Gerente ({@link Manager})) e as entidades passivas
+ * (Mundo Exterior ({@link OutsideWorld}), Recepção ({@link Lounge}), Parque de
+ * Estacionamento ({@link Park}), Área de Reparação ({@link RepairArea}) e Fornecedor
+ * ({@link SupplierSite})).<br>
+ * Durante a execução da simulação, todas as entidades passivas irão atualizar um
+ * Repositório Geral de Dados ({@link GeneralRepository}), que irá escrever num ficheiro
+ * de logging para um acompanhamento de todos os estados e transições do problema.
  *
+ * @author Miguel Bras
+ * @author Cristiano Vagos
  */
 public class RepairShop {
 
+    /**
+     * Flag constante que indica se pretende executar a simulação em modo DEBUG,
+     * o que irá executar a simulação do problema sem intervenção do utilizador,
+     * escrevendo num ficheiro de logging com o nome "log-debug.txt" por defeito.
+     */
     private static final boolean DEBUG_MODE = true;
+
+    /**
+     * Constante indicando o número de clientes a serem instanciados
+     * @see Customer
+     */
     private static final int N_CUSTOMERS = 30;
+
+    /**
+     * Constante indicando o número de mecânicos a serem instanciados
+     * @see Mechanic
+     */
     private static final int N_MECHANICS = 2;
+
+    /**
+     * Constante indicando o número de tipos de peças distintos do problema
+     */
     private static final int N_PARTS = 3;
+
+    /**
+     * Constante indicando o número total de viaturas de substituição
+     */
     private static final int N_REPLACEMENT_CARS = 3;
+
+    /**
+     * Constante indicando o número máximo de peças a serem obtidas pelo
+     * Gerente ({@link Manager}) no Fornecedor ({@link SupplierSite})
+     */
     private static final int N_MAX_PARTS = 20;
 
+    /**
+     * Operação main<br>
+     *
+     * Aqui será inicializada a simulação do problema.
+     *
+     * @param args argumentos da função (não usados)
+     */
     public static void main(String[] args) {
         String fileName;
         char opt;
@@ -33,7 +75,7 @@ public class RepairShop {
         GeneralRepository repository;
         OutsideWorld outsideWorld;
         Park park;
-        NewLounge lounge;
+        Lounge lounge;
         RepairArea repairArea;
         SupplierSite supplierSite;
 
@@ -69,7 +111,7 @@ public class RepairShop {
 
         park = new Park(N_CUSTOMERS, N_REPLACEMENT_CARS, N_PARTS, repository);
         outsideWorld = new OutsideWorld(N_CUSTOMERS, repository);
-        lounge = new NewLounge(N_CUSTOMERS, N_REPLACEMENT_CARS, repository);
+        lounge = new Lounge(N_CUSTOMERS, N_REPLACEMENT_CARS, repository);
         repairArea = new RepairArea(N_CUSTOMERS, N_PARTS, repository);
         supplierSite = new SupplierSite(N_PARTS, N_MAX_PARTS, repository);
 

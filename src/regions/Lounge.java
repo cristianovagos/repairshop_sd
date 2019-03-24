@@ -3,471 +3,551 @@ package regions;
 import entities.*;
 import utils.MemFIFO;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
- * TODO javadoc
+ * Classe Lounge (Recepção)<br>
+ *
+ * Esta classe é responsável pela criação da Recepção da Oficina, uma
+ * das entidades passivas do problema.<br>
+ *
+ * É neste local que o maior número de interações acontece, uma vez que
+ * é o principal local de trabalho do Gerente ({@link Manager}) da Oficina,
+ * que a vai gerindo consoante as necessidades e tarefas que aparecerem.
+ * Atender os Clientes ({@link Customer}) quando estes chegam, fornecer
+ * chaves de substituição, entre outros.<br>
+ * Os Clientes irão ter aqui um ponto de contacto com a Oficina, onde
+ * estão na fila de espera para serem atendidos, ou estarão a aguardar uma
+ * chave de substituição para a eventualmente receber, ou irão efetuar o
+ * pagamento do serviço de reparação.<br>
+ * Já os Mecânicos ({@link Mechanic}) irão aqui informar o Gerente tanto da
+ * falta de peças para as reparações como para a conclusão de reparações por
+ * ele pedidas anteriormente.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
 public class Lounge {
-    /**
-     * Número de clientes
-     */
-    private final int N_CUSTOMERS;
 
     /**
-     *  Keys for the Replacement Cars
-     */
-    private int[] replacementKeys = {100, 101, 102};
-
-    /**
-     * The current customer state
-     */
-    private CustomerState [] currentCustomerState;
-
-    /**
-     * Indicia a chave da viatura de substituição que está a ser dada
-     * @serialField carKeyToHandle
-     */
-    private int carKeyToHandle;
-
-    /**
-     * Indicia o numero total de carros reparados no dia
-     * @serialField nTotalRepairedCars
-     */
-    private int nTotalRepairedCars;
-
-    /**
-    *  number of Customer waiting for keys
-    *
-    *    @serialField nCostumerForKey
-    */
-    private int nCustomerForKey;
-
-    /**
-    *  Customer waiting for keys
-    *
-    *    @serialField clientsWaitingForKey
-    */
-    private MemFIFO customersWaitingForKey;
-
-    /**
-     * Repositorio que armazena informação atual do sistema
-     * @serialField repository
+     * Referência para o Repositório
+     * @see GeneralRepository
      */
     private GeneralRepository repository;
 
-      /**
-     * Variáveis para interação entre manager e cliente
-     * @serialField repository
+    /**
+     * Fila de espera de clientes na Recepção
+     * ({@link Customer})
      */
-    private boolean isCustomerTaskComplete;
-
-    // todo javadoc
-    private boolean isManagerTaskComplete;
-
-    /**
-    *  Cliente a ser atendido
-    *
-    *    @serialField nextCostumer
-    */
-    private int nextCustomer;
-
-    /**
-    *  Customer Queue
-    *
-    *    @serialField customerQueue
-    */
     private MemFIFO customerQueue;
 
     /**
-    *  Customer List Registry
-    *
-    *    @serialField customerRegistry
-    */
-    private MemFIFO repairedCars;
+     * Número de clientes em espera na Recepção
+     */
+    private int numCustomerQueue;
 
     /**
-    *  Number of Requests
-    *
-    *    @serialField nRequests
-    */
-    private int nRequests;
+     * Fila de espera de clientes à espera de chave
+     * para viatura de substituição
+     */
+    private MemFIFO customerReplacementCarKeyQueue;
 
     /**
-    *  Customer Requests
-    *
-    *    @serialField costumerInQueue
-    */
-    private int nCustomerInQueue;
+     * Número de clientes à espera de chave para
+     * viatura de substituição
+     */
+    private int numCustomerReplacementCarKeyQueue;
 
     /**
-    *  Indica a quantidade de carros de substituição disponivel.
-    *
-    *    @serialField replacementCarAvailable
-    */
-    private int nReplacementCarAvailable;
+     * Indicação se os Mecânicos ({@link Mechanic})
+     * precisam de reabastecimento de peças
+     */
+    private AtomicBoolean mechanicsNeedParts;
 
     /**
-    *  Indica se há peças que necessitem de supply.
-    *
-    *    @serialField replacementCarAvailable
-    */
-    private boolean needsResupplyParts;
+     * Fila de espera de viaturas reparadas aguardando
+     * alerta ao cliente ({@link Customer})
+     */
+    private MemFIFO carsRepairedQueue;
 
     /**
-    *  Indica o numero de carros reparados.
-    *
-    *    @serialField nRepairArea
-    */
-    private int nRepairedCar;
-
-    private boolean[] customerWantsReplacementCar;
-
-
-    
-    private boolean[] managerFoundAKey;
-
-    private boolean customerPaid;
-
-    private boolean managerReceivedPayment;
-
-    private boolean customerReceivedKey;
-
-    private MemFIFO replacementKeysFifo;
-
-    private boolean managerTalked;
+     * Número de viaturas reparadas aguardando
+     * alerta ao cliente ({@link Customer})
+     */
+    private int numCarsRepairedQueue;
 
     /**
-    *  Instanciação do Lounge.
-    *
-    */
+     * Fila de espera de chaves de viaturas de substituição
+     */
+    private MemFIFO replacementCarKeys;
+
+    /**
+     * Número de viaturas de substituição disponíveis
+     */
+    private int numReplacementCarsAvailable;
+
+    /**
+     * Número total de carros reparados
+     */
+    private int numCarsRepaired;
+
+    /**
+     * Número de pedidos ao Gerente
+     * ({@link Manager})
+     */
+    private int managerRequests;
+
+    /**
+     * Lista de clientes à espera de reparação
+     */
+    private boolean[] waitForRepair;
+
+    /**
+     * Lista de clientes à espera de pagamento
+     */
+    private boolean[] waitForPayment;
+
+    /**
+     * Lista de clientes à espera de chave para viatura
+     * de substituição
+     */
+    private boolean[] waitForReplacementCarKey;
+
+    /**
+     * Lista de clientes com chave de substituição
+     * e chave respetiva
+     */
+    private int [] customerWithReplacementKey;
+
+    /**
+     * Numero de clientes servidos hoje
+     */
+    private int numCustomersServedToday;
+
+    /**
+     * Numero de clientes que existem no total.
+     */
+    private final int NCUSTOMERS;
+
+    /**
+     * Clientes que pagaram.
+     * Variável de bloqueio para confirmação de pagamento
+     */
+    private boolean[] customerPaid;
+
+    /**
+     * Construtor de uma Recepção<br>
+     *
+     * Aqui será construído o objeto referente a uma Recepção.<br>
+     *
+     * @param nCustomers número total de clientes ({@link Customer})
+     * @param nReplacementCars número total de viaturas de substituição
+     * @param repo referência para o Repositório ({@link GeneralRepository})
+     */
     public Lounge(int nCustomers, int nReplacementCars, GeneralRepository repo) {
-        this.N_CUSTOMERS = nCustomers;
-        this.nextCustomer = -1;
-        this.isCustomerTaskComplete = this.isManagerTaskComplete = false;
         this.repository = repo;
-        this.nReplacementCarAvailable = nReplacementCars;
-        this.needsResupplyParts = false;
-        this.carKeyToHandle = -1;
-        this.nCustomerInQueue = 0;
         this.customerQueue = new MemFIFO(nCustomers);
-        this.customersWaitingForKey = new MemFIFO(nCustomers);
-        this.repairedCars = new MemFIFO(nCustomers);
-        this.customerWantsReplacementCar = new boolean[nCustomers];
-        if(nCustomers > 0) this.managerFoundAKey = new boolean[nCustomers];
-        customerPaid = false;
-        managerReceivedPayment = false;
-        customerReceivedKey = false;
-        this.replacementKeysFifo  = new MemFIFO(nCustomers);
-        for (int i = 0; i <nReplacementCars; i++)
+        this.numCustomerQueue = 0;
+        this.customerReplacementCarKeyQueue = new MemFIFO(nCustomers);
+        this.numCustomerReplacementCarKeyQueue = 0;
+        this.mechanicsNeedParts = new AtomicBoolean(); // defaults to false
+        this.carsRepairedQueue = new MemFIFO(nCustomers);
+        this.numCarsRepairedQueue = 0;
+        this.replacementCarKeys = new MemFIFO(nReplacementCars);
+        this.numReplacementCarsAvailable = nReplacementCars;
+        this.numCarsRepaired = 0;
+        this.managerRequests = 0;
+        this.waitForRepair = new boolean[nCustomers];
+        this.waitForPayment = new boolean[nCustomers];
+        this.waitForReplacementCarKey = new boolean[nCustomers];
+
+        // initialize all wait conditions
+        for (int i = 0; i < nCustomers; i++) {
+            this.waitForRepair[i] = false;
+            this.waitForPayment[i] = false;
+            this.waitForReplacementCarKey[i] = false;
+        }
+
+        // initially all replacement cars and keys are available
+        for (int i = 0; i < nReplacementCars; i++)
+            this.replacementCarKeys.write(100 + i);
+
+        this.customerWithReplacementKey = new int[nCustomers];
+        //NEW
+        for(int i = 0; i<nCustomers;i++)
         {
-            replacementKeysFifo.write(100+i);
+            customerWithReplacementKey[i] = -1;
         }
-        this.currentCustomerState = new CustomerState [nCustomers];
-        this.managerTalked = false;
-        this.nCustomerForKey = 0;
+        this.numCustomersServedToday = 0;
+        this.NCUSTOMERS = nCustomers;
+
+        this.customerPaid = new boolean[nCustomers];
     }
 
-    /**
-     * Operação queueIn (chamada pelo {@link Customer})
-     *
-     * Aqui, o cliente vai entrar na fila.
-     * O {@link Manager} avisa quando chegar a vez de o cliente ser atendido
-     */
-    public synchronized void queueIn() {
-        int customerId = ((Customer) Thread.currentThread()).getCustomerId();
+    /* CUSTOMER */
 
-        // add customer to the queue
+    /**
+     * Operação queueIn (chamada pelo {@link Customer})<br>
+     *
+     * O Cliente chega à Recepção e aguarda na fila, para ser
+     * atendido pelo Gerente ({@link Manager}). Tanto poderá colocar a sua
+     * viatura para reparação ou para proceder ao pagamento do mesmo.<br>
+     *
+     * @param repairCompleted indicação se a reparação já foi feita
+     */
+    public synchronized void queueIn(boolean repairCompleted) {
+        // customer is in repair shop queue
+        int customerId = ((Customer) Thread.currentThread()).getCustomerId();
         customerQueue.write(customerId);
-        nCustomerInQueue++;
+        numCustomerQueue++;
+        repository.setCustomersInQueue(numCustomerQueue);
 
-        int currentCarID = ((Customer) Thread.currentThread()).getCarId();
-
-        //if currentKey is equal to the customer id, then customer arrives with its car and wants to repair it
-        ((Customer) Thread.currentThread()).setState(currentCarID == customerId ?
-                CustomerState.RECEPTION_REPAIR : CustomerState.RECEPTION_PAYING);
-        repository.setCustomerState(customerId, currentCarID == customerId ?
-                CustomerState.RECEPTION_REPAIR : CustomerState.RECEPTION_PAYING);
-        repository.setCustomersInQueue(nCustomerInQueue);
-
-        currentCustomerState[customerId] = ((Customer) Thread.currentThread()).getCustomerState();
-
-        //increase the number of requests and notify
-        nRequests++;
+        // manager has work to do
+        managerRequests++;
         notifyAll();
 
-        // block on condition variable
-        while (customerId != nextCustomer) {
-            try {
-                wait();
-            } catch (InterruptedException e) { }
+        // customer is at reception
+        ((Customer) Thread.currentThread()).setState(CustomerState.RECEPTION);
+        repository.setCustomerState(customerId, CustomerState.RECEPTION);
+
+        if (repairCompleted) {
+            // repair has completed, customer wants to pay
+
+            // waits for its turn to pay
+            waitForPayment[customerId] = true;
+            while (waitForPayment[customerId]) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {}
+            }
+        } else {
+            // customer wants to repair their car
+
+            // waits for its turn to repair
+            waitForRepair[customerId] = true;
+            while (waitForRepair[customerId]) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {}
+            }
         }
-        nCustomerInQueue--;
-        repository.setCustomersInQueue(nCustomerInQueue);
     }
 
     /**
-     * Operação collectKey (chamada pelo {@link Customer})
+     * Operação talkWithManager (chamada pelo {@link Customer})<br>
      *
-     * Aqui, o cliente vai receber a chave da viatura de substituição
-     * dada pelo {@link Manager}.
-     * Devolve um int que representa a chave do carro.
-     */
-    public synchronized int collectKey() {
-        int carKey;
-
-        int customerId = ((Customer) Thread.currentThread()).getCustomerId();
-        // change customer state, update repository
-        ((Customer) Thread.currentThread()).setState(CustomerState.WAITING_FOR_REPLACE_CAR);
-        repository.setCustomerState(customerId, CustomerState.WAITING_FOR_REPLACE_CAR);
-
-
-        nRequests++;
-        nCustomerForKey++;
-        customersWaitingForKey.write(customerId);
-        repository.setCustomersInQueueForKey(nCustomerForKey);
-
-        notifyAll();
-
-        // client wait until manager searches for keys
-        while (!managerFoundAKey[customerId]) {
-            try {
-                wait();
-            } catch (InterruptedException e) { }
-        }
-        managerFoundAKey[customerId] = false;
-        carKey = (int)replacementKeysFifo.read();
-        
-        return carKey;
-    }
-
-    /**
-     * Operação talkWithManager (chamada pelo {@link Customer})
-     *
-     * Aqui, o cliente vai falar com o {@link Manager}.
+     * O Cliente fala com o Gerente {@link Manager} para reparar
+     * a sua viatura e entrega-lhe a chave da mesma.<br>
      */
     public synchronized void talkWithManager() {
-        int customerId = ((Customer) Thread.currentThread()).getCustomerId();
-        customerWantsReplacementCar[customerId] = ((Customer) Thread.currentThread()).getWantsReplacementCar();
+        // talk with manager
 
-        // update customer state
+        // update state and repository
+        int customerId = ((Customer) Thread.currentThread()).getCustomerId();
         ((Customer) Thread.currentThread()).setState(CustomerState.RECEPTION_TALK_WITH_MANAGER);
         repository.setCustomerState(customerId, CustomerState.RECEPTION_TALK_WITH_MANAGER);
 
-        
-        ((Customer) Thread.currentThread()).setCarId(-1); //customer hands over the key
+        // give manager the customers car key
+        ((Customer) Thread.currentThread()).setCarId(-1);
         repository.setCustomerCar(customerId, -1);
-
-
-        // block on condition variable
-        while (!managerTalked) {
-            try {
-                wait();
-            } catch (InterruptedException e) { }
-        }
-
-        managerTalked = false;
     }
 
+    /**
+     * Operação collectKey (chamada pelo {@link Customer})<br>
+     *
+     * O Cliente pretende uma viatura de substituição enquanto a sua
+     * viatura própria é reparada, e aguarda a entrega de uma chave de
+     * uma das viaturas de substituição disponíveis por parte do Gerente
+     * ({@link Manager}).<br>
+     *
+     * @return chave da viatura de substituição
+     */
+    public synchronized int collectKey() {
+        // update state and repository
+        int customerId = ((Customer) Thread.currentThread()).getCustomerId();
+        ((Customer) Thread.currentThread()).setState(CustomerState.WAITING_FOR_REPLACE_CAR);
+        repository.setCustomerState(customerId, CustomerState.WAITING_FOR_REPLACE_CAR);
+
+        // customer is on the queue waiting for a replacement car key
+        customerReplacementCarKeyQueue.write(customerId);
+        numCustomerReplacementCarKeyQueue++;
+        repository.setCustomersInQueueForKey(numCustomerReplacementCarKeyQueue);
+
+        // manager has work to do
+        managerRequests++;
+        notifyAll();
+
+        // wait until manager has a replacement car key available
+        //waitForReplacementCarKey[customerId] = true;
+        while (customerWithReplacementKey[customerId]==-1) {
+            try {
+                wait();
+            } catch (InterruptedException e) {}
+        }
+
+        // get the first replacement car available
+        //int replacementCarKey = (int) replacementCarKeys.read();
+        //NEW
+        int replacementCarKey = customerWithReplacementKey[customerId];
+        //numReplacementCarsAvailable--;
+        ((Customer) Thread.currentThread()).setCarId(replacementCarKey);
+        repository.setCustomerCar(customerId, replacementCarKey);
+
+        return replacementCarKey;
+    }
 
     /**
-     * Operação payForTheService (chamada pelo {@link Customer})
+     * Operação payForTheService (chamada pelo {@link Customer})<br>
      *
-     * Aqui, o cliente vai paga o serviço esperando pela confirmação do {@link Manager}.
-     * Após confirmação o {@link Customer} vai receber a chave.
+     * O Cliente procede ao pagamento do serviço prestado pela Oficina.
+     * Caso este tenha utilizado uma viatura de substituição devolve a
+     * chave da mesma ao Gerente ({@link Manager}).<br>
      */
-	public synchronized void payForTheService() {
+    public synchronized void payForTheService() {
+        // update state and repository
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
-        
-        // update customer state and repository
         ((Customer) Thread.currentThread()).setState(CustomerState.RECEPTION_PAYING);
         repository.setCustomerState(customerId, CustomerState.RECEPTION_PAYING);
 
+        customerPaid[customerId] = true;
+    }
 
-        // if the customer used a replacement car, it's now available
-        int tempCarID = ((Customer) Thread.currentThread()).getCarId();
-        if(tempCarID != customerId && tempCarID != -1) {
-            //nReplacementCarAvailable++;
-            replacementKeysFifo.write(tempCarID);
-        }
-        
-        ((Customer) Thread.currentThread()).setCarId(customerId);
-        repository.setCustomerCar(customerId, customerId);
-        // Customer pays
-        customerPaid = true;
-        notifyAll();
-
-	}
+    /* MANAGER */
 
     /**
-     * Operação getNextTask (chamada pelo {@link entities.Manager})
-     * Aqui o manager fica à espera da próxima tarefa.
-     * Se o dia chegar ao fim, o manager avisa os mecanicos que o dia acabou.
+     * Operação getNextTask (chamada pelo {@link Manager})<br>
+     *
+     * Caso hajam pedidos ao Gerente, este procede à realização
+     * das tarefas pretendidas. Assim que não haja mais pedidos,
+     * a Oficina é fechada, e os Mecânicos ({@link Mechanic}) poderão
+     * ir embora.<br>
+     *
+     * @return indicação se ainda há trabalho para fazer na Oficina
      */
     public synchronized boolean getNextTask() {
-        // update state
+        // update state and repository
         ((Manager) Thread.currentThread()).setState(ManagerState.CHECKING_WHAT_TO_DO);
         repository.setManagerState(ManagerState.CHECKING_WHAT_TO_DO);
 
-        if(nTotalRepairedCars >= N_CUSTOMERS)
+
+        //manager will mark end of the day
+        if(numCustomersServedToday >= NCUSTOMERS)
             return false;
 
-        // block on condition variable
-        while (nRequests == 0) {
+        while (managerRequests == 0) {
             try {
                 wait();
-            } catch (InterruptedException e) { }
+            } catch (InterruptedException e) {
+                // manager will mark end of the day
+                //return false;
+            }
         }
-        nRequests--;
+        if (managerRequests > 0)
+            managerRequests--;
+
+
+        // there is still work left to do
         return true;
     }
 
     /**
-     * Operação appraiseSit chamada pelo {@link entities.Manager})
-     * Aqui o manager verifica qual a sua próxima tarefa a realizar.
-     * Prioridade: 1º reabastecer stock, 2º atribuir chave, 3º atender cliente
+     * Operação appraiseSit (chamada pelo {@link Manager})<br>
+     *
+     * O Gerente avalia a próxima tarefa a desempenhar, de acordo
+     * com a seguinte prioridade:<br>
+     * <ul>
+     *     <li>Reabastecimento de peças para os {@link Mechanic}
+     *     poderem trabalhar na {@link RepairArea} através da {@link SupplierSite}</li>
+     *     <li>Caso haja clientes em fila de espera para obter uma chave para
+     *     viatura de substituição.</li>
+     *     <li>Caso haja viaturas reparadas, o Gerente vai chamar os clientes
+     *     para as virem buscar.</li>
+     *     <li>Atender os clientes em fila de espera na Recepção</li>
+     * </ul>
+     *
+     * @return a próxima tarefa a ser executada pelo Gerente
      */
     public synchronized ManagerTask appraiseSit() {
-        // update Manager state and repository
+        // update state and repository
         ((Manager) Thread.currentThread()).setState(ManagerState.CHECKING_WHAT_TO_DO);
         repository.setManagerState(ManagerState.CHECKING_WHAT_TO_DO);
 
-        if (needsResupplyParts) {
-            needsResupplyParts = false;
+        if (mechanicsNeedParts.getAndSet(false))
             return ManagerTask.GET_PARTS;
-        }
-        else if (nCustomerForKey > 0 && !replacementKeysFifo.empty()){
-            nCustomerForKey--;
-            repository.setCustomersInQueueForKey(nCustomerForKey);
-            nextCustomer = (int) customersWaitingForKey.read();
-            notifyAll();
-            return ManagerTask.HAND_CAR_KEY;
-        }
-        else if (nRepairedCar > 0) {
-            nRepairedCar--;
+        else if (numCustomerReplacementCarKeyQueue > 0 && numReplacementCarsAvailable > 0)
+            return ManagerTask.TALK_CUSTOMER;
+        else if (numCarsRepairedQueue > 0) {
+            int customerToCall = (int) carsRepairedQueue.read();
+            numCarsRepairedQueue--;
+            ((Manager) Thread.currentThread()).setCurrentlyAttendingCustomer(customerToCall);
             return ManagerTask.PHONE_CUSTOMER;
         }
-        else if (nCustomerInQueue > 0)
-        {
-            nextCustomer = (int) customerQueue.read();
-            notifyAll();
+        else if (numCustomerQueue > 0)
             return ManagerTask.TALK_CUSTOMER;
-        }
+        managerRequests++;
         return ManagerTask.NONE;
     }
 
     /**
-     * Operação talkToCustomer chamada pelo {@link entities.Manager})
-     * Aqui o manager verifica qual o próximo cliente a chamar.
-     * Devolve o próximo "customer"
+     * Operação talkToCustomer (chamada pelo {@link Manager})<br>
+     *
+     * O Gerente irá atender o cliente {@link Customer} para saber o que
+     * este pretende, de uma das seguintes opções:<br>
+     * <ul>
+     *     <li>Reparar a sua viatura</li>
+     *     <li>Obter uma viatura de substituição</li>
+     *     <li>Efetuar pagamento do serviço</li>
+     * </ul>
+     *
+     * @return estado do cliente atual
      */
     public synchronized CustomerState talkToCustomer() {
-        // update Manager state and repository
+        // update state and repository
         ((Manager) Thread.currentThread()).setState(ManagerState.ATTENDING_CUSTOMER);
         repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
 
+        if (numReplacementCarsAvailable > 0 && numCustomerReplacementCarKeyQueue > 0) {
+            /* there are replacement cars available, and
+             * customers waiting for replacement car keys
+             */
+             return CustomerState.WAITING_FOR_REPLACE_CAR;
+        } else if (!customerQueue.empty()) {
+            /* talk to the first customer in queue
+             * and figure out what he wants
+             */
+            int customerToAttend = (int) customerQueue.read();
+            numCustomerQueue--;
+            repository.setCustomersInQueue(numCustomerQueue);
 
-        // avisa os customers que estão em fila
-        ((Manager) Thread.currentThread()).setCurrentlyAttendingCustomer(nextCustomer);
-        managerTalked = true;
-        notifyAll();
-        return currentCustomerState[nextCustomer];
-    }
-
-    /**
-     *  Operação receivePayment Chamada pelo {@link Manager})
-     *  Recebe pagamento por parte do cliente
-     */
-    public synchronized void receivePayment() {
-        // update Manager state and repository
-        ((Manager) Thread.currentThread()).setState(ManagerState.ATTENDING_CUSTOMER);
-        repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
-
-        // waits for customer to pay
-        while (!customerPaid) {
-            try {
-                wait();
-            } catch (InterruptedException e) { }
+            if (waitForPayment[customerToAttend]) {
+                // customer wants to pay
+                waitForPayment[customerToAttend] = false;
+                ((Manager) Thread.currentThread()).setCurrentlyAttendingCustomer(customerToAttend);
+                notifyAll();
+                return CustomerState.RECEPTION_PAYING;
+            } else if (waitForRepair[customerToAttend]) {
+                // customer wants to repair his car
+                waitForRepair[customerToAttend] = false;
+                ((Manager) Thread.currentThread()).setCurrentlyAttendingCustomer(customerToAttend);
+                notifyAll();
+                return CustomerState.RECEPTION_REPAIR;
+            }
         }
-        customerPaid = false;
-
+        return CustomerState.NONE;
     }
 
     /**
-     *  Operação handCarKey (chamada pelo {@link Manager})
-     *  Devolve a chave ao cliente
+     * Operação handCarKey (chamada pelo {@link Manager})<br>
      *
-//     *  @param returningKey identificação do cliente que recebe a chave
+     * O Gerente irá dar uma das chaves das viaturas de substituição
+     * disponíveis ao {@link Customer}.<br>
      */
     public synchronized void handCarKey() {
+        // update state and repository
         ((Manager) Thread.currentThread()).setState(ManagerState.ATTENDING_CUSTOMER);
         repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
-        
-        //client wants a replacement car
-        if (!replacementKeysFifo.empty())
-        {
-            //Manager signals that he found the key.
-            
-            managerFoundAKey[nextCustomer] = true;
-            notifyAll();
-        }
-    }
 
-    /**
-    *  Operação letManagerKnow Chamada pelo {@link Mechanic})
-    *  Notifica o manager que uma peça está em falta, se ainda não está registada
-    *  @param partRequired identificação da parte em falta
-    */
-    public synchronized void letManagerKnow(int partRequired) {
-        // update Mechanic state and repository
-        int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
-//        ((Mechanic) Thread.currentThread()).setState(MechanicState.ALERTING_MANAGER);
-//        repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER);
-        repository.setPartMissingAlert(partRequired, true);
+        // get first customer in queue waiting for replacement car
+        int customerToAttend = (int) customerReplacementCarKeyQueue.read();
+        numCustomerReplacementCarKeyQueue--;
+        repository.setCustomersInQueueForKey(numCustomerReplacementCarKeyQueue);
 
-        // notify Manager that needs to resupply parts
-        needsResupplyParts = true;
-        nRequests++;
+        // let customer know there is a key available
+        //waitForReplacementCarKey[customerToAttend] = false;
+
+        customerWithReplacementKey[customerToAttend] = (int)replacementCarKeys.read();
+
+        numReplacementCarsAvailable--;
         notifyAll();
     }
 
     /**
-    *  Operação repairConcluded Chamada pelo {@link entities.Mechanic})
-    *  Notifica o manager que a reparação de um carro foi concluida.
-    */
-    public synchronized void repairConcluded() {
-        // update Mechanic state and repository
-        int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
-//        ((Mechanic) Thread.currentThread()).setState(MechanicState.ALERTING_MANAGER);
-//        repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER);
-
-        // add repaired car to queue of repaired cars, update repository
-        int repairedCarId = ((Mechanic) Thread.currentThread()).getCurrentCarFixingId();
-        repairedCars.write(repairedCarId);
-        nRepairedCar++;
-        repository.setCustomerRepairConcluded(repairedCarId, true);
-
-        // Mechanic is not fixing any car
-        ((Mechanic) Thread.currentThread()).setCurrentCarFixingId(-1);
-
-        // notify Manager, repair concluded
-        notifyAll();
-	}
-
-    /**
-     * Função auxiliar para obter o numero de um cliente.
-     * Chamada pelo {@link entities.Manager})
+     * Operação receivePayment (chamada pelo {@link Manager})<br>
+     *
+     * O Gerente recebe o pagamento do serviço por parte do {@link Customer}<br>
+     *
+     * @param customerToAttend o id do cliente a fazer pagamento
      */
-    public synchronized int getClientNumber() {
-        return (int) this.repairedCars.read();
+    public synchronized void receivePayment(int customerToAttend) {
+        // update state and repository
+        ((Manager) Thread.currentThread()).setState(ManagerState.ATTENDING_CUSTOMER);
+        repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
+
+        // let customer know that he needs to pay
+        waitForPayment[customerToAttend] = false;
+        if (customerWithReplacementKey[customerToAttend] != -1)
+        {
+            replacementCarKeys.write(customerWithReplacementKey[customerToAttend]);
+            numReplacementCarsAvailable++;
+
+            customerWithReplacementKey[customerToAttend] = -1;
+        }
+
+        notifyAll();
+        while (customerPaid[customerToAttend]) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                // manager will mark end of the day
+                //return false;
+            }
+        }
+        numCustomersServedToday++;
+
     }
 
-    public synchronized boolean wantReplacementCar(int customerId) {
-        return this.customerWantsReplacementCar[customerId];
+    /* MECHANIC */
+
+    /**
+     * Operação letManagerKnow (chamada pelo {@link Mechanic})<br>
+     *
+     * O Mecânico informa o Gerente ({@link Manager}) de que não existem
+     * peças para que este possa reparar uma viatura.<br>
+     *
+     * @param partRequired peça em falta
+     */
+    public synchronized void letManagerKnow(int partRequired) {
+        // update state and repository
+        int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
+        ((Mechanic) Thread.currentThread()).setState(MechanicState.ALERTING_MANAGER_FOR_PARTS);
+        repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER_FOR_PARTS);
+
+        // mark part as needed to replenish
+        repository.setPartMissingAlert(partRequired, true);
+        mechanicsNeedParts.set(true);
+
+        // manager has work to do
+        managerRequests++;
+        notifyAll();
     }
 
-    public synchronized int getCurrentCustomerID() {
-        return this.nextCustomer;
+    /**
+     * Operação repairConcluded (chamada pelo {@link Mechanic})<br>
+     *
+     * O Mecânico terminou de reparar uma viatura, e irá informar o Gerente
+     * ({@link Manager}) que esta está pronta a ser levantada pelo seu proprietário,
+     * o Cliente ({@link Customer}).<br>
+     */
+    public synchronized void repairConcluded() {
+        // update state and repository
+        int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
+        ((Mechanic) Thread.currentThread()).setState(MechanicState.ALERTING_MANAGER_REPAIR_CONCLUDED);
+        repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER_REPAIR_CONCLUDED);
+
+        // add car to the repaired cars queue
+        int carFixed = ((Mechanic) Thread.currentThread()).getCurrentCarFixingId();
+        carsRepairedQueue.write(carFixed);
+        numCarsRepairedQueue++;
+
+
+        // update number of total repaired cars
+        numCarsRepaired++;
+
+
+        repository.setTotalRepairedCars(numCarsRepaired);
+
+        // manager has work to do
+        managerRequests++;
+        notifyAll();
     }
 }

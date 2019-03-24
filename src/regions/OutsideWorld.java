@@ -6,17 +6,17 @@ import entities.Manager;
 import entities.ManagerState;
 
 /**
- * Classe OutsideWorld (Mundo Exterior)
+ * Classe OutsideWorld (Mundo Exterior)<br>
  *
  * Esta classe é responsável pela criação do Mundo Exterior, uma das entidades
- * passivas do problema.
+ * passivas do problema.<br>
  *
- * É aqui que os Clientes {@link Customer} estão no início do problema, a fazer
+ * É aqui que os Clientes ({@link Customer}) estão no início do problema, a fazer
  * a sua vida normal com a sua viatura. Após um dado tempo, a sua viatura avaria
- * e necessita de ser reparada. Aí, o Cliente dirige-se à Oficina.
+ * e necessita de ser reparada. Aí, o Cliente dirige-se à Oficina.<br>
  * Quer queira uma viatura de substituição ou não, o Cliente volta a fazer a sua
  * vida normal assim que deixa a sua viatura na Oficina, e é notificado pelo
- * Gerente {@link Manager} assim que a reparação esteja concluída.
+ * Gerente ({@link Manager}) assim que a reparação esteja concluída.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -24,9 +24,9 @@ import entities.ManagerState;
 public class OutsideWorld {
 
     /**
-     * Variável de condição (waitForCarRepair)
+     * Variável de condição (waitForCarRepair)<br>
      *
-     * Assinala se o {@link Customer} está à espera de reparação da viatura
+     * Assinala se o {@link Customer} está à espera de reparação da viatura<br>
      */
     private boolean[] waitForCarRepair;
 
@@ -44,11 +44,11 @@ public class OutsideWorld {
     }
 
     /**
-     * Operação backToWorkByBus (chamada pelo {@link Customer})
+     * Operação backToWorkByBus (chamada pelo {@link Customer})<br>
      *
      * Aqui, o cliente vai fazer a sua vida normal, ficando à espera
      * de novidades por parte do {@link Manager}, que irá notificá-lo quando
-     * o seu carro pessoal estiver pronto.
+     * o seu carro pessoal estiver pronto.<br>
      */
     public synchronized void backToWorkByBus() {
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
@@ -68,12 +68,12 @@ public class OutsideWorld {
     }
 
     /**
-     * Operação backToWorkByCar (chamada pelo {@link Customer})
+     * Operação backToWorkByCar (chamada pelo {@link Customer})<br>
      *
      * Aqui, o cliente vai fazer a sua vida normal.
      * No caso de ter colocado a sua viatura para reparação na Oficina, fica à espera
      * de novidades por parte do {@link Manager}, que irá notificá-lo quando
-     * o seu carro pessoal estiver pronto.
+     * o seu carro pessoal estiver pronto.<br>
      *
      * @param carRepaired indicação se a sua viatura já foi reparada
      */
@@ -97,10 +97,10 @@ public class OutsideWorld {
     }
 
     /**
-     * Operação phoneCustomer (chamada pelo {@link Manager})
+     * Operação phoneCustomer (chamada pelo {@link Manager})<br>
      *
      * Aqui, o {@link Manager} irá notificar o {@link Customer} de que
-     * o seu carro está pronto, ligando-lhe.
+     * o seu carro está pronto, ligando-lhe.<br>
      *
      * @param customerId o id do {@link Customer}
      */

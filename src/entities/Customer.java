@@ -3,22 +3,22 @@ package entities;
 import regions.*;
 
 /**
- * Classe Customer (Cliente)
+ * Classe Customer (Cliente)<br>
  *
  * Esta classe é responsável pela criação de um Cliente, que é uma
- * das entidades ativas do problema.
+ * das entidades ativas do problema.<br>
  *
  * Inicialmente, o Cliente irá decidir por si próprio se pretende reparar a sua
  * viatura, e quando achar oportuno, dirige-se à Oficina, estacionando a sua viatura
- * no Parque de Estacionamento {@link Park}, e dirige-se à Recepção {@link Lounge},
- * onde aguarda a sua vez para ser atendido pelo Gerente {@link Manager}, que o
+ * no Parque de Estacionamento ({@link Park}), e dirige-se à Recepção ({@link Lounge}),
+ * onde aguarda a sua vez para ser atendido pelo Gerente ({@link Manager}), que o
  * irá atender tendo em vista a reparação da sua viatura própria. Caso queira, o
  * cliente poderá ter acesso a uma viatura de substituição, que caso esteja disponível,
  * ser-lhe-à dado uma chave, para que a possa levantar ao Parque de Estacionamento
- * e prosseguir com a sua vida normal no Mundo Exterior {@link OutsideWorld}.
+ * e prosseguir com a sua vida normal no Mundo Exterior ({@link OutsideWorld}).<br>
  * Assim que a reparação esteja concluída, o Gerente irá notificar o Cliente de que
  * a sua viatura está pronta a ser levantada. O Cliente assim volta à Oficina,
- * para pagar a reparação e levantar a sua viatura.
+ * para pagar a reparação e levantar a sua viatura.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -29,15 +29,17 @@ public class Customer extends Thread {
     private int customerId;
 
     /**
-     * Id da viatura que o cliente está a conduzir de momento
+     * Id da viatura que o cliente está a conduzir de momento<br>
      * <ul>
      *  <li>o id do cliente</li>
      *  <li>uma das viaturas de substituição</li>
-     *  <ul>
-     *      <li>100, se viatura de substituição 0</li>
-     *      <li>101, se viatura de substituição 1</li>
-     *      <li>etc...</li>
-     *  </ul>
+     *  <li>
+     *      <ul>
+     *          <li>100, se viatura de substituição 0</li>
+     *          <li>101, se viatura de substituição 1</li>
+     *          <li>etc...</li>
+     *      </ul>
+     *  </li>
      *  <li>-1, se nenhuma</li>
      * </ul>
      */
@@ -69,7 +71,7 @@ public class Customer extends Thread {
      * Referência para a Recepção (Lounge)
      * @see Lounge
      */
-    private NewLounge lounge;
+    private Lounge lounge;
 
     /**
      * Referência para o Parque de Estacionamento (Park)
@@ -84,11 +86,11 @@ public class Customer extends Thread {
     private OutsideWorld outsideWorld;
 
     /**
-     * Construtor de um Cliente
+     * Construtor de um Cliente<br>
      *
      * Aqui será construído o objeto referente a um Cliente.
      * De seguida, o repositório {@link GeneralRepository} será informado de
-     * que o Cliente foi criado, mostrando o seu estado inicial.
+     * que o Cliente foi criado, mostrando o seu estado inicial.<br>
      *
      * @param id id do cliente
      * @param repo referência para o Repositório {@link GeneralRepository}
@@ -96,7 +98,7 @@ public class Customer extends Thread {
      * @param park referência para o Park {@link Park}
      * @param outsideWorld referência para o Outside World {@link OutsideWorld}
      */
-    public Customer(int id, GeneralRepository repo, NewLounge lounge, Park park, OutsideWorld outsideWorld) {
+    public Customer(int id, GeneralRepository repo, Lounge lounge, Park park, OutsideWorld outsideWorld) {
         this.customerId = id;
         this.carId = id;
         this.state = CustomerState.NORMAL_LIFE_WITH_CAR;
@@ -132,9 +134,9 @@ public class Customer extends Thread {
     }
 
     /**
-     * Operação getCustomerId
+     * Operação getCustomerId<br>
      *
-     * Obtém o id do Cliente
+     * Obtém o id do Cliente<br>
      *
      * @return o id do cliente
      */
@@ -143,9 +145,9 @@ public class Customer extends Thread {
     }
 
     /**
-     * Operação setCarId
+     * Operação setCarId<br>
      *
-     * Altera o id da viatura que o cliente possui
+     * Altera o id da viatura que o cliente possui<br>
      *
      * @param carId o id da viatura
      */
@@ -154,9 +156,9 @@ public class Customer extends Thread {
     }
 
     /**
-     * Operação getCarId
+     * Operação getCarId<br>
      *
-     * Obtém o id da viatura atual que o cliente possui
+     * Obtém o id da viatura atual que o cliente possui<br>
      *
      * @return o id da viatura
      */
@@ -165,9 +167,9 @@ public class Customer extends Thread {
     }
 
     /**
-     * Operação getWantsReplacementCar
+     * Operação getWantsReplacementCar<br>
      *
-     * Obtém a indicação se o cliente pretende ou não viatura de substituição
+     * Obtém a indicação se o cliente pretende ou não viatura de substituição<br>
      *
      * @return se o cliente pretende ou não viatura de substituição
      */
@@ -176,9 +178,9 @@ public class Customer extends Thread {
     }
 
     /**
-     * Operação setState
+     * Operação setState<br>
      *
-     * Altera o estado interno do cliente
+     * Altera o estado interno do cliente<br>
      *
      * @param state o novo estado do cliente
      */
@@ -187,9 +189,9 @@ public class Customer extends Thread {
     }
 
     /**
-     * Operação getCustomerState
+     * Operação getCustomerState<br>
      *
-     * Obtém o estado interno do cliente
+     * Obtém o estado interno do cliente<br>
      *
      * @return o estado interno do cliente
      */
@@ -198,9 +200,9 @@ public class Customer extends Thread {
     }
 
     /**
-     * Operação interna decideOnRepair
+     * Operação interna decideOnRepair<br>
      *
-     * O cliente irá decidir se pretende reparar a viatura durante um período de tempo
+     * O cliente irá decidir se pretende reparar a viatura durante um período de tempo<br>
      */
     private void decideOnRepair() {
         try {

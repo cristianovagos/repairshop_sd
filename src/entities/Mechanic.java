@@ -3,24 +3,24 @@ package entities;
 import regions.*;
 
 /**
- * Classe Mechanic (Mecânico)
+ * Classe Mechanic (Mecânico)<br>
  *
  * Esta classe é responsável pela criação de um Mecânico, que é uma
- * das entidades ativas do problema.
+ * das entidades ativas do problema.<br>
  *
  * O Mecânico, quando chega ao local de trabalho, fica a aguardar
  * que haja tarefas para fazer, nomeadamente viaturas para reparar.
- * Assim que uma tarefa de reparação seja registada pelo Gerente {@link Manager},
+ * Assim que uma tarefa de reparação seja registada pelo Gerente ({@link Manager}),
  * o Mecânico é notificado de que existe trabalho para fazer, e de seguida
- * dirige ao Parque de Estacionamento {@link Park} para avaliar a viatura
+ * dirige ao Parque de Estacionamento ({@link Park}) para avaliar a viatura
  * e diagnosticar qual a peça danificada que necessita de substituição.
  * De seguida, verifica se essa peça existe em stock na Área de Reparação
- * {@link RepairArea}, e caso esta não exista, informa o Gerente para que este
+ * ({@link RepairArea}), e caso esta não exista, informa o Gerente para que este
  * possa reabastecer a Área de Reparação com mais peças, necessárias para a
  * reparação. Caso a peça esteja disponível, o Mecânico repara a viatura com a
  * peça, e assim que esta esteja reparada, coloca a viatura no Parque de
  * Estacionamento e informa o Gerente de que esta está pronta a ser levantada
- * pelo Cliente {@link Customer}.
+ * pelo Cliente ({@link Customer}).<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -31,8 +31,8 @@ public class Mechanic extends Thread {
     private int mechanicId;
 
     /**
-     * O id da viatura que o Mecânico está a reparar de momento.
-     * Poderá ter os seguintes valores:
+     * O id da viatura que o Mecânico está a reparar de momento.<br>
+     * Poderá ter os seguintes valores:<br>
      * <ul>
      *  <li>o id do cliente {@link Customer}</li>
      *  <li>-1, se nenhuma</li>
@@ -68,14 +68,14 @@ public class Mechanic extends Thread {
      * Referência para a Recepção (Lounge)
      * @see Lounge
      */
-    private NewLounge lounge;
+    private Lounge lounge;
 
     /**
-     * Construtor de um Mecânico
+     * Construtor de um Mecânico<br>
      *
      * Aqui será construído o objeto referente a um Mecânico.
      * De seguida, o repositório {@link GeneralRepository} será informado de
-     * que o Mecânico foi criado, mostrando o seu estado inicial.
+     * que o Mecânico foi criado, mostrando o seu estado inicial.<br>
      *
      * @param id o id do Mecânico
      * @param repo referência para o {@link GeneralRepository}
@@ -83,7 +83,7 @@ public class Mechanic extends Thread {
      * @param park referência para o {@link Park}
      * @param lounge referência para o {@link Lounge}
      */
-    public Mechanic(int id, GeneralRepository repo, RepairArea repairArea, Park park, NewLounge lounge) {
+    public Mechanic(int id, GeneralRepository repo, RepairArea repairArea, Park park, Lounge lounge) {
         this.mechanicId = id;
         this.state = MechanicState.WAITING_FOR_WORK;
         this.repository = repo;
@@ -119,9 +119,9 @@ public class Mechanic extends Thread {
     }
 
     /**
-     * Operação getMechanicId
+     * Operação getMechanicId<br>
      *
-     * Obtém o id do Mecânico
+     * Obtém o id do Mecânico<br>
      *
      * @return o id do mecânico
      */
@@ -130,9 +130,9 @@ public class Mechanic extends Thread {
     }
 
     /**
-     * Operação setState
+     * Operação setState<br>
      *
-     * Modifica o estado interno do Mecânico
+     * Modifica o estado interno do Mecânico<br>
      *
      * @param state o estado interno do Mecânico
      */
@@ -141,10 +141,10 @@ public class Mechanic extends Thread {
     }
 
     /**
-     * Operação getCurrentCarFixingId
+     * Operação getCurrentCarFixingId<br>
      *
      * Marca a viatura que o Mecânico estiver a reparar de momento,
-     * o id da viatura caso esteja a reparar uma viatura, -1 se nenhuma.
+     * o id da viatura caso esteja a reparar uma viatura, -1 se nenhuma.<br>
      *
      * @param carId o id da viatura (o mesmo que o do {@link Customer})
      */
@@ -153,10 +153,10 @@ public class Mechanic extends Thread {
     }
 
     /**
-     * Operação getCurrentCarFixingId
+     * Operação getCurrentCarFixingId<br>
      *
      * Obtém a viatura que o Mecânico estiver a reparar de momento.
-     * Devolve o id da viatura caso esteja a reparar uma viatura, -1 se nenhuma.
+     * Devolve o id da viatura caso esteja a reparar uma viatura, -1 se nenhuma.<br>
      *
      * @return o id da viatura (o mesmo que o do {@link Customer})
      */
@@ -165,9 +165,9 @@ public class Mechanic extends Thread {
     }
 
     /**
-     * Operação interna fixIt
+     * Operação interna fixIt<br>
      *
-     * O Mecânico irá reparar a viatura durante um período aleatório de tempo.
+     * O Mecânico irá reparar a viatura durante um período aleatório de tempo.<br>
      */
     private void fixIt() {
         try {

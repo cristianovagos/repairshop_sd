@@ -1,9 +1,9 @@
 package entities;
 
 /**
- * Enumerado MechanicState
+ * Enumerado MechanicState<br>
  *
- * Estado interno do Mecânico {@link Mechanic}.
+ * Estado interno do Mecânico ({@link Mechanic}).
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -21,9 +21,9 @@ public enum MechanicState {
     private final String state;
 
     /**
-     * Construtor privado do estado interno do mecânico
+     * Construtor privado do estado interno do mecânico<br>
      *
-     * Será criado um objeto referente ao estado interno do mecânico.
+     * Será criado um objeto referente ao estado interno do mecânico.<br>
      *
      * @param state a descrição do estado interno do mecânico
      */
@@ -32,9 +32,9 @@ public enum MechanicState {
     }
 
     /**
-     * Operação state
+     * Operação state<br>
      *
-     * Obtém a descrição do estado interno do mecânico
+     * Obtém a descrição do estado interno do mecânico<br>
      *
      * @return a descrição do estado interno do mecânico
      */

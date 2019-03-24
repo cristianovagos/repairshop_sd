@@ -7,17 +7,17 @@ import genclass.TextFile;
 import java.text.DecimalFormat;
 
 /**
- * Classe GeneralRepository (Repositório Geral)
+ * Classe GeneralRepository (Repositório Geral)<br>
  *
  * Esta classe é reponsável pela criação e posterior atualização de um ficheiro
  * de logging que irá permitir visualizar os diferentes estados e valores
- * decorrentes da execução do problema.
+ * decorrentes da execução do problema.<br>
  *
  * Assim que necessário e pedido pelas diferentes entidades e regiões partilhadas
  * de dados deste problema, será acrescentado ao ficheiro de logging os valores
  * mais recentes para posterior acompanhamento, que serão atualizados nas variáveis
  * e estruturas de dados que nada mais são de que "fotocópias" dos dados que estão
- * a ser alterados e atualizados nas diferentes entidades ativas e passivas do problema.
+ * a ser alterados e atualizados nas diferentes entidades ativas e passivas do problema.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -30,12 +30,12 @@ public class GeneralRepository {
     private String FILE_NAME;
 
     /**
-     * Número de Clientes {@link Customer}
+     * Número de Clientes ({@link Customer})
      */
     private final int N_CUSTOMERS;
 
     /**
-     * Número de Mecânicos {@link Mechanic}
+     * Número de Mecânicos ({@link Mechanic})
      */
     private final int N_MECHANICS;
 
@@ -61,15 +61,17 @@ public class GeneralRepository {
     private boolean[] customersReqReplVehicle;
 
     /**
-     * Viatura que cada cliente está a conduzir de momento
+     * Viatura que cada cliente está a conduzir de momento<br>
      * <ul>
-     *  <li>o id do cliente {@link Customer}</li>
+     *  <li>o id do cliente ({@link Customer})</li>
      *  <li>uma das viaturas de substituição</li>
-     *  <ul>
-     *      <li>100, se viatura de substituição 0</li>
-     *      <li>101, se viatura de substituição 1</li>
-     *      <li>etc...</li>
-     *  </ul>
+     *  <li>
+     *      <ul>
+     *          <li>100, se viatura de substituição 0</li>
+     *          <li>101, se viatura de substituição 1</li>
+     *          <li>etc...</li>
+     *      </ul>
+     *  </li>
      *  <li>-1, se nenhuma</li>
      * </ul>
      */
@@ -105,7 +107,7 @@ public class GeneralRepository {
     private int replacementCarsInPark;
 
     /**
-     * Número de clientes na fila da Recepção {@link Lounge}
+     * Número de clientes na fila da Recepção ({@link Lounge})
      * para serem atendidos pelo Manager
      */
     private int customersInQueue;
@@ -121,12 +123,12 @@ public class GeneralRepository {
     private int totalRepairedCars;
 
     /**
-     * Número de serviços pedidos pelo Gerente {@link Manager}
+     * Número de serviços pedidos pelo Gerente ({@link Manager})
      */
     private int requestedServices;
 
     /**
-     * Número de peças em stock na Área de Reparação {@link RepairArea}
+     * Número de peças em stock na Área de Reparação ({@link RepairArea})
      */
     private int[] stockParts;
 
@@ -136,21 +138,21 @@ public class GeneralRepository {
     private int[] customersMissingParts;
 
     /**
-     * Indicação se o Gerente {@link Manager} já foi alertado para a falta
+     * Indicação se o Gerente ({@link Manager}) já foi alertado para a falta
      * de uma dada peça
      */
     private boolean[] partMissingAlert;
 
     /**
-     * Número de peças vendidas pelo Fornecedor {@link SupplierSite}
+     * Número de peças vendidas pelo Fornecedor ({@link SupplierSite})
      */
     private int[] soldParts;
 
     /**
-     * Construtor do Repositório
+     * Construtor do Repositório<br>
      *
      * Aqui serão inicializadas as variáveis e estruturas de dados que serão
-     * posteriormente atualizadas durante a execução do problema.
+     * posteriormente atualizadas durante a execução do problema.<br>
      *
      * @param fileName nome do ficheiro de logging
      * @param nCustomers número de clientes
@@ -207,14 +209,14 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação printHeader
+     * Operação printHeader<br>
      *
      * Aqui será escrito no ficheiro de logging o cabeçalho da tabela referente
      * a cada um dos valores que serão posteriormente escritos durante a execução
-     * do problema.
+     * do problema.<br>
      *
      * O ficheiro de logging é criado de acordo com o nome que foi fornecido
-     * no construtor, e irá ser escrito o cabeçalho da tabela.
+     * no construtor, e irá ser escrito o cabeçalho da tabela.<br>
      */
     private void printHeader() {
         // initialize file writer
@@ -272,15 +274,15 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação printStateLine
+     * Operação printStateLine<br>
      *
      * Aqui serão escritos os valores dos diferentes estados das entidades,
      * bem como os valores referentes às diferentes operações que serão executadas
-     * durante a execução do problema.
+     * durante a execução do problema.<br>
      *
      * O ficheiro de logging já foi previamente criado em {@link #printHeader()} e
      * agora os valores mais recentes serão colocados imediatamente abaixo do que
-     * foi previamente escrito no ficheiro.
+     * foi previamente escrito no ficheiro.<br>
      */
     private void printStateLine() {
         // initialize file writer
@@ -382,9 +384,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação initializeCustomer
+     * Operação initializeCustomer<br>
      *
-     * Inicializa o estado de cada um dos Customers
+     * Inicializa o estado de cada um dos Customers<br>
      *
      * @param index índice do cliente
      * @param requiresReplacement indicação se requer viatura de substituição
@@ -400,9 +402,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação setCustomerState
+     * Operação setCustomerState<br>
      *
-     * Altera o estado de um cliente em específico
+     * Altera o estado de um cliente em específico<br>
      *
      * @param index o índice do cliente em questão
      * @param newState o estado novo do cliente
@@ -415,9 +417,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação setCustomerCar
+     * Operação setCustomerCar<br>
      *
-     * Altera a viatura atual de um cliente em específico
+     * Altera a viatura atual de um cliente em específico<br>
      *
      * @param index o índice do cliente em questão
      * @param carId o identificador da viatura
@@ -431,9 +433,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação setCustomerRepairConcluded
+     * Operação setCustomerRepairConcluded<br>
      *
-     * Altera o estado de conclusão da reparação da viatura
+     * Altera o estado de conclusão da reparação da viatura<br>
      *
      * @param index o índice do cliente em questão
      * @param isRepairConcluded se a reparação foi concluída
@@ -446,9 +448,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação setManagerState
+     * Operação setManagerState<br>
      *
-     * Altera o estado do Manager
+     * Altera o estado do Manager<br>
      *
      * @param state estado do Manager
      */
@@ -460,9 +462,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação setMechanicState
+     * Operação setMechanicState<br>
      *
-     * Altera o estado de um mecânico em específico
+     * Altera o estado de um mecânico em específico<br>
      *
      * @param index o índice do mecânico em questão
      * @param newState o estado novo do mecânico
@@ -475,9 +477,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação customerCarEntersPark
+     * Operação customerCarEntersPark<br>
      *
-     * Indica que uma viatura de um cliente entrou no park
+     * Indica que uma viatura de um cliente entrou no park<br>
      */
     public synchronized void customerCarEntersPark() {
         this.customerCarsInPark++;
@@ -487,9 +489,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação customerCarLeavesPark
+     * Operação customerCarLeavesPark<br>
      *
-     * Indica que uma viatura de um cliente saiu do park
+     * Indica que uma viatura de um cliente saiu do park<br>
      */
     public synchronized void customerCarLeavesPark() {
         this.customerCarsInPark--;
@@ -499,9 +501,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação replacementCarEntersPark
+     * Operação replacementCarEntersPark<br>
      *
-     * Indica que uma viatura de substituição entrou no park
+     * Indica que uma viatura de substituição entrou no park<br>
      */
     public synchronized void replacementCarEntersPark() {
         this.replacementCarsInPark++;
@@ -511,9 +513,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação replacementCarLeavesPark
+     * Operação replacementCarLeavesPark<br>
      *
-     * Indica que uma viatura de substituição saiu do park
+     * Indica que uma viatura de substituição saiu do park<br>
      */
     public synchronized void replacementCarLeavesPark() {
         this.replacementCarsInPark--;
@@ -523,9 +525,11 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação setCustomersInQueue
+     * Operação setCustomersInQueue<br>
      *
-     * Altera o valor dos clientes na fila no Lounge
+     * Altera o valor dos clientes na fila no Lounge<br>
+     *
+     * @param customersInQueue número de clientes na fila no Lounge
      */
     public synchronized void setCustomersInQueue(int customersInQueue) {
         this.customersInQueue = customersInQueue;
@@ -535,9 +539,11 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação setCustomersInQueueForKey
+     * Operação setCustomersInQueueForKey<br>
      *
-     * Altera o valor dos clientes na fila para obter uma chave para viatura de substituição no Lounge
+     * Altera o valor dos clientes na fila para obter uma chave para viatura de substituição no Lounge<br>
+     *
+     * @param customersInQueueForKey número de clientes na fila à espera de chave para viatura de substituição
      */
     public synchronized void setCustomersInQueueForKey(int customersInQueueForKey) {
         this.customersInQueueForKey = customersInQueueForKey;
@@ -547,9 +553,11 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação setTotalRepairedCars
+     * Operação setTotalRepairedCars<br>
      *
-     * Altera o valor do total de carros reparados
+     * Altera o valor do total de carros reparados<br>
+     *
+     * @param repairedCars total de carros reparados
      */
     public synchronized void setTotalRepairedCars(int repairedCars) {
         this.totalRepairedCars = repairedCars;
@@ -559,9 +567,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação managerRequestedService
+     * Operação managerRequestedService<br>
      *
-     * Incrementa o número de serviços pedidos pelo {@link Manager} na {@link RepairArea}
+     * Incrementa o número de serviços pedidos pelo ({@link Manager}) na ({@link RepairArea})<br>
      */
     public synchronized void managerRequestedService() {
         requestedServices++;
@@ -571,9 +579,11 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação setStockParts
+     * Operação setStockParts<br>
      *
-     * Altera o array referente ao número de peças em stock na {@link RepairArea}
+     * Altera o array referente ao número de peças em stock na ({@link RepairArea})<br>
+     *
+     * @param stockParts lista com número de peças em stock
      */
     public synchronized void setStockParts(int[] stockParts) {
         this.stockParts = stockParts;
@@ -583,9 +593,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação addMissingPart
+     * Operação addMissingPart<br>
      *
-     * Marca uma dada peça como inexistente no stock da {@link RepairArea}
+     * Marca uma dada peça como inexistente no stock da ({@link RepairArea})<br>
      *
      * @param partIndex o índice da peça
      */
@@ -597,9 +607,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação removeMissingPart
+     * Operação removeMissingPart<br>
      *
-     * Marca uma dada peça como existente no stock da {@link RepairArea}
+     * Marca uma dada peça como existente no stock da ({@link RepairArea})<br>
      *
      * @param partIndex o índice da peça
      */
@@ -613,9 +623,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação setMissingPartIndex
+     * Operação setMissingPartIndex<br>
      *
-     * Altera o valor de um dado índice do array de peças em falta
+     * Altera o valor de um dado índice do array de peças em falta<br>
      *
      * @param partIndex o índice da peça
      * @param value o novo valor
@@ -628,9 +638,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação setPartMissingAlert
+     * Operação setPartMissingAlert<br>
      *
-     * Altera o valor de um dado índice do array de alerta de peças em falta
+     * Altera o valor de um dado índice do array de alerta de peças em falta<br>
      *
      * @param partIndex o índice da peça
      * @param value o novo valor
@@ -643,9 +653,9 @@ public class GeneralRepository {
     }
 
     /**
-     * Operação setSoldParts
+     * Operação setSoldParts<br>
      *
-     * Altera o valor do array referente ao número de peças vendidas pela {@link SupplierSite}
+     * Altera o valor do array referente ao número de peças vendidas pela ({@link SupplierSite})<br>
      *
      * @param soldParts array com o total de peças vendidas
      */

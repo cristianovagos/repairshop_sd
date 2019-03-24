@@ -1,7 +1,7 @@
 package entities;
 
 /**
- * Enumerado ManagerState
+ * Enumerado ManagerState<br>
  *
  * Estado interno do Gerente {@link Manager}.
  *
@@ -22,9 +22,9 @@ public enum ManagerState {
     private final String state;
 
     /**
-     * Construtor privado do estado interno do gerente
+     * Construtor privado do estado interno do gerente<br>
      *
-     * Será criado um objeto referente ao estado interno do gerente.
+     * Será criado um objeto referente ao estado interno do gerente.<br>
      *
      * @param state a descrição do estado interno do gerente
      */
@@ -33,9 +33,9 @@ public enum ManagerState {
     }
 
     /**
-     * Operação state
+     * Operação state<br>
      *
-     * Obtém a descrição do estado interno do gerente
+     * Obtém a descrição do estado interno do gerente<br>
      *
      * @return a descrição do estado interno do gerente
      */
