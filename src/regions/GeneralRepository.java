@@ -495,7 +495,8 @@ public class GeneralRepository {
      * Indica que uma viatura de um cliente saiu do park<br>
      */
     public synchronized void customerCarLeavesPark() {
-        this.customerCarsInPark--;
+        if(this.customerCarsInPark > 0)
+            this.customerCarsInPark--;
 
         // print state line
         printStateLine();
@@ -519,7 +520,8 @@ public class GeneralRepository {
      * Indica que uma viatura de substituição saiu do park<br>
      */
     public synchronized void replacementCarLeavesPark() {
-        this.replacementCarsInPark--;
+        if(this.replacementCarsInPark > 0)
+            this.replacementCarsInPark--;
 
         // print state line
         printStateLine();
