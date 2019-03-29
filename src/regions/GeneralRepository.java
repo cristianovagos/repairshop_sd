@@ -284,6 +284,7 @@ public class GeneralRepository {
      * agora os valores mais recentes serão colocados imediatamente abaixo do que
      * foi previamente escrito no ficheiro.<br>
      */
+
     private void printStateLine() {
         // initialize file writer
         TextFile log = new TextFile();

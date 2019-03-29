@@ -9,10 +9,29 @@ package entities;
  * @author Cristiano Vagos
  */
 public enum MechanicState {
+    /**
+     * O Mecânico está à espera de novas viaturas para reparar, trazidas pelo Cliente.
+     */
     WAITING_FOR_WORK ("WAI"),
+
+    /**
+     * O Mecânico encontra-se a reparar a viatura.
+     */
     FIXING_THE_CAR ("FIX"),
+
+    /**
+     * O Mecânico está a alertar o Gerente de que é preciso peças na {@link regions.RepairArea}.
+     */
     ALERTING_MANAGER_FOR_PARTS ("ALP"),
+
+    /**
+     * O Mecânico está a alertar o Gerente de que acabou de reparar uma viatura.
+     */
     ALERTING_MANAGER_REPAIR_CONCLUDED("ARP"),
+
+    /**
+     * O Mecânico está a verificar o stock de peças na {@link regions.RepairArea}.
+     */
     CHECKING_STOCK ("CHK");
 
     /**

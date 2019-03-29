@@ -30,6 +30,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Lounge {
 
     /**
+     * Numero de clientes que existem no total.
+     */
+    private final int NCUSTOMERS;
+
+    /**
      * Referência para o Repositório
      * @see GeneralRepository
      */
@@ -108,32 +113,15 @@ public class Lounge {
     private boolean[] waitForPayment;
 
     /**
-     * Lista de clientes à espera de chave para viatura
-     * de substituição
-     */
-    private boolean[] waitForReplacementCarKey;
-
-    /**
      * Lista de clientes com chave de substituição
      * e chave respetiva
      */
-    private int [] customerWithReplacementKey;
+    private int[] customerWithReplacementKey;
 
     /**
      * Numero de clientes servidos hoje
      */
     private int numCustomersServedToday;
-
-    /**
-     * Numero de clientes que existem no total.
-     */
-    private final int NCUSTOMERS;
-
-    /**
-     * Clientes que pagaram.
-     * Variável de bloqueio para confirmação de pagamento
-     */
-    private boolean[] customerPaid;
 
     /**
      * Construtor de uma Recepção<br>
@@ -145,6 +133,7 @@ public class Lounge {
      * @param repo referência para o Repositório ({@link GeneralRepository})
      */
     public Lounge(int nCustomers, int nReplacementCars, GeneralRepository repo) {
+        this.NCUSTOMERS = nCustomers;
         this.repository = repo;
         this.customerQueue = new MemFIFO(nCustomers);
         this.numCustomerQueue = 0;
@@ -159,29 +148,19 @@ public class Lounge {
         this.managerRequests = 0;
         this.waitForRepair = new boolean[nCustomers];
         this.waitForPayment = new boolean[nCustomers];
-        this.waitForReplacementCarKey = new boolean[nCustomers];
+        this.customerWithReplacementKey = new int[nCustomers];
+        this.numCustomersServedToday = 0;
 
         // initialize all wait conditions
         for (int i = 0; i < nCustomers; i++) {
             this.waitForRepair[i] = false;
             this.waitForPayment[i] = false;
-            this.waitForReplacementCarKey[i] = false;
+            this.customerWithReplacementKey[i] = -1;
         }
 
         // initially all replacement cars and keys are available
         for (int i = 0; i < nReplacementCars; i++)
             this.replacementCarKeys.write(100 + i);
-
-        this.customerWithReplacementKey = new int[nCustomers];
-        //NEW
-        for(int i = 0; i<nCustomers;i++)
-        {
-            customerWithReplacementKey[i] = -1;
-        }
-        this.numCustomersServedToday = 0;
-        this.NCUSTOMERS = nCustomers;
-
-        this.customerPaid = new boolean[nCustomers];
     }
 
     /* CUSTOMER */
@@ -278,18 +257,14 @@ public class Lounge {
         notifyAll();
 
         // wait until manager has a replacement car key available
-        //waitForReplacementCarKey[customerId] = true;
-        while (customerWithReplacementKey[customerId]==-1) {
+        while (customerWithReplacementKey[customerId] == -1) {
             try {
                 wait();
             } catch (InterruptedException e) {}
         }
 
-        // get the first replacement car available
-        //int replacementCarKey = (int) replacementCarKeys.read();
-        //NEW
+        // get the replacement car assigned
         int replacementCarKey = customerWithReplacementKey[customerId];
-        //numReplacementCarsAvailable--;
         ((Customer) Thread.currentThread()).setCarId(replacementCarKey);
         repository.setCustomerCar(customerId, replacementCarKey);
 
@@ -308,8 +283,6 @@ public class Lounge {
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
         ((Customer) Thread.currentThread()).setState(CustomerState.RECEPTION_PAYING);
         repository.setCustomerState(customerId, CustomerState.RECEPTION_PAYING);
-
-        customerPaid[customerId] = true;
     }
 
     /* MANAGER */
@@ -329,7 +302,6 @@ public class Lounge {
         ((Manager) Thread.currentThread()).setState(ManagerState.CHECKING_WHAT_TO_DO);
         repository.setManagerState(ManagerState.CHECKING_WHAT_TO_DO);
 
-
         //manager will mark end of the day
         if(numCustomersServedToday >= NCUSTOMERS)
             return false;
@@ -337,14 +309,11 @@ public class Lounge {
         while (managerRequests == 0) {
             try {
                 wait();
-            } catch (InterruptedException e) {
-                // manager will mark end of the day
-                //return false;
-            }
+            } catch (InterruptedException e) {}
         }
+
         if (managerRequests > 0)
             managerRequests--;
-
 
         // there is still work left to do
         return true;
@@ -453,10 +422,7 @@ public class Lounge {
         repository.setCustomersInQueueForKey(numCustomerReplacementCarKeyQueue);
 
         // let customer know there is a key available
-        //waitForReplacementCarKey[customerToAttend] = false;
-
         customerWithReplacementKey[customerToAttend] = (int)replacementCarKeys.read();
-
         numReplacementCarsAvailable--;
         notifyAll();
     }
@@ -475,25 +441,15 @@ public class Lounge {
 
         // let customer know that he needs to pay
         waitForPayment[customerToAttend] = false;
-        if (customerWithReplacementKey[customerToAttend] != -1)
-        {
+        if (customerWithReplacementKey[customerToAttend] != -1) {
+            // if this customer have used a replacement car, that car it's available to others
             replacementCarKeys.write(customerWithReplacementKey[customerToAttend]);
             numReplacementCarsAvailable++;
-
             customerWithReplacementKey[customerToAttend] = -1;
         }
 
         notifyAll();
-        while (customerPaid[customerToAttend]) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                // manager will mark end of the day
-                //return false;
-            }
-        }
         numCustomersServedToday++;
-
     }
 
     /* MECHANIC */
@@ -539,11 +495,8 @@ public class Lounge {
         carsRepairedQueue.write(carFixed);
         numCarsRepairedQueue++;
 
-
         // update number of total repaired cars
         numCarsRepaired++;
-
-
         repository.setTotalRepairedCars(numCarsRepaired);
 
         // manager has work to do
