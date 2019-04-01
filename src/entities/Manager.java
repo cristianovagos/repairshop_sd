@@ -35,6 +35,11 @@ public class Manager extends Thread {
     private ManagerState state;
 
     /**
+     * Indicação se é a primeira execução
+     */
+    private boolean firstRun;
+
+    /**
      * Cesto de compras do Gerente.<br>
      * Para reabastecer-se de peças no Fornecedor {@link SupplierSite}.
      */
@@ -98,8 +103,9 @@ public class Manager extends Thread {
         this.outsideWorld = outsideWorld;
         this.supplierSite = supplierSite;
         this.partsBasket = new int[nParts];
+        this.firstRun = true;
 
-        repository.setManagerState(ManagerState.CHECKING_WHAT_TO_DO);
+        repository.setManagerState(ManagerState.CHECKING_WHAT_TO_DO, false);
     }
 
     /**
@@ -146,6 +152,28 @@ public class Manager extends Thread {
      */
     public void setState(ManagerState state) {
         this.state = state;
+    }
+
+    /**
+     * Operação getFirstRun<br>
+     *
+     * Obtém a indicação se é a primeira execução<br>
+     *
+     * @return o valor da primeira execução
+     */
+    public boolean getFirstRun() {
+        return this.firstRun;
+    }
+
+    /**
+     * Operação setFirstRun<br>
+     *
+     * Altera a indicação se é a primeira execução<br>
+     *
+     * @param firstRun o novo valor
+     */
+    public void setFirstRun(boolean firstRun) {
+        this.firstRun = firstRun;
     }
 
     /**

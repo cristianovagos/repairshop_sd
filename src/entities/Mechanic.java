@@ -41,6 +41,11 @@ public class Mechanic extends Thread {
     private int currentCarFixingId;
 
     /**
+     * Indicação se é a primeira execução
+     */
+    private boolean firstRun;
+
+    /**
      * Referência para o Repositório Geral
      * @see GeneralRepository
      */
@@ -91,8 +96,9 @@ public class Mechanic extends Thread {
         this.park = park;
         this.lounge = lounge;
         this.currentCarFixingId = -1;
+        this.firstRun = true;
 
-        repository.setMechanicState(id, MechanicState.WAITING_FOR_WORK);
+        repository.setMechanicState(id, MechanicState.WAITING_FOR_WORK, false);
     }
 
     /**
@@ -127,6 +133,28 @@ public class Mechanic extends Thread {
      */
     public int getMechanicId() {
         return this.mechanicId;
+    }
+
+    /**
+     * Operação getFirstRun<br>
+     *
+     * Obtém a indicação se é a primeira execução<br>
+     *
+     * @return o valor da primeira execução
+     */
+    public boolean getFirstRun() {
+        return this.firstRun;
+    }
+
+    /**
+     * Operação setFirstRun<br>
+     *
+     * Altera a indicação se é a primeira execução<br>
+     *
+     * @param firstRun o novo valor
+     */
+    public void setFirstRun(boolean firstRun) {
+        this.firstRun = firstRun;
     }
 
     /**

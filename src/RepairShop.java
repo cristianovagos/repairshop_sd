@@ -121,8 +121,8 @@ public class RepairShop {
         for (int i = 0; i < N_MECHANICS; i++)
             mechanics[i] = new Mechanic(i, repository, repairArea, park, lounge);
 
-
         /* arranque da simulação */
+        repository.printInitialState();
 
         manager.start();
         for (int i = 0; i < N_MECHANICS; i++)

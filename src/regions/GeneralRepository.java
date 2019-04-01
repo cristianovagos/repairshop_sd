@@ -284,7 +284,6 @@ public class GeneralRepository {
      * agora os valores mais recentes serão colocados imediatamente abaixo do que
      * foi previamente escrito no ficheiro.<br>
      */
-
     private void printStateLine() {
         // initialize file writer
         TextFile log = new TextFile();
@@ -385,6 +384,15 @@ public class GeneralRepository {
     }
 
     /**
+     * Operação printInitialState<br>
+     *
+     * Irá imprimir a linha de estado, e será chamada pelo programa inicial quando este começa.<br>
+     */
+    public void printInitialState() {
+        printStateLine();
+    }
+
+    /**
      * Operação initializeCustomer<br>
      *
      * Inicializa o estado de cada um dos Customers<br>
@@ -397,9 +405,6 @@ public class GeneralRepository {
         this.customersReqReplVehicle[index] = requiresReplacement;
         this.customersCars[index] = index;
         this.customersRepairConcluded[index] = false;
-
-        // print state line
-        printStateLine();
     }
 
     /**
@@ -409,12 +414,13 @@ public class GeneralRepository {
      *
      * @param index o índice do cliente em questão
      * @param newState o estado novo do cliente
+     * @param print indicação se será impressa a linha de estado no ficheiro de logging
      */
-    public synchronized void setCustomerState(int index, CustomerState newState) {
+    public synchronized void setCustomerState(int index, CustomerState newState, boolean print) {
         this.customersState[index] = newState;
 
         // print state line
-        printStateLine();
+        if (print) printStateLine();
     }
 
     /**
@@ -425,27 +431,13 @@ public class GeneralRepository {
      * @param index o índice do cliente em questão
      * @param carId o identificador da viatura
      *              (-1 se nenhuma, id do customer se a própria, ou 100..102 para viatura de substituição)
+     * @param print indicação se será impressa a linha de estado no ficheiro de logging
      */
-    public synchronized void setCustomerCar(int index, int carId) {
+    public synchronized void setCustomerCar(int index, int carId, boolean print) {
         this.customersCars[index] = carId;
 
         // print state line
-        printStateLine();
-    }
-
-    /**
-     * Operação setCustomerRepairConcluded<br>
-     *
-     * Altera o estado de conclusão da reparação da viatura<br>
-     *
-     * @param index o índice do cliente em questão
-     * @param isRepairConcluded se a reparação foi concluída
-     */
-    public synchronized void setCustomerRepairConcluded(int index, boolean isRepairConcluded) {
-        this.customersRepairConcluded[index] = isRepairConcluded;
-
-        // print state line
-        printStateLine();
+        if (print) printStateLine();
     }
 
     /**
@@ -454,12 +446,13 @@ public class GeneralRepository {
      * Altera o estado do Manager<br>
      *
      * @param state estado do Manager
+     * @param print indicação se será impressa a linha de estado no ficheiro de logging
      */
-    public synchronized void setManagerState(ManagerState state) {
+    public synchronized void setManagerState(ManagerState state, boolean print) {
         this.managerState = state;
 
         // print state line
-        printStateLine();
+        if (print) printStateLine();
     }
 
     /**
@@ -469,12 +462,13 @@ public class GeneralRepository {
      *
      * @param index o índice do mecânico em questão
      * @param newState o estado novo do mecânico
+     * @param print indicação se será impressa a linha de estado no ficheiro de logging
      */
-    public synchronized void setMechanicState(int index, MechanicState newState) {
+    public synchronized void setMechanicState(int index, MechanicState newState, boolean print) {
         this.mechanicsState[index] = newState;
 
         // print state line
-        printStateLine();
+        if (print) printStateLine();
     }
 
     /**
@@ -533,12 +527,13 @@ public class GeneralRepository {
      * Altera o valor dos clientes na fila no Lounge<br>
      *
      * @param customersInQueue número de clientes na fila no Lounge
+     * @param print indicação se será impressa a linha de estado no ficheiro de logging
      */
-    public synchronized void setCustomersInQueue(int customersInQueue) {
+    public synchronized void setCustomersInQueue(int customersInQueue, boolean print) {
         this.customersInQueue = customersInQueue;
 
         // print state line
-        printStateLine();
+        if (print) printStateLine();
     }
 
     /**
@@ -617,27 +612,8 @@ public class GeneralRepository {
      * @param partIndex o índice da peça
      */
     public synchronized void removeMissingPart(int partIndex) {
-        if(this.customersMissingParts[partIndex] > 0) {
+        if(this.customersMissingParts[partIndex] > 0)
             this.customersMissingParts[partIndex]--;
-
-            // update state line
-            printStateLine();
-        }
-    }
-
-    /**
-     * Operação setMissingPartIndex<br>
-     *
-     * Altera o valor de um dado índice do array de peças em falta<br>
-     *
-     * @param partIndex o índice da peça
-     * @param value o novo valor
-     */
-    public synchronized void setMissingPartIndex(int partIndex, int value) {
-        this.customersMissingParts[partIndex] = value;
-
-        // update state line
-        printStateLine();
     }
 
     /**
@@ -647,12 +623,13 @@ public class GeneralRepository {
      *
      * @param partIndex o índice da peça
      * @param value o novo valor
+     * @param print indicação se será impressa a linha de estado no ficheiro de logging
      */
-    public synchronized void setPartMissingAlert(int partIndex, boolean value) {
+    public synchronized void setPartMissingAlert(int partIndex, boolean value, boolean print) {
         this.partMissingAlert[partIndex] = value;
 
         // update state line
-        printStateLine();
+        if (print) printStateLine();
     }
 
     /**

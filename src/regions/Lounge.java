@@ -179,7 +179,7 @@ public class Lounge {
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
         customerQueue.write(customerId);
         numCustomerQueue++;
-        repository.setCustomersInQueue(numCustomerQueue);
+        repository.setCustomersInQueue(numCustomerQueue, false);
 
         // manager has work to do
         managerRequests++;
@@ -187,7 +187,7 @@ public class Lounge {
 
         // customer is at reception
         ((Customer) Thread.currentThread()).setState(CustomerState.RECEPTION);
-        repository.setCustomerState(customerId, CustomerState.RECEPTION);
+        repository.setCustomerState(customerId, CustomerState.RECEPTION, true);
 
         if (repairCompleted) {
             // repair has completed, customer wants to pay
@@ -224,11 +224,11 @@ public class Lounge {
         // update state and repository
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
         ((Customer) Thread.currentThread()).setState(CustomerState.RECEPTION_TALK_WITH_MANAGER);
-        repository.setCustomerState(customerId, CustomerState.RECEPTION_TALK_WITH_MANAGER);
+        repository.setCustomerState(customerId, CustomerState.RECEPTION_TALK_WITH_MANAGER, false);
 
         // give manager the customers car key
         ((Customer) Thread.currentThread()).setCarId(-1);
-        repository.setCustomerCar(customerId, -1);
+        repository.setCustomerCar(customerId, -1, true);
     }
 
     /**
@@ -245,7 +245,7 @@ public class Lounge {
         // update state and repository
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
         ((Customer) Thread.currentThread()).setState(CustomerState.WAITING_FOR_REPLACE_CAR);
-        repository.setCustomerState(customerId, CustomerState.WAITING_FOR_REPLACE_CAR);
+        repository.setCustomerState(customerId, CustomerState.WAITING_FOR_REPLACE_CAR, false);
 
         // customer is on the queue waiting for a replacement car key
         customerReplacementCarKeyQueue.write(customerId);
@@ -266,7 +266,7 @@ public class Lounge {
         // get the replacement car assigned
         int replacementCarKey = customerWithReplacementKey[customerId];
         ((Customer) Thread.currentThread()).setCarId(replacementCarKey);
-        repository.setCustomerCar(customerId, replacementCarKey);
+        repository.setCustomerCar(customerId, replacementCarKey, true);
 
         return replacementCarKey;
     }
@@ -282,7 +282,7 @@ public class Lounge {
         // update state and repository
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
         ((Customer) Thread.currentThread()).setState(CustomerState.RECEPTION_PAYING);
-        repository.setCustomerState(customerId, CustomerState.RECEPTION_PAYING);
+        repository.setCustomerState(customerId, CustomerState.RECEPTION_PAYING, true);
     }
 
     /* MANAGER */
@@ -300,7 +300,9 @@ public class Lounge {
     public synchronized boolean getNextTask() {
         // update state and repository
         ((Manager) Thread.currentThread()).setState(ManagerState.CHECKING_WHAT_TO_DO);
-        repository.setManagerState(ManagerState.CHECKING_WHAT_TO_DO);
+        boolean firstRun = ((Manager) Thread.currentThread()).getFirstRun();
+        if (firstRun) ((Manager) Thread.currentThread()).setFirstRun(false);
+        repository.setManagerState(ManagerState.CHECKING_WHAT_TO_DO, !firstRun);
 
         //manager will mark end of the day
         if(numCustomersServedToday >= NCUSTOMERS)
@@ -337,10 +339,6 @@ public class Lounge {
      * @return a próxima tarefa a ser executada pelo Gerente
      */
     public synchronized ManagerTask appraiseSit() {
-        // update state and repository
-        ((Manager) Thread.currentThread()).setState(ManagerState.CHECKING_WHAT_TO_DO);
-        repository.setManagerState(ManagerState.CHECKING_WHAT_TO_DO);
-
         if (mechanicsNeedParts.getAndSet(false))
             return ManagerTask.GET_PARTS;
         else if (numCustomerReplacementCarKeyQueue > 0 && numReplacementCarsAvailable > 0)
@@ -373,7 +371,7 @@ public class Lounge {
     public synchronized CustomerState talkToCustomer() {
         // update state and repository
         ((Manager) Thread.currentThread()).setState(ManagerState.ATTENDING_CUSTOMER);
-        repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
+        repository.setManagerState(ManagerState.ATTENDING_CUSTOMER, false);
 
         if (numReplacementCarsAvailable > 0 && numCustomerReplacementCarKeyQueue > 0) {
             /* there are replacement cars available, and
@@ -386,7 +384,7 @@ public class Lounge {
              */
             int customerToAttend = (int) customerQueue.read();
             numCustomerQueue--;
-            repository.setCustomersInQueue(numCustomerQueue);
+            repository.setCustomersInQueue(numCustomerQueue, true);
 
             if (waitForPayment[customerToAttend]) {
                 // customer wants to pay
@@ -414,7 +412,7 @@ public class Lounge {
     public synchronized void handCarKey() {
         // update state and repository
         ((Manager) Thread.currentThread()).setState(ManagerState.ATTENDING_CUSTOMER);
-        repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
+        repository.setManagerState(ManagerState.ATTENDING_CUSTOMER, false);
 
         // get first customer in queue waiting for replacement car
         int customerToAttend = (int) customerReplacementCarKeyQueue.read();
@@ -437,7 +435,7 @@ public class Lounge {
     public synchronized void receivePayment(int customerToAttend) {
         // update state and repository
         ((Manager) Thread.currentThread()).setState(ManagerState.ATTENDING_CUSTOMER);
-        repository.setManagerState(ManagerState.ATTENDING_CUSTOMER);
+        repository.setManagerState(ManagerState.ATTENDING_CUSTOMER, true);
 
         // let customer know that he needs to pay
         waitForPayment[customerToAttend] = false;
@@ -466,10 +464,10 @@ public class Lounge {
         // update state and repository
         int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
         ((Mechanic) Thread.currentThread()).setState(MechanicState.ALERTING_MANAGER_FOR_PARTS);
-        repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER_FOR_PARTS);
+        repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER_FOR_PARTS, false);
 
         // mark part as needed to replenish
-        repository.setPartMissingAlert(partRequired, true);
+        repository.setPartMissingAlert(partRequired, true, true);
         mechanicsNeedParts.set(true);
 
         // manager has work to do
@@ -488,7 +486,7 @@ public class Lounge {
         // update state and repository
         int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
         ((Mechanic) Thread.currentThread()).setState(MechanicState.ALERTING_MANAGER_REPAIR_CONCLUDED);
-        repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER_REPAIR_CONCLUDED);
+        repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER_REPAIR_CONCLUDED, false);
 
         // add car to the repaired cars queue
         int carFixed = ((Mechanic) Thread.currentThread()).getCurrentCarFixingId();

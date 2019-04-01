@@ -86,7 +86,7 @@ public class Park {
         int carId = ((Customer) Thread.currentThread()).getCarId();
 
         // update repository
-        repository.setCustomerState(customerId, CustomerState.PARK);
+        repository.setCustomerState(customerId, CustomerState.PARK, false);
 
         if(customerId != carId) {
             // replacement car is on park
@@ -119,8 +119,8 @@ public class Park {
 
         // update repository
         int customerId = ((Customer) Thread.currentThread()).getCustomerId();
-        repository.setCustomerState(customerId, CustomerState.PARK);
-        repository.setCustomerCar(customerId, replacementCar);
+        repository.setCustomerState(customerId, CustomerState.PARK, false);
+        repository.setCustomerCar(customerId, replacementCar, false);
         repository.replacementCarLeavesPark();
     }
 
@@ -139,8 +139,8 @@ public class Park {
         customerCars[customerId] = false;
 
         // update repository
-        repository.setCustomerState(customerId, CustomerState.PARK);
-        repository.setCustomerCar(customerId, customerId);
+        repository.setCustomerState(customerId, CustomerState.PARK, false);
+        repository.setCustomerCar(customerId, customerId, false);
         repository.customerCarLeavesPark();
     }
 
@@ -153,16 +153,11 @@ public class Park {
      * @return a peça que necessita de substituição
      */
     public synchronized int getVehicle() {
-        // update Mechanic state
-        ((Mechanic) Thread.currentThread()).setState(MechanicState.FIXING_THE_CAR);
-
         // Customer car is not on Park
         int customerId = ((Mechanic) Thread.currentThread()).getCurrentCarFixingId();
         customerCars[customerId] = false;
 
         // update repository
-        int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
-        repository.setMechanicState(mechanicId, MechanicState.FIXING_THE_CAR);
         repository.customerCarLeavesPark();
 
         // select randomly the part that needs to be replaced
@@ -175,16 +170,11 @@ public class Park {
      * O Mecânico devolve a viatura já reparada ao Park.<br>
      */
     public synchronized void returnVehicle() {
-        // update Mechanic state
-        ((Mechanic) Thread.currentThread()).setState(MechanicState.FIXING_THE_CAR);
-
         // Customer car is now on Park
         int customerId = ((Mechanic) Thread.currentThread()).getCurrentCarFixingId();
         customerCars[customerId] = true;
 
         // update repository
-        int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
-        repository.setMechanicState(mechanicId, MechanicState.FIXING_THE_CAR);
         repository.customerCarEntersPark();
     }
 }

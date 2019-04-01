@@ -78,9 +78,7 @@ public class SupplierSite {
     public synchronized int[] goToSupplier() {
         // Update Manager state
         ((Manager) Thread.currentThread()).setState(ManagerState.GETTING_NEW_PARTS);
-
-        // update repository
-        repository.setManagerState(ManagerState.GETTING_NEW_PARTS);
+        repository.setManagerState(ManagerState.GETTING_NEW_PARTS, false);
 
         /* Fill up the Manager shopping cart with parts.
            In our case, we chose to always fill it up with a fixed number for each part.

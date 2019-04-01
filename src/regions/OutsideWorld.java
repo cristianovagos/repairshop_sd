@@ -57,7 +57,7 @@ public class OutsideWorld {
         ((Customer) Thread.currentThread()).setState(CustomerState.NORMAL_LIFE_WITHOUT_CAR);
 
         // update repository
-        repository.setCustomerState(customerId, CustomerState.NORMAL_LIFE_WITHOUT_CAR);
+        repository.setCustomerState(customerId, CustomerState.NORMAL_LIFE_WITHOUT_CAR, true);
 
         // block on condition variable
         while (waitForCarRepair[customerId]) {
@@ -82,7 +82,7 @@ public class OutsideWorld {
 
         // change customer state, and repository
         ((Customer) Thread.currentThread()).setState(CustomerState.NORMAL_LIFE_WITH_CAR);
-        repository.setCustomerState(customerId, CustomerState.NORMAL_LIFE_WITH_CAR);
+        repository.setCustomerState(customerId, CustomerState.NORMAL_LIFE_WITH_CAR, true);
 
         if(carRepaired)
             return;
@@ -109,8 +109,7 @@ public class OutsideWorld {
         ((Manager) Thread.currentThread()).setState(ManagerState.ALERTING_CUSTOMER);
 
         // update repository
-        repository.setManagerState(ManagerState.ALERTING_CUSTOMER);
-
+        repository.setManagerState(ManagerState.ALERTING_CUSTOMER, true);
 
         // signal condition variable
         waitForCarRepair[customerId] = false;

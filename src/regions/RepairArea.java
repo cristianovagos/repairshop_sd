@@ -88,8 +88,10 @@ public class RepairArea {
     public synchronized boolean readThePaper() {
         // update mechanic state and repository
         int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
+        boolean firstRun = ((Mechanic) Thread.currentThread()).getFirstRun();
+        if (firstRun) ((Mechanic) Thread.currentThread()).setFirstRun(false);
         ((Mechanic) Thread.currentThread()).setState(MechanicState.WAITING_FOR_WORK);
-        repository.setMechanicState(mechanicId, MechanicState.WAITING_FOR_WORK);
+        repository.setMechanicState(mechanicId, MechanicState.WAITING_FOR_WORK, !firstRun);
 
         if(!endOfDay){
             while (nRequestedServices == 0) {
@@ -131,7 +133,7 @@ public class RepairArea {
 
         // update repository
         int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
-        repository.setMechanicState(mechanicId, MechanicState.FIXING_THE_CAR);
+        repository.setMechanicState(mechanicId, MechanicState.FIXING_THE_CAR, true);
     }
 
     /**
@@ -149,7 +151,7 @@ public class RepairArea {
 
         // update repository
         int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
-        repository.setMechanicState(mechanicId, MechanicState.CHECKING_STOCK);
+        repository.setMechanicState(mechanicId, MechanicState.CHECKING_STOCK, false);
 
         // check if part is in stock
         if (stockParts[partId] > 0)
@@ -181,7 +183,7 @@ public class RepairArea {
         // update state and repository
         int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
         ((Mechanic) Thread.currentThread()).setState(MechanicState.CHECKING_STOCK);
-        repository.setMechanicState(mechanicId, MechanicState.CHECKING_STOCK);
+        repository.setMechanicState(mechanicId, MechanicState.CHECKING_STOCK, false);
         repository.setStockParts(stockParts);
     }
 
@@ -197,7 +199,7 @@ public class RepairArea {
 
         // update repository
         int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
-        repository.setMechanicState(mechanicId, MechanicState.FIXING_THE_CAR);
+        repository.setMechanicState(mechanicId, MechanicState.FIXING_THE_CAR, true);
     }
 
     /**
@@ -210,18 +212,16 @@ public class RepairArea {
      * @param newParts peças novas a serem incluídas no stock
      */
     public synchronized void storePart(int[] newParts) {
-        // update Manager state
+        // update Manager state and repository
         ((Manager) Thread.currentThread()).setState(ManagerState.REPLENISH_STOCK);
-
-        // update repository
-        repository.setManagerState(ManagerState.REPLENISH_STOCK);
+        repository.setManagerState(ManagerState.REPLENISH_STOCK, false);
 
         for (int part = 0; part < stockParts.length; part++) {
             // replenishing stock of parts
             stockParts[part] += newParts[part];
 
             // update repository
-            repository.setPartMissingAlert(part, false);
+            repository.setPartMissingAlert(part, false, false);
             for (int i = 0; i < newParts[part]; i++)
                 repository.removeMissingPart(part);
 
@@ -257,7 +257,7 @@ public class RepairArea {
         ((Manager) Thread.currentThread()).setState(ManagerState.POSTING_JOB);
 
         // update repository
-        repository.setManagerState(ManagerState.POSTING_JOB);
+        repository.setManagerState(ManagerState.POSTING_JOB, false);
         repository.managerRequestedService();
 
         // mechanics have one more service to do
