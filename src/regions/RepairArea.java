@@ -76,6 +76,8 @@ public class RepairArea {
             this.customerMissingPartQueue[i] = new MemFIFO(nCustomers);
             this.stockParts[i] = (int) (10 * Math.random());
         }
+
+        repository.setStockParts(stockParts, false);
     }
 
     /**
@@ -184,7 +186,7 @@ public class RepairArea {
         int mechanicId = ((Mechanic) Thread.currentThread()).getMechanicId();
         ((Mechanic) Thread.currentThread()).setState(MechanicState.CHECKING_STOCK);
         repository.setMechanicState(mechanicId, MechanicState.CHECKING_STOCK, false);
-        repository.setStockParts(stockParts);
+        repository.setStockParts(stockParts, true);
     }
 
     /**
@@ -236,7 +238,7 @@ public class RepairArea {
         }
 
         // update repository
-        repository.setStockParts(stockParts);
+        repository.setStockParts(stockParts, true);
 
         notifyAll();
     }

@@ -583,11 +583,11 @@ public class GeneralRepository {
      *
      * @param stockParts lista com número de peças em stock
      */
-    public synchronized void setStockParts(int[] stockParts) {
+    public synchronized void setStockParts(int[] stockParts, boolean print) {
         this.stockParts = stockParts;
 
         // update state line
-        printStateLine();
+        if(print) printStateLine();
     }
 
     /**
