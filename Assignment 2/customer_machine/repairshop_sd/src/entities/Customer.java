@@ -1,5 +1,6 @@
 package entities;
 
+import model.CustomerState;
 import regions.*;
 
 /**

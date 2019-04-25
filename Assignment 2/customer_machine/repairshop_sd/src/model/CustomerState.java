@@ -1,9 +1,9 @@
-package entities;
+package model;
 
 /**
  * Enumerado CustomerState<br>
  *
- * Estado interno do Cliente ({@link Customer}).
+ * Estado interno do Cliente.
  *
  * @author Miguel Bras
  * @author Cristiano Vagos

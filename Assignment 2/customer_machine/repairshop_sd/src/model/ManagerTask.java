@@ -1,9 +1,9 @@
-package regions;
+package model;
 
 /**
  * Enumerado ManagerTask<br>
  *
- * Tarefas do Manager ({@link entities.Manager}).<br>
+ * Tarefas do Manager.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -15,7 +15,7 @@ public enum ManagerTask {
     PHONE_CUSTOMER,
 
     /**
-     * Obter novas peças para reabastecer a {@link RepairArea}.
+     * Obter novas peças para reabastecer a RepairArea.
      */
     GET_PARTS,
 
