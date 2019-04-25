@@ -7,7 +7,7 @@ import utils.Constants;
 import comm.ServerCom;
 
 /**
- * Servidor do Lounge <br>
+ * Servidor do RepairArea <br>
  *
  * Classe responsável pela criação do Servidor do RepairArea, uma das regiões partilhadas
  * do problema Repair Shop Activities.<br>

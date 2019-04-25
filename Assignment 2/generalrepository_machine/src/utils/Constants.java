@@ -39,5 +39,5 @@ public class Constants {
     /**
      * Porta do Servidor do Supplier Site
      */
-    public static final int GENERAL_REPOSITORY_SERVER_PORT_NUMBER = 1234;
+    public static final int GENERAL_REPOSITORY_SERVER_PORT_NUMBER = 22100;
 }

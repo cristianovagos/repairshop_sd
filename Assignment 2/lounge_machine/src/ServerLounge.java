@@ -27,17 +27,17 @@ public class ServerLounge {
         ClientProxy cliProxy;
         GeneralRepository repository = new GeneralRepository(Constants.REPOSITORY_SERVER_HOST, Constants.REPOSITORY_SERVER_PORT);
 
-        scon = new ServerCom(Constants.LOUNGE_SERVER_PORT_NUMBER);         // criação do canal de escuta e sua associação
-        scon.start();                                        // com o endereço público
+        scon = new ServerCom(Constants.LOUNGE_SERVER_PORT_NUMBER);          // criação do canal de escuta e sua associação
+        scon.start();                                                       // com o endereço público
         lounge = new Lounge(Constants.NUM_CUSTOMERS, Constants.NUM_REPLACEMENT_CARS, repository); // activação do serviço
-        loungeInter = new LoungeInterface(lounge);          // activação do interface com o serviço
+        loungeInter = new LoungeInterface(lounge);                          // activação do interface com o serviço
         GenericIO.writelnString("O serviço foi estabelecido!");
         GenericIO.writelnString("O servidor esta em escuta.");
 
         /* processamento de pedidos */
         while (true) {
-            sconi = scon.accept();                            // entrada em processo de escuta
-            cliProxy = new ClientProxy(sconi, loungeInter);   // lançamento do agente prestador do serviço
+            sconi = scon.accept();                                          // entrada em processo de escuta
+            cliProxy = new ClientProxy(sconi, loungeInter);                 // lançamento do agente prestador do serviço
             cliProxy.start();
         }
     }

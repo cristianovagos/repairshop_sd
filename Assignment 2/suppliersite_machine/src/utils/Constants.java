@@ -34,15 +34,15 @@ public class Constants {
     /**
      * Porta do Servidor do Supplier Site
      */
-    public static final int SUPPLIER_SITE_SERVER_PORT_NUMBER = 1234;
+    public static final int SUPPLIER_SITE_SERVER_PORT_NUMBER = 22104;
 
     /**
      * Terminal do Servidor do Repository
      */
-    public static final String REPOSITORY_SERVER_HOST = "localhost";
+    public static final String REPOSITORY_SERVER_HOST = "l040101-ws01.ua.pt";
 
     /**
      * Porta do Servidor do Repository
      */
-    public static final int REPOSITORY_SERVER_PORT = 1234;
+    public static final int REPOSITORY_SERVER_PORT = 22100;
 }

@@ -9,7 +9,7 @@ import model.MechanicState;
 import service.OutsideWorldInterface;
 
 /**
- *   Este tipo de dados define o thread agente prestador de serviço para o RepairArea, uma das áreas partilhadas do
+ *   Este tipo de dados define o thread agente prestador de serviço para o OutsideWorld, uma das áreas partilhadas do
  *   problema da Repair Shop, que implementa o modelo cliente-servidor de tipo 2 (replicação do servidor).
  *   A comunicação baseia-se em passagem de mensagens sobre sockets usando o protocolo TCP.
  */
@@ -25,7 +25,7 @@ public class ClientProxy extends Thread implements IManagerAtt, ICustomerAtt, IM
     private ServerCom sconi;
 
     /**
-     *  Interface da RepairArea
+     *  Interface do OutsideWorld
      */
     private OutsideWorldInterface outsideWorldInterface;
 

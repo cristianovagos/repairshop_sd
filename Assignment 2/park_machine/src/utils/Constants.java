@@ -29,15 +29,15 @@ public class Constants {
     /**
      * Porta do Servidor do Park
      */
-    public static final int PARK_SERVER_PORT_NUMBER = 1234;
+    public static final int PARK_SERVER_PORT_NUMBER = 22103;
 
     /**
      * Terminal do Servidor do Repository
      */
-    public static final String REPOSITORY_SERVER_HOST = "localhost";
+    public static final String REPOSITORY_SERVER_HOST = "l040101-ws01.ua.pt";
 
     /**
      * Porta do Servidor do Repository
      */
-    public static final int REPOSITORY_SERVER_PORT = 1234;
+    public static final int REPOSITORY_SERVER_PORT = 22100;
 }

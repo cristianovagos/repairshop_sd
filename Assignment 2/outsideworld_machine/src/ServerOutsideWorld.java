@@ -7,9 +7,9 @@ import utils.Constants;
 import comm.ServerCom;
 
 /**
- * Servidor do Lounge <br>
+ * Servidor do OutsideWorld <br>
  *
- * Classe responsável pela criação do Servidor do RepairArea, uma das regiões partilhadas
+ * Classe responsável pela criação do Servidor do OutsideWorld, uma das regiões partilhadas
  * do problema Repair Shop Activities.<br>
  *
  * @author Miguel Bras
@@ -28,16 +28,16 @@ public class ServerOutsideWorld {
         GeneralRepository repository = new GeneralRepository(Constants.REPOSITORY_SERVER_HOST, Constants.REPOSITORY_SERVER_PORT);
 
         scon = new ServerCom(Constants.OUTSIDE_WORLD_SERVER_PORT_NUMBER);         // criação do canal de escuta e sua associação
-        scon.start();                                        // com o endereço público
-        outsideWorld = new OutsideWorld(Constants.NUM_CUSTOMERS, repository); // activação do serviço
-        outsideWorldInter = new OutsideWorldInterface(outsideWorld);          // activação do interface com o serviço
+        scon.start();                                                             // com o endereço público
+        outsideWorld = new OutsideWorld(Constants.NUM_CUSTOMERS, repository);     // activação do serviço
+        outsideWorldInter = new OutsideWorldInterface(outsideWorld);              // activação do interface com o serviço
         GenericIO.writelnString("O serviço foi estabelecido!");
         GenericIO.writelnString("O servidor esta em escuta.");
 
         /* processamento de pedidos */
         while (true) {
-            sconi = scon.accept();                            // entrada em processo de escuta
-            cliProxy = new ClientProxy(sconi, outsideWorldInter);   // lançamento do agente prestador do serviço
+            sconi = scon.accept();                                                // entrada em processo de escuta
+            cliProxy = new ClientProxy(sconi, outsideWorldInter);                 // lançamento do agente prestador do serviço
             cliProxy.start();
         }
     }
