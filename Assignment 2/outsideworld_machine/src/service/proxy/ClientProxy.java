@@ -113,7 +113,7 @@ public class ClientProxy extends Thread implements IManagerAtt, ICustomerAtt, IM
      *  @param outsideWorldInterface interface ao RepairArea
      */
     public ClientProxy (ServerCom sconi, OutsideWorldInterface outsideWorldInterface) {
-        super ("RepairAreaProxy_" + getProxyId ());
+        super ("OutsideWorldProxy_" + getProxyId ());
         this.sconi = sconi;
         this.outsideWorldInterface = outsideWorldInterface;
     }
