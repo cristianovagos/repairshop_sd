@@ -60,12 +60,12 @@ public class OutsideWorld implements IOutsideWorld{
 
         int customerID = ((Customer)Thread.currentThread()).getCustomerId();
         //criar mensagem
-        outMessage = new Message(MessageType.BACK_TO_WORK_BY_BUS_REQUEST, customerID);
+        outMessage = new Message(MessageType.OUTSIDE_WORLD_BACK_TO_WORK_BY_BUS_REQ, customerID);
         //enviar e receber mensagem de resposta
         inMessage = communicationWithServer(outMessage);
 
         //check if received message is valid
-        if(inMessage.getMessageType() != MessageType.BACK_TO_WORK_BY_BUS_RESPONSE)
+        if(inMessage.getMessageType() != MessageType.OUTSIDE_WORLD_BACK_TO_WORK_BY_BUS_RESP)
         {
             GenericIO.writelnString ("Thread " + ((Customer) Thread.currentThread()).getName()+ ": Tipo inválido!");
             GenericIO.writelnString (inMessage.toString ());
@@ -92,12 +92,12 @@ public class OutsideWorld implements IOutsideWorld{
 
         int customerID = ((Customer)Thread.currentThread()).getCustomerId();
         //criar mensagem
-        outMessage = new Message(MessageType.BACK_TO_WORK_BY_CAR_REQUEST, customerID, carRepaired);
+        outMessage = new Message(MessageType.OUTSIDE_WORLD_BACK_TO_WORK_BY_CAR_REQ, customerID, carRepaired);
         //enviar e receber mensagem de resposta
         inMessage = communicationWithServer(outMessage);
 
         //check if received message is valid
-        if(inMessage.getMessageType() != MessageType.BACK_TO_WORK_BY_CAR_RESPONSE)
+        if(inMessage.getMessageType() != MessageType.OUTSIDE_WORLD_BACK_TO_WORK_BY_CAR_RESP)
         {
             GenericIO.writelnString ("Thread " + ((Customer) Thread.currentThread()).getName()+ ": Tipo inválido!");
             GenericIO.writelnString (inMessage.toString ());

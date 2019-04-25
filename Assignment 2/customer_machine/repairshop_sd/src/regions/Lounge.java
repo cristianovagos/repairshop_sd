@@ -72,12 +72,12 @@ public class Lounge implements ILounge {
         customerID = ((Customer)Thread.currentThread()).getCustomerId();
 
         //criar mensagem
-        outMessage = new Message(MessageType.QUEUE_IN_REQUEST, customerID, repairCompleted);
+        outMessage = new Message(MessageType.LOUNGE_QUEUE_IN_REQ, customerID, repairCompleted);
         //enviar e receber mensagem de resposta
         inMessage = communicationWithServer(outMessage);
 
         //check if received message is valid
-        if(inMessage.getMessageType() != MessageType.QUEUE_IN_RESPONSE)
+        if(inMessage.getMessageType() != MessageType.LOUNGE_QUEUE_IN_RESP)
         {
             GenericIO.writelnString ("Thread " + ((Customer) Thread.currentThread()).getName()+ ": Tipo inválido!");
             GenericIO.writelnString (inMessage.toString ());
@@ -101,12 +101,12 @@ public class Lounge implements ILounge {
 
         customerID = ((Customer)Thread.currentThread()).getCustomerId();
         //criar mensagem
-        outMessage = new Message(MessageType.TALK_WITH_MANAGER_REQUEST, customerID);
+        outMessage = new Message(MessageType.LOUNGE_TALK_WITH_MANAGER_REQ, customerID);
         //enviar e receber mensagem de resposta
         inMessage = communicationWithServer(outMessage);
 
         //check if received message is valid
-        if(inMessage.getMessageType() != MessageType.TALK_WITH_MANAGER_RESPONSE)
+        if(inMessage.getMessageType() != MessageType.LOUNGE_TALK_WITH_MANAGER_RESP)
         {
             GenericIO.writelnString ("Thread " + ((Customer) Thread.currentThread()).getName()+ ": Tipo inválido!");
             GenericIO.writelnString (inMessage.toString ());
@@ -135,12 +135,12 @@ public class Lounge implements ILounge {
 
         customerID = ((Customer)Thread.currentThread()).getCustomerId();
         //criar mensagem
-        outMessage = new Message(MessageType.COLLECT_KEY_REQUEST, customerID);
+        outMessage = new Message(MessageType.LOUNGE_COLLECT_KEY_REQ, customerID);
         //enviar e receber mensagem de resposta
         inMessage = communicationWithServer(outMessage);
 
         //check if received message is valid
-        if(inMessage.getMessageType() != MessageType.COLLECT_KEY_RESPONSE)
+        if(inMessage.getMessageType() != MessageType.LOUNGE_COLLECT_KEY_RESP)
         {
             GenericIO.writelnString ("Thread " + ((Customer) Thread.currentThread()).getName()+ ": Tipo inválido!");
             GenericIO.writelnString (inMessage.toString ());
@@ -170,12 +170,12 @@ public class Lounge implements ILounge {
 
         customerID = ((Customer)Thread.currentThread()).getCustomerId();
         //criar mensagem
-        outMessage = new Message(MessageType.PAY_FOR_THE_SERVICE_REQUEST, customerID);
+        outMessage = new Message(MessageType.LOUNGE_PAY_FOR_THE_SERVICE_REQ, customerID);
         //enviar e receber mensagem de resposta
         inMessage = communicationWithServer(outMessage);
 
         //check if received message is valid
-        if(inMessage.getMessageType() != MessageType.PART_AVAILABLE_RESPONSE)
+        if(inMessage.getMessageType() != MessageType.LOUNGE_PAY_FOR_THE_SERVICE_RESP)
         {
             GenericIO.writelnString ("Thread " + ((Customer) Thread.currentThread()).getName()+ ": Tipo inválido!");
             GenericIO.writelnString (inMessage.toString ());

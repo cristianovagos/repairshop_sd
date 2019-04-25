@@ -62,12 +62,12 @@ public class Park implements IPark{
         carID = ((Customer)Thread.currentThread()).getCarId();
 
         //criar mensagem
-        outMessage = new Message(MessageType.GO_TO_REPAIR_SHOP_REQUEST, customerID, carID);
+        outMessage = new Message(MessageType.PARK_GO_TO_REPAIR_SHOP_REQ, customerID, carID);
         //enviar e receber mensagem de resposta
         inMessage = communicationWithServer(outMessage);
 
         //check if received message is valid
-        if(inMessage.getMessageType() != MessageType.GO_TO_REPAIR_SHOP_RESPONSE)
+        if(inMessage.getMessageType() != MessageType.PARK_GO_TO_REPAIR_SHOP_RESP)
         {
             GenericIO.writelnString ("Thread " + ((Customer) Thread.currentThread()).getName()+ ": Tipo inválido!");
             GenericIO.writelnString (inMessage.toString ());
@@ -93,12 +93,12 @@ public class Park implements IPark{
         customerID = ((Customer)Thread.currentThread()).getCustomerId();
 
         //criar mensagem
-        outMessage = new Message(MessageType.FIND_CAR_REQUEST, customerID, replacementCar);
+        outMessage = new Message(MessageType.PARK_FIND_CAR_REQ, customerID, replacementCar);
         //enviar e receber mensagem de resposta
         inMessage = communicationWithServer(outMessage);
 
         //check if received message is valid
-        if(inMessage.getMessageType() != MessageType.FIND_CAR_RESPONSE)
+        if(inMessage.getMessageType() != MessageType.PARK_FIND_CAR_RESP)
         {
             GenericIO.writelnString ("Thread " + ((Customer) Thread.currentThread()).getName()+ ": Tipo inválido!");
             GenericIO.writelnString (inMessage.toString ());
@@ -124,12 +124,12 @@ public class Park implements IPark{
         customerID = ((Customer)Thread.currentThread()).getCustomerId();
 
         //criar mensagem
-        outMessage = new Message(MessageType.COLLECT_CAR_REQUEST, customerID);
+        outMessage = new Message(MessageType.PARK_COLLECT_CAR_REQ, customerID);
         //enviar e receber mensagem de resposta
         inMessage = communicationWithServer(outMessage);
 
         //check if received message is valid
-        if(inMessage.getMessageType() != MessageType.COLLECT_CAR_RESPONSE)
+        if(inMessage.getMessageType() != MessageType.PARK_COLLECT_CAR_RESP)
         {
             GenericIO.writelnString ("Thread " + ((Customer) Thread.currentThread()).getName()+ ": Tipo inválido!");
             GenericIO.writelnString (inMessage.toString ());
