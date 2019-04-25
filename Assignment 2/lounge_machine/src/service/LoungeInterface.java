@@ -83,6 +83,11 @@ public class LoungeInterface {
                 if (inMessage.getBooleanParam1() == null)
                     throw new MessageException("Indicacao de conclusao de reparacao invalida!", inMessage);
                 break;
+            case LOUNGE_TALK_TO_CUSTOMER_REQ:
+            case LOUNGE_APPRAISE_SIT_REQ:
+            case LOUNGE_HAND_CAR_KEY_REQ:
+                // nothing to do
+                break;
             case NONE:
             default:
                 throw new MessageException("Tipo de mensagem invalida!", inMessage);
