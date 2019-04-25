@@ -1,6 +1,5 @@
 package regions;
 
-import entities.Customer;
 import entities.Mechanic;
 
 import java.util.Random;

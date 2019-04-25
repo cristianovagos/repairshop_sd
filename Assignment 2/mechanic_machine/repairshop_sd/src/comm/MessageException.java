@@ -7,7 +7,6 @@ public class MessageException extends Exception
 {
     /**
      *  Mensagem que originou a excepção
-     *  @serialField msg
      */
     private Message msg;
 

@@ -5,7 +5,6 @@ import comm.Message;
 import comm.MessageType;
 import entities.*;
 import genclass.GenericIO;
-import utils.MemFIFO;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

@@ -1,9 +1,10 @@
 package regions;
 
+
 import comm.ClientCom;
 import comm.Message;
 import comm.MessageType;
-import entities.*;
+import entities.Mechanic;
 import genclass.GenericIO;
 
 /**

@@ -3,7 +3,6 @@ package regions;
 import comm.ClientCom;
 import comm.Message;
 import comm.MessageType;
-import entities.Customer;
 import entities.Mechanic;
 import genclass.GenericIO;
 

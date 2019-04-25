@@ -1,4 +1,4 @@
-package comm;
+package model;
 
 /**
  * Enumerado CustomerState<br>

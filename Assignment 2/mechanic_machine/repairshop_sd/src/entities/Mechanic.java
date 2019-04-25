@@ -1,6 +1,7 @@
 package entities;
 
-import comm.MechanicState;
+
+import model.MechanicState;
 import regions.*;
 
 /**
