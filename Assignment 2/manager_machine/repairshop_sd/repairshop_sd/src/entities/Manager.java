@@ -1,5 +1,7 @@
 package entities;
 
+import model.ManagerState;
+import model.ManagerTask;
 import regions.*;
 
 /**
@@ -11,15 +13,15 @@ import regions.*;
  * O Gerente, como o nome indica, é o responsável pela gestão da Oficina.
  * Quando o Gerente chega à Oficina fica a aguardar tarefas, que começam com
  * a chegada de Clientes ({@link Customer}), que esperam ser atendidos pelo Gerente
- * assim que chegam à Recepção ({@link Lounge}) para reparar a sua viatura. Caso os
+ * assim que chegam à Recepção ({@link ILounge}) para reparar a sua viatura. Caso os
  * Clientes queiram, poderão obter uma das viaturas de substituição à disposição,
  * cuja chave é entregue pelo Gerente assim que disponível. Assim que a viatura
  * esteja reparada, o Gerente informa o respectivo cliente, que está algures
- * a fazer a sua vida normal ({@link OutsideWorld}) para a vir buscar,
+ * a fazer a sua vida normal ({@link IOutsideWorld}) para a vir buscar,
  * o que é feito após o pagamento da reparação. Caso os Mecânicos ({@link Mechanic})
  * necessitem de peças para a reparação das viaturas, o Gerente também é responsável
- * por se dirigir ao Fornecedor ({@link SupplierSite}) comprar as peças e colocá-las
- * na Área de Reparação ({@link RepairArea}) para que os Mecânicos possam continuar o
+ * por se dirigir ao Fornecedor ({@link ISupplierSite}) comprar as peças e colocá-las
+ * na Área de Reparação ({@link IRepairArea}) para que os Mecânicos possam continuar o
  * trabalho. Assim que não haja mais trabalho para fazer, o Gerente fecha a
  * Oficina e marca o dia como terminado.<br>
  *
@@ -41,7 +43,7 @@ public class Manager extends Thread {
 
     /**
      * Cesto de compras do Gerente.<br>
-     * Para reabastecer-se de peças no Fornecedor {@link SupplierSite}.
+     * Para reabastecer-se de peças no Fornecedor {@link ISupplierSite}.
      */
     private int[] partsBasket;
 
@@ -58,27 +60,27 @@ public class Manager extends Thread {
 
     /**
      * Referência para a Recepção (Lounge)
-     * @see Lounge
+     * @see ILounge
      */
-    private Lounge lounge;
+    private ILounge lounge;
 
     /**
      * Referência para a Área de Reparação (Repair Area)
-     * @see RepairArea
+     * @see IRepairArea
      */
-    private RepairArea repairArea;
+    private IRepairArea repairArea;
 
     /**
      * Referência para o Mundo Exterior (Outside World)
-     * @see OutsideWorld
+     * @see IOutsideWorld
      */
-    private OutsideWorld outsideWorld;
+    private IOutsideWorld outsideWorld;
 
     /**
      * Referência para o Fornecedor (SupplierSite)
-     * @see SupplierSite
+     * @see ISupplierSite
      */
-    private SupplierSite supplierSite;
+    private ISupplierSite supplierSite;
 
     /**
      * Construtor de um Gerente<br>
@@ -89,12 +91,12 @@ public class Manager extends Thread {
      *
      * @param nParts número total de peças existentes
      * @param repo referência para o {@link GeneralRepository}
-     * @param lounge referência para o {@link Lounge}
-     * @param repairArea referência para a {@link RepairArea}
-     * @param outsideWorld referência para o {@link OutsideWorld}
-     * @param supplierSite referência para o {@link SupplierSite}
+     * @param lounge referência para o {@link ILounge}
+     * @param repairArea referência para a {@link IRepairArea}
+     * @param outsideWorld referência para o {@link IOutsideWorld}
+     * @param supplierSite referência para o {@link ISupplierSite}
      */
-    public Manager(int nParts, GeneralRepository repo, Lounge lounge, RepairArea repairArea, OutsideWorld outsideWorld, SupplierSite supplierSite) {
+    public Manager(int nParts, GeneralRepository repo, ILounge lounge, IRepairArea repairArea, IOutsideWorld outsideWorld, ISupplierSite supplierSite) {
         this.state = ManagerState.CHECKING_WHAT_TO_DO;
         this.currentCustomerAttending = -1;
         this.repository = repo;

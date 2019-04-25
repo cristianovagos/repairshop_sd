@@ -1,9 +1,9 @@
-package entities;
+package model;
 
 /**
  * Enumerado ManagerState<br>
  *
- * Estado interno do Gerente {@link Manager}.
+ * Estado interno do Gerente Manager.
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -30,12 +30,12 @@ public enum ManagerState {
     ALERTING_CUSTOMER ("ALRT"),
 
     /**
-     * O Gerente está a abastecer-se de novas peças na {@link regions.SupplierSite}.
+     * O Gerente está a abastecer-se de novas peças na SupplierSite.
      */
     GETTING_NEW_PARTS ("GETT"),
 
     /**
-     * O Gerente está a abastecer a {@link regions.RepairArea} com as peças
+     * O Gerente está a abastecer a RepairArea com as peças
      * novas adquiridas.
      */
     REPLENISH_STOCK ("RPLN");

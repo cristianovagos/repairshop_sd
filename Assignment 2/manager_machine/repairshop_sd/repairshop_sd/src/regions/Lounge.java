@@ -1,8 +1,38 @@
 package regions;
-import entities.*;
 
-public interface Lounge {
-    /* MANAGER */
+import comm.ClientCom;
+import comm.Message;
+import comm.MessageType;
+import entities.*;
+import genclass.GenericIO;
+import model.CustomerState;
+import model.ManagerTask;
+
+
+public class Lounge implements ILounge {
+
+    /**
+     *  Nome do sistema computacional onde está localizado o servidor.
+     */
+    private String serverHostName;
+
+    /**
+     *  Número do port de escuta do servidor.
+     */
+   private int serverPortNumb;
+
+
+    /**
+     *  Instanciação do stub.
+     *
+     *    @param hostName nome do sistema computacional onde está localizado o servidor
+     *    @param port número do port de escuta do servidor
+     */
+    public Lounge(String hostName, int port)
+    {
+        serverHostName = hostName;
+        serverPortNumb = port;
+    }
 
     /**
      * Operação getNextTask (chamada pelo {@link Manager})<br>
@@ -14,7 +44,34 @@ public interface Lounge {
      *
      * @return indicação se ainda há trabalho para fazer na Oficina
      */
-    public boolean getNextTask();
+    @Override
+    public boolean getNextTask() {
+        Message inMessage;      //input
+        boolean hasNextTask = false; //manager tem tarefa a realizar
+
+        //Message to Send
+        //CREATE MESSAGE
+        Message messageToSend = new Message(MessageType.LOUNGE_GET_NEXT_TASK_REQ);
+
+        //wait to receive message
+        inMessage = communicationWithServer(messageToSend);
+
+        //check if received message is valid
+        if(inMessage.getMessageType() != MessageType.LOUNGE_GET_NEXT_TASK_RESP)
+        {
+            GenericIO.writelnString ("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
+            GenericIO.writelnString (inMessage.toString ());
+            System.exit (1);
+        }
+
+
+        //retrieve state, and True/False from the message
+        ((Manager) Thread.currentThread()).setState(  inMessage.getManagerState());
+        hasNextTask = inMessage.getBooleanParam1();
+
+        //return if manager has next task
+        return hasNextTask;
+    }
 
     /**
      * Operação appraiseSit (chamada pelo {@link Manager})<br>
@@ -23,7 +80,7 @@ public interface Lounge {
      * com a seguinte prioridade:<br>
      * <ul>
      *     <li>Reabastecimento de peças para os {@link Mechanic}
-     *     poderem trabalhar na {@link RepairArea} através da {@link SupplierSite}</li>
+     *     poderem trabalhar na {@link IRepairArea} através da {@link ISupplierSite}</li>
      *     <li>Caso haja clientes em fila de espera para obter uma chave para
      *     viatura de substituição.</li>
      *     <li>Caso haja viaturas reparadas, o Gerente vai chamar os clientes
@@ -33,7 +90,35 @@ public interface Lounge {
      *
      * @return a próxima tarefa a ser executada pelo Gerente
      */
-    public ManagerTask appraiseSit();
+    @Override
+    public ManagerTask appraiseSit() {
+        Message inMessage;      //input
+        ManagerTask nextTask = ManagerTask.NONE; //manager tem tarefa a realizar
+
+        //Message to Send
+        //CREATE MESSAGE
+        Message messageToSend = new Message(MessageType.LOUNGE_APPRAISE_SIT_REQ);
+
+        //wait to receive message
+        inMessage = communicationWithServer(messageToSend);
+
+
+        //check if received message is valid
+        if(inMessage.getMessageType() != MessageType.LOUNGE_APPRAISE_SIT_RESP)
+        {
+            GenericIO.writelnString ("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
+            GenericIO.writelnString (inMessage.toString ());
+            System.exit (1);
+        }
+
+
+        //retrieve state, and True/False from the message
+        ((Manager) Thread.currentThread()).setState(  inMessage.getManagerState());
+        nextTask =  inMessage.getManagerTask();
+
+        //return if manager's next task
+        return nextTask;
+    }
 
     /**
      * Operação talkToCustomer (chamada pelo {@link Manager})<br>
@@ -48,7 +133,33 @@ public interface Lounge {
      *
      * @return estado do cliente atual
      */
-    public CustomerState talkToCustomer();
+    @Override
+    public CustomerState talkToCustomer() {
+        Message inMessage;      //input
+        CustomerState customerState= CustomerState.NONE; //manager tem tarefa a realizar
+
+        //Message to Send
+        //CREATE MESSAGE
+        Message messageToSend = new Message(MessageType.LOUNGE_TALK_TO_CUSTOMER_REQ);
+
+        //wait to receive message
+        inMessage = communicationWithServer(messageToSend);
+
+        //check if received message is valid
+        if(inMessage.getMessageType() != MessageType.LOUNGE_TALK_TO_CUSTOMER_RESP)
+        {
+            GenericIO.writelnString ("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
+            GenericIO.writelnString (inMessage.toString ());
+            System.exit (1);
+        }
+
+        //retrieve state, and True/False from the message
+        ((Manager) Thread.currentThread()).setState( inMessage.getManagerState());
+        customerState =  inMessage.getCustomerState();
+
+        //return if customer's state
+        return customerState;
+    }
 
     /**
      * Operação handCarKey (chamada pelo {@link Manager})<br>
@@ -56,14 +167,82 @@ public interface Lounge {
      * O Gerente irá dar uma das chaves das viaturas de substituição
      * disponíveis ao {@link Customer}.<br>
      */
-    public void handCarKey();
+    @Override
+    public void handCarKey() {
+        Message inMessage;      //input
 
-    /**
-     * Operação receivePayment (chamada pelo {@link Manager})<br>
-     *
-     * O Gerente recebe o pagamento do serviço por parte do {@link Customer}<br>
-     *
-     * @param customerToAttend o id do cliente a fazer pagamento
-     */
-    public void receivePayment(int customerToAttend);
+        //Message to Send
+        //CREATE MESSAGE
+        Message messageToSend = new Message( MessageType.LOUNGE_HAND_CAR_KEY_REQ);
+
+        //receive message
+        inMessage = communicationWithServer(messageToSend);
+
+        //check if received message is valid
+        if(inMessage.getMessageType() != MessageType.LOUNGE_HAND_CAR_KEY_RESP)
+        {
+            GenericIO.writelnString ("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
+            GenericIO.writelnString (inMessage.toString ());
+            System.exit (1);
+        }
+
+        //retrieve state, and True/False from the message
+        ((Manager) Thread.currentThread()).setState(  inMessage.getManagerState());
+    }
+
+    @Override
+    public void receivePayment(int customerToAttend) {
+        Message inMessage;
+
+        //Message to Send
+        //CREATE MESSAGE
+        Message messageToSend = new Message(MessageType.LOUNGE_RECEIVE_PAYMENT_REQ, customerToAttend);
+
+        inMessage = communicationWithServer(messageToSend);
+
+        //check if received message is valid
+        if(inMessage.getMessageType() != MessageType.LOUNGE_RECEIVE_PAYMENT_RESP)
+        {
+            GenericIO.writelnString ("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
+            GenericIO.writelnString (inMessage.toString ());
+            System.exit (1);
+        }
+
+
+        //retrieve state, and True/False from the message
+        ((Manager) Thread.currentThread()).setState(  inMessage.getManagerState());
+    }
+
+    private Message communicationWithServer(Message messageToSend)
+    {
+        ClientCom com = new ClientCom(serverHostName, serverPortNumb);
+        Message fromServer;      //input
+        Message fromUser;       //output
+
+        //enquanto a ligação não estiver establecida
+        //a thread vai "dormir" até establecer a ligação
+        while(!com.open())
+        {
+            try
+            { Thread.currentThread ().sleep ((long) (10));
+            }
+            catch (InterruptedException e) {}
+        }
+
+        //Message to Send
+        //CREATE MESSAGE
+        fromUser = messageToSend;
+
+        //Send Message
+        com.writeObject(fromUser);
+
+        //receive message
+        fromServer = (Message) com.readObject();
+
+        //close communications
+        com.close();
+
+        //return object
+        return fromServer;
+    }
 }

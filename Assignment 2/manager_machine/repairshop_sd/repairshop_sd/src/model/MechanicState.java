@@ -1,9 +1,9 @@
-package entities;
+package model;
 
 /**
  * Enumerado MechanicState<br>
  *
- * Estado interno do Mecânico ({@link Mechanic}).
+ * Estado interno do Mecânico.
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -20,7 +20,7 @@ public enum MechanicState {
     FIXING_THE_CAR ("FIX"),
 
     /**
-     * O Mecânico está a alertar o Gerente de que é preciso peças na {@link regions.RepairArea}.
+     * O Mecânico está a alertar o Gerente de que é preciso peças na RepairArea.
      */
     ALERTING_MANAGER_FOR_PARTS ("ALP"),
 
@@ -30,7 +30,7 @@ public enum MechanicState {
     ALERTING_MANAGER_REPAIR_CONCLUDED("ARP"),
 
     /**
-     * O Mecânico está a verificar o stock de peças na {@link regions.RepairArea}.
+     * O Mecânico está a verificar o stock de peças na RepairArea.
      */
     CHECKING_STOCK ("CHK");
 
