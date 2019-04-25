@@ -400,6 +400,47 @@ public class Message implements Serializable {
     }
 
     /**
+     * Instanciação de uma mensagem (forma 26): RepairArea readThePaper response
+     *
+     * @param type tipo da mensagem
+     * @param mState estado do mecanico
+     * @param endOfDay indicacao se o dia de trabalho acabou
+     * @param firstRun indicacao se e a primeira execucao do programa
+     */
+    public Message(MessageType type, MechanicState mState, boolean endOfDay, boolean firstRun) {
+        messageType = type;
+        mechanicState = mState;
+        booleanParam1 = endOfDay;
+        booleanParam2 = firstRun;
+    }
+
+    /**
+     * Instanciação de uma mensagem (forma 27): RepairArea startRepairProcedure response
+     *
+     * @param type tipo da mensagem
+     * @param mState estado do mecanico
+     * @param currentCarFixingId id do carro a ser arranjado
+     */
+    public Message(MessageType type, MechanicState mState, int currentCarFixingId) {
+        messageType = type;
+        mechanicState = mState;
+        integerParam1 = currentCarFixingId;
+    }
+
+    /**
+     * Instanciação de uma mensagem (forma 28): SupplierSite goToSupplier response
+     *
+     * @param type tipo da mensagem
+     * @param mState estado do manager
+     * @param newParts cesto de compras com novas pecas
+     */
+    public Message(MessageType type, ManagerState mState, int[] newParts) {
+        messageType = type;
+        managerState = mState;
+        integerArrayParam = newParts;
+    }
+
+    /**
      * Obtem tipo da mensagem
      * @return tipo da mensagem
      */

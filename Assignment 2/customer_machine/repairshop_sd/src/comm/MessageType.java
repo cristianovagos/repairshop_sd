@@ -145,16 +145,6 @@ public enum MessageType {
      */
     OUTSIDE_WORLD_BACK_TO_WORK_BY_CAR_RESP,
 
-    /**
-     * Pedido OutsideWorld phoneCustomer
-     */
-    OUTSIDE_WORLD_PHONE_CUSTOMER_REQ,
-
-    /**
-     * Resposta OutsideWorld phoneCustomer
-     */
-    OUTSIDE_WORLD_PHONE_CUSTOMER_RESP,
-
 
     /* PARK */
 

@@ -428,6 +428,19 @@ public class Message implements Serializable {
     }
 
     /**
+     * Instanciação de uma mensagem (forma 28): SupplierSite goToSupplier response
+     *
+     * @param type tipo da mensagem
+     * @param mState estado do manager
+     * @param newParts cesto de compras com novas pecas
+     */
+    public Message(MessageType type, ManagerState mState, int[] newParts) {
+        messageType = type;
+        managerState = mState;
+        integerArrayParam = newParts;
+    }
+
+    /**
      * Obtem tipo da mensagem
      * @return tipo da mensagem
      */
