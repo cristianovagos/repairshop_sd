@@ -15,7 +15,7 @@ import comm.ServerCom;
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
-public class ServerPark {
+public class ServerSupplierSite {
 
     /**
      * Programa principal.
