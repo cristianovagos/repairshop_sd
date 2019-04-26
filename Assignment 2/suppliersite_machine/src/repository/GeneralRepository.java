@@ -461,6 +461,29 @@ public class GeneralRepository implements IGeneralRepository {
     }
 
     /**
+     * Operação setCustomerCarRepaired<br>
+     *
+     * Marca um dado carro como reparado
+     *
+     * @param carIndex o índice do carro
+     */
+    @Override
+    public void setCustomerCarRepaired(int carIndex) {
+        Message inMessage, outMessage;
+
+        // criar mensagem
+        outMessage = new Message(MessageType.REPOSITORY_SET_CUSTOMER_CAR_REPAIRED_REQ, carIndex);
+        inMessage = communicationWithServer(outMessage);    // enviar e receber mensagem de resposta
+
+        // validar mensagem de resposta
+        if(inMessage.getMessageType() != MessageType.REPOSITORY_SET_CUSTOMER_CAR_REPAIRED_RESP) {
+            GenericIO.writelnString("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
+            GenericIO.writelnString(inMessage.toString());
+            System.exit(1);
+        }
+    }
+
+    /**
      * Comunicação com o servidor do Repository.
      * Envia e recebe mensagem de resposta
      *

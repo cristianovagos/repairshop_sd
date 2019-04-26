@@ -96,11 +96,13 @@ public class Lounge implements ILounge{
     @Override
     public void repairConcluded() {
         Message inMessage, outMessage;
-        int mechanicID;
+        int mechanicID, carFixed;
 
         mechanicID = ((Mechanic)Thread.currentThread()).getMechanicId();
+        carFixed = ((Mechanic)Thread.currentThread()).getCurrentCarFixingId();
+
         //criar mensagem
-        outMessage = new Message(MessageType.LOUNGE_REPAIR_CONCLUDED_REQ, mechanicID);
+        outMessage = new Message(MessageType.LOUNGE_REPAIR_CONCLUDED_REQ, carFixed, mechanicID);
         //enviar e receber mensagem de resposta
         inMessage = communicationWithServer(outMessage);
 

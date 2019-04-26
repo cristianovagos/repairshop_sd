@@ -46,7 +46,7 @@ public class ParkInterface {
                     ((ClientProxy) Thread.currentThread()).setCustomerId(inMessage.getIntegerParam1());
                 if ((inMessage.getIntegerParam2() < 0) || (
                         (inMessage.getIntegerParam2() > Constants.NUM_CUSTOMERS) &&
-                        ((inMessage.getIntegerParam2() - 100) < Constants.NUM_REPLACEMENT_CARS)))
+                        ((inMessage.getIntegerParam2() - 100) > Constants.NUM_REPLACEMENT_CARS)))
                     throw new MessageException("Id do carro do cliente invalido!", inMessage);
                 else
                     ((ClientProxy) Thread.currentThread()).setCustomerCarId(inMessage.getIntegerParam2());
@@ -95,7 +95,7 @@ public class ParkInterface {
                 park.collectCar();
                 int customerCarId2 = ((ClientProxy) Thread.currentThread()).getCustomerCarId();
                 CustomerState customerState3 = ((ClientProxy) Thread.currentThread()).getCustomerState();
-                outMessage = new Message(MessageType.PARK_FIND_CAR_RESP, customerState3, customerCarId2);
+                outMessage = new Message(MessageType.PARK_COLLECT_CAR_RESP, customerState3, customerCarId2);
                 break;
             case PARK_GET_VEHICLE_REQ:
                 int partId = park.getVehicle();

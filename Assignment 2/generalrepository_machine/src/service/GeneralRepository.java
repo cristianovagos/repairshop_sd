@@ -647,4 +647,15 @@ public class GeneralRepository {
         // update state line
         printStateLine();
     }
+
+    /**
+     * Operação setCustomerCarRepaired<br>
+     *
+     * Marca um dado carro como reparado
+     *
+     * @param carIndex o índice do carro
+     */
+    public synchronized void setCustomerCarRepaired(int carIndex) {
+        this.customersRepairConcluded[carIndex] = true;
+    }
 }

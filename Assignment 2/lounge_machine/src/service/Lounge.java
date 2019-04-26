@@ -489,6 +489,7 @@ public class Lounge {
 
         // add car to the repaired cars queue
         int carFixed = ((ClientProxy) Thread.currentThread()).getCurrentCarFixingId();
+        repository.setCustomerCarRepaired(carFixed);
         carsRepairedQueue.write(carFixed);
         numCarsRepairedQueue++;
 

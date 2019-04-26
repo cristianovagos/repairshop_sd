@@ -488,6 +488,16 @@ public enum MessageType {
     REPOSITORY_SET_SOLD_PARTS_RESP,
 
     /**
+     * Pedido GeneralRepository setCustomerCarRepaired
+     */
+    REPOSITORY_SET_CUSTOMER_CAR_REPAIRED_REQ,
+
+    /**
+     * Resposta GeneralRepository setCustomerCarRepaired
+     */
+    REPOSITORY_SET_CUSTOMER_CAR_REPAIRED_RESP,
+
+    /**
      * Nenhuma
      */
     NONE

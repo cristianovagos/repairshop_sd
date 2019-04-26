@@ -156,8 +156,11 @@ public class Lounge implements ILounge {
         }
 
         //retrieve state, and True/False from the message
-        ((Manager) Thread.currentThread()).setState( inMessage.getManagerState());
+        ((Manager) Thread.currentThread()).setState(inMessage.getManagerState());
         customerState =  inMessage.getCustomerState();
+
+        if(customerState == CustomerState.RECEPTION_REPAIR || customerState == CustomerState.RECEPTION_PAYING)
+            ((Manager) Thread.currentThread()).setCurrentlyAttendingCustomer(inMessage.getIntegerParam1());
 
         //return if customer's state
         return customerState;

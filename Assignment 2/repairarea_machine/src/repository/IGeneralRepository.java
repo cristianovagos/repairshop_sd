@@ -168,4 +168,13 @@ public interface IGeneralRepository {
      * @param soldParts array com o total de peças vendidas
      */
     void setSoldParts(int[] soldParts);
+
+    /**
+     * Operação setCustomerCarRepaired<br>
+     *
+     * Marca um dado carro como reparado
+     *
+     * @param carIndex o índice do carro
+     */
+    void setCustomerCarRepaired(int carIndex);
 }

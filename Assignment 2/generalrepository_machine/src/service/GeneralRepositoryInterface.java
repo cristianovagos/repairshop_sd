@@ -116,6 +116,10 @@ public class GeneralRepositoryInterface {
                 if (inMessage.getIntegerArrayParam().length < 1)
                     throw new MessageException("Array de pecas vendidas invalido!", inMessage);
                 break;
+            case REPOSITORY_SET_CUSTOMER_CAR_REPAIRED_REQ:
+                if (inMessage.getIntegerParam1() < 0 || inMessage.getIntegerParam1() > Constants.NUM_CUSTOMERS)
+                    throw new MessageException("Indice de carro do cliente invalido!", inMessage);
+                break;
             case NONE:
             default:
                 throw new MessageException("Tipo de mensagem invalida!", inMessage);
@@ -195,6 +199,10 @@ public class GeneralRepositoryInterface {
             case REPOSITORY_SET_SOLD_PARTS_REQ:
                 repository.setSoldParts(inMessage.getIntegerArrayParam());
                 outMessage = new Message(MessageType.REPOSITORY_SET_SOLD_PARTS_RESP);
+                break;
+            case REPOSITORY_SET_CUSTOMER_CAR_REPAIRED_REQ:
+                repository.setCustomerCarRepaired(inMessage.getIntegerParam1());
+                outMessage = new Message(MessageType.REPOSITORY_SET_CUSTOMER_CAR_REPAIRED_RESP);
                 break;
         }
 

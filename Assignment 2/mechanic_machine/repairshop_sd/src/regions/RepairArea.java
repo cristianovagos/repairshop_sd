@@ -111,6 +111,7 @@ public class RepairArea implements  IRepairArea{
 
         //set customer state
         ((Mechanic)Thread.currentThread()).setState(inMessage.getMechanicState());
+        ((Mechanic)Thread.currentThread()).setCurrentCarFixingId(inMessage.getIntegerParam1());
     }
 
     /**

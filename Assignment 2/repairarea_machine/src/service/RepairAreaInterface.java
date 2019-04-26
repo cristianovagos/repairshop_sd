@@ -138,7 +138,7 @@ public class RepairAreaInterface {
             case REPAIR_AREA_REGISTER_SERVICE_REQ:
                 repairArea.registerService(inMessage.getIntegerParam1());
                 ManagerState managerState2 = ((ClientProxy) Thread.currentThread()).getManagerState();
-                outMessage = new Message(MessageType.REPAIR_AREA_STORE_PART_RESP, managerState2);
+                outMessage = new Message(MessageType.REPAIR_AREA_REGISTER_SERVICE_RESP, managerState2);
                 break;
         }
 
