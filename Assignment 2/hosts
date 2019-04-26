@@ -1,0 +1,26 @@
+[repository]
+l040101-ws01.ua.pt ansible_user=sd0101 ansible_ssh_pass=fisheiros
+
+[lounge]
+l040101-ws02.ua.pt ansible_user=sd0101 ansible_ssh_pass=fisheiros
+
+[outsideworld]
+l040101-ws03.ua.pt ansible_user=sd0101 ansible_ssh_pass=fisheiros
+
+[park]
+l040101-ws04.ua.pt ansible_user=sd0101 ansible_ssh_pass=fisheiros
+
+[suppliersite]
+l040101-ws05.ua.pt ansible_user=sd0101 ansible_ssh_pass=fisheiros
+
+[repairarea]
+l040101-ws06.ua.pt ansible_user=sd0101 ansible_ssh_pass=fisheiros
+
+[customer]
+l040101-ws07.ua.pt ansible_user=sd0101 ansible_ssh_pass=fisheiros
+
+[mechanic]
+l040101-ws08.ua.pt ansible_user=sd0101 ansible_ssh_pass=fisheiros
+
+[manager]
+l040101-ws09.ua.pt ansible_user=sd0101 ansible_ssh_pass=fisheiros

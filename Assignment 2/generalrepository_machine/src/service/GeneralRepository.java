@@ -179,6 +179,8 @@ public class GeneralRepository {
             this.customersRepairConcluded[i] = false;
         }
 
+        this.managerState = ManagerState.CHECKING_WHAT_TO_DO;
+
         this.mechanicsState = new MechanicState[N_MECHANICS];
         for (int i = 0; i < N_MECHANICS; i++)
             this.mechanicsState[i] = MechanicState.WAITING_FOR_WORK;

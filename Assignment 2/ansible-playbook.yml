@@ -1,0 +1,177 @@
+---
+# ANSIBLE PLAYBOOK
+# para transferir os ficheiros jar para as machines da sala de aula
+# 
+# Requer o ansible instalado na máquina "source", python instalado na máquina destino
+# 
+# STEPS:
+# - Copiar o conteudo do ficheiro hosts para /etc/ansible/hosts 
+#   (para não interferir com outros hosts caso tenhas)
+#   lá estão os dados para se aceder a todas as maquinas, incluíndo username e password
+#   (não recomendado)
+# 
+# - Gerar ficheiros jar no IntelliJ para todos os projetos
+#   (File > Project Structure > Artifacts > + > JAR > From modules.. > 
+#   Escolher Main Class (clicando na pasta) > Extract to the target JAR > OK)
+#   Depois, (Build > Build Artifacts > Build)
+# 
+# - Alterar este ficheiro com o caminho completo para os jars que foram criados
+# 
+# - Ligar à VPN da UA (caso não estejas na rede da UA)
+# 
+# - Executar "ansible-playbook playbook.yml -v"
+#   (caso hajam erros com o -v dá para mostrar mais qualquer coisa)
+# 
+
+# REPOSITORY
+
+- name: Setting up Repository machine
+  hosts: repository
+
+  tasks:
+  - name: Create repository directory 
+    command: mkdir -p repository
+
+  - name: Copy repository jar file to repository machine
+    copy: 
+      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/generalrepository_machine/out/artifacts/generalrepository_jar/generalrepository.jar
+      dest: ./repository/
+  
+  # - name: Run repository jar
+  #   command: java -jar ./repository/generalrepository.jar
+
+# LOUNGE
+
+- name: Setting up Lounge machine
+  hosts: lounge
+
+  tasks:
+  - name: Create lounge directory 
+    command: mkdir -p lounge
+
+  - name: Copy lounge jar file to lounge machine
+    copy: 
+      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/lounge_machine/out/artifacts/lounge_jar/lounge.jar
+      dest: ./lounge/
+  
+  # - name: Run lounge jar
+  #   command: java -jar ./lounge/lounge.jar
+
+# OUTSIDE WORLD
+
+- name: Setting up OutsideWorld machine
+  hosts: outsideworld
+
+  tasks:
+  - name: Create OutsideWorld directory 
+    command: mkdir -p outsideworld
+
+  - name: Copy OutsideWorld jar file to OutsideWorld machine
+    copy: 
+      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/outsideworld_machine/out/artifacts/outsideworld_jar/outsideworld.jar
+      dest: ./outsideworld/
+  
+  # - name: Run outsideworld jar
+  #   command: java -jar ./outsideworld/outsideworld.jar
+
+# PARK
+
+- name: Setting up Park machine
+  hosts: park
+
+  tasks:
+  - name: Create Park directory 
+    command: mkdir -p park
+
+  - name: Copy Park jar file to Park machine
+    copy: 
+      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/park_machine/out/artifacts/park_jar/park.jar
+      dest: ./park/
+  
+  # - name: Run park jar
+  #   command: java -jar ./park/park.jar
+
+# SUPPLIER SITE
+
+- name: Setting up SupplierSite machine
+  hosts: suppliersite
+
+  tasks:
+  - name: Create SupplierSite directory 
+    command: mkdir -p suppliersite
+
+  - name: Copy SupplierSite jar file to SupplierSite machine
+    copy: 
+      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/suppliersite_machine/out/artifacts/suppliersite_jar/suppliersite.jar
+      dest: ./suppliersite/
+  
+  # - name: Run suppliersite jar
+  #   command: java -jar ./suppliersite/suppliersite.jar
+
+# REPAIR AREA
+
+- name: Setting up RepairArea machine
+  hosts: repairarea
+
+  tasks:
+  - name: Create RepairArea directory 
+    command: mkdir -p repairarea
+
+  - name: Copy repairarea jar file to repairarea machine
+    copy: 
+      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/repairarea_machine/out/artifacts/repairarea_jar/repairarea.jar
+      dest: ./repairarea/
+  
+  # - name: Run suppliersite jar
+  #   command: java -jar ./repairarea/repairarea.jar
+
+# CUSTOMER
+
+- name: Setting up Customer machine
+  hosts: customer
+
+  tasks:
+  - name: Create customer directory 
+    command: mkdir -p customer
+
+  - name: Copy customer jar file to customer machine
+    copy: 
+      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/customer_machine/out/artifacts/customer_jar/customer.jar
+      dest: ./customer/
+  
+  # - name: Run customer jar
+  #   command: java -jar ./customer/customer.jar
+
+# MECHANIC
+
+- name: Setting up mechanic machine
+  hosts: mechanic
+
+  tasks:
+  - name: Create mechanic directory 
+    command: mkdir -p mechanic
+
+  - name: Copy mechanic jar file to mechanic machine
+    copy: 
+      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/mechanic_machine/out/artifacts/mechanic_jar/mechanic.jar
+      dest: ./mechanic/
+  
+  # - name: Run mechanic jar
+  #   command: java -jar ./mechanic/mechanic.jar
+
+# MANAGER
+
+- name: Setting up manager machine
+  hosts: manager
+
+  tasks:
+  - name: Create manager directory 
+    command: mkdir -p manager
+
+  - name: Copy manager jar file to manager machine
+    copy: 
+      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/manager_machine/out/artifacts/manager_jar/manager.jar
+      dest: ./manager/
+  
+  # - name: Run manager jar
+  #   command: java -jar ./manager/manager.jar
