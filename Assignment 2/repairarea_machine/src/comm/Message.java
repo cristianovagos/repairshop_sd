@@ -6,6 +6,7 @@ import model.ManagerTask;
 import model.MechanicState;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  *  Este tipo de dados define uma mensagem para ser enviada
@@ -441,6 +442,21 @@ public class Message implements Serializable {
     }
 
     /**
+     * Instanciação de uma mensagem (forma 29): Lounge getNextTask response
+     *
+     * @param type tipo da mensagem
+     * @param mState estado do manager
+     * @param firstRun indicacao se e primeira execucao
+     * @param endOfDay indicacao se o dia de trabalho terminou
+     */
+    public Message(MessageType type, ManagerState mState, boolean firstRun, boolean endOfDay) {
+        messageType = type;
+        managerState = mState;
+        booleanParam1 = firstRun;
+        booleanParam2 = endOfDay;
+    }
+
+    /**
      * Obtem tipo da mensagem
      * @return tipo da mensagem
      */
@@ -526,5 +542,29 @@ public class Message implements Serializable {
      */
     public Boolean getBooleanParam2() {
         return booleanParam2;
+    }
+
+
+    /**
+     *  Impressão dos campos internos.
+     *  Usada para fins de debugging.
+     *
+     *  @return string contendo, em linhas separadas, a concatenação da identificação de cada campo e valor respectivo
+     */
+    @Override
+    public String toString() {
+        return ("Message{" +
+                "\nmessageType = " + messageType +
+                "\nbooleanParam1 = " + booleanParam1 +
+                "\nbooleanParam2 = " + booleanParam2 +
+                "\nmanagerState = " + managerState +
+                "\nmechanicState = " + mechanicState +
+                "\ncustomerState = " + customerState +
+                "\nmanagerTask = " + managerTask +
+                "\nintegerParam1 = " + integerParam1 +
+                "\nintegerParam2 = " + integerParam2 +
+                "\nintegerParam3 = " + integerParam3 +
+                "\nintegerArrayParam = " + Arrays.toString(integerArrayParam) +
+                "\n}");
     }
 }

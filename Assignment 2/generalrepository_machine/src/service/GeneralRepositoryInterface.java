@@ -138,6 +138,7 @@ public class GeneralRepositoryInterface {
                 break;
             case REPOSITORY_SET_MANAGER_STATE_REQ:
                 repository.setManagerState(inMessage.getManagerState(), inMessage.getBooleanParam1());
+                outMessage = new Message(MessageType.REPOSITORY_SET_MANAGER_STATE_RESP);
                 break;
             case REPOSITORY_SET_MECHANIC_STATE_REQ:
                 repository.setMechanicState(inMessage.getIntegerParam1(), inMessage.getMechanicState(), inMessage.getBooleanParam1());

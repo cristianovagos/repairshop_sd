@@ -48,10 +48,11 @@ public class Lounge implements ILounge {
     public boolean getNextTask() {
         Message inMessage;      //input
         boolean hasNextTask = false; //manager tem tarefa a realizar
+        boolean firstRun = ((Manager) Thread.currentThread()).getFirstRun();
 
         //Message to Send
         //CREATE MESSAGE
-        Message messageToSend = new Message(MessageType.LOUNGE_GET_NEXT_TASK_REQ);
+        Message messageToSend = new Message(MessageType.LOUNGE_GET_NEXT_TASK_REQ, firstRun);
 
         //wait to receive message
         inMessage = communicationWithServer(messageToSend);
@@ -66,8 +67,9 @@ public class Lounge implements ILounge {
 
 
         //retrieve state, and True/False from the message
-        ((Manager) Thread.currentThread()).setState(  inMessage.getManagerState());
-        hasNextTask = inMessage.getBooleanParam1();
+        ((Manager) Thread.currentThread()).setState(inMessage.getManagerState());
+        ((Manager) Thread.currentThread()).setFirstRun(inMessage.getBooleanParam1());
+        hasNextTask = inMessage.getBooleanParam2();
 
         //return if manager has next task
         return hasNextTask;

@@ -109,7 +109,8 @@ public class LoungeInterface {
             case LOUNGE_GET_NEXT_TASK_REQ:
                 boolean endOfDay = lounge.getNextTask();                                // proxima tarefa do Manager
                 ManagerState state1 = ((ClientProxy) Thread.currentThread()).getManagerState();
-                outMessage = new Message(MessageType.LOUNGE_GET_NEXT_TASK_RESP, state1, endOfDay); // gerar resposta
+                boolean firstRun = ((ClientProxy) Thread.currentThread()).getFirstRun();
+                outMessage = new Message(MessageType.LOUNGE_GET_NEXT_TASK_RESP, state1, firstRun, endOfDay); // gerar resposta
                 break;
             case LOUNGE_TALK_TO_CUSTOMER_REQ:
                 CustomerState customerState = lounge.talkToCustomer();                  // Manager fala com o Cliente

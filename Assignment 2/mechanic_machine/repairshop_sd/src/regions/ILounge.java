@@ -1,7 +1,5 @@
 package regions;
 
-import entities.Customer;
-import entities.Manager;
 import entities.Mechanic;
 
 public interface ILounge {

@@ -1,7 +1,6 @@
 package regions;
 
 import entities.Customer;
-import entities.CustomerState;
 
 public interface ILounge {
 
