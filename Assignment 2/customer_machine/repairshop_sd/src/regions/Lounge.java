@@ -7,29 +7,17 @@ import comm.Message;
 import comm.MessageType;
 
 /**
- * Classe Lounge (Recepção)<br>
+ * Classe Lounge (ligação com o Lounge)<br>
  *
- * Esta classe é responsável pela criação da Recepção da Oficina, uma
- * das entidades passivas do problema.<br>
- *
- * É neste local que o maior número de interações acontece, uma vez que
- * é o principal local de trabalho do Gerente ({@link Manager}) da Oficina,
- * que a vai gerindo consoante as necessidades e tarefas que aparecerem.
- * Atender os Clientes ({@link Customer}) quando estes chegam, fornecer
- * chaves de substituição, entre outros.<br>
- * Os Clientes irão ter aqui um ponto de contacto com a Oficina, onde
- * estão na fila de espera para serem atendidos, ou estarão a aguardar uma
- * chave de substituição para a eventualmente receber, ou irão efetuar o
- * pagamento do serviço de reparação.<br>
- * Já os Mecânicos ({@link Mechanic}) irão aqui informar o Gerente tanto da
- * falta de peças para as reparações como para a conclusão de reparações por
- * ele pedidas anteriormente.<br>
+ * Esta classe é responsável pela comunicação com o servidor do serviço da Recepção,
+ * uma região partilhada do problema, feita através de passagem de mensagens, atuando
+ * como um Stub para a classe real, sendo que são implementados os métodos do serviço
+ * propriamente dito, através da sua interface.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
 public class Lounge implements ILounge {
-
 
     /**
      *  Nome do sistema computacional onde está localizado o servidor.
@@ -40,7 +28,6 @@ public class Lounge implements ILounge {
      *  Número do port de escuta do servidor.
      */
     private int serverPortNumb;
-
 
     /**
      *  Instanciação do stub.
@@ -54,12 +41,11 @@ public class Lounge implements ILounge {
         serverPortNumb = port;
     }
 
-
     /**
      * Operação queueIn (chamada pelo {@link Customer})<br>
      * <p>
      * O Cliente chega à Recepção e aguarda na fila, para ser
-     * atendido pelo Gerente ({@link Manager}). Tanto poderá colocar a sua
+     * atendido pelo Gerente (Manager). Tanto poderá colocar a sua
      * viatura para reparação ou para proceder ao pagamento do mesmo.<br>
      *
      * @param repairCompleted indicação se a reparação já foi feita
@@ -91,7 +77,7 @@ public class Lounge implements ILounge {
     /**
      * Operação talkWithManager (chamada pelo {@link Customer})<br>
      * <p>
-     * O Cliente fala com o Gerente {@link Manager} para reparar
+     * O Cliente fala com o Gerente para reparar
      * a sua viatura e entrega-lhe a chave da mesma.<br>
      */
     @Override
@@ -123,8 +109,7 @@ public class Lounge implements ILounge {
      * <p>
      * O Cliente pretende uma viatura de substituição enquanto a sua
      * viatura própria é reparada, e aguarda a entrega de uma chave de
-     * uma das viaturas de substituição disponíveis por parte do Gerente
-     * ({@link Manager}).<br>
+     * uma das viaturas de substituição disponíveis por parte do Gerente.<br>
      *
      * @return chave da viatura de substituição
      */
@@ -162,7 +147,7 @@ public class Lounge implements ILounge {
      * <p>
      * O Cliente procede ao pagamento do serviço prestado pela Oficina.
      * Caso este tenha utilizado uma viatura de substituição devolve a
-     * chave da mesma ao Gerente ({@link Manager}).<br>
+     * chave da mesma ao Gerente.<br>
      */
     @Override
     public void payForTheService() {
@@ -188,6 +173,13 @@ public class Lounge implements ILounge {
         ((Customer) Thread.currentThread()).setState(inMessage.getCustomerState());
     }
 
+    /**
+     * Comunicação com o servidor do Lounge.
+     * Envia e recebe mensagem de resposta
+     *
+     * @param messageToSend mensagem a ser enviada para o servidor
+     * @return mensagem de resposta vinda do servidor
+     */
     private Message communicationWithServer(Message messageToSend)
     {
         ClientCom com = new ClientCom(serverHostName, serverPortNumb);

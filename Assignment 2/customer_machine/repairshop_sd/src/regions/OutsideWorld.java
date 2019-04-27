@@ -7,22 +7,17 @@ import comm.Message;
 import comm.MessageType;
 
 /**
- * Classe OutsideWorld (Mundo Exterior)<br>
+ * Classe OutsideWorld (ligação com o MundoExterior)<br>
  *
- * Esta classe é responsável pela criação do Mundo Exterior, uma das entidades
- * passivas do problema.<br>
- *
- * É aqui que os Clientes estão no início do problema, a fazer
- * a sua vida normal com a sua viatura. Após um dado tempo, a sua viatura avaria
- * e necessita de ser reparada. Aí, o Cliente dirige-se à Oficina.<br>
- * Quer queira uma viatura de substituição ou não, o Cliente volta a fazer a sua
- * vida normal assim que deixa a sua viatura na Oficina, e é notificado pelo
- * Gerente assim que a reparação esteja concluída.<br>
+ * Esta classe é responsável pela comunicação com o servidor do serviço do OutsideWorld,
+ * uma região partilhada do problema, feita através de passagem de mensagens, atuando
+ * como um Stub para a classe real, sendo que são implementados os métodos do serviço
+ * propriamente dito, através da sua interface.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
-public class OutsideWorld implements IOutsideWorld{
+public class OutsideWorld implements IOutsideWorld {
 
     /**
      *  Nome do sistema computacional onde está localizado o servidor.
@@ -34,12 +29,11 @@ public class OutsideWorld implements IOutsideWorld{
      */
     private int serverPortNumb;
 
-
     /**
      *  Instanciação do stub.
      *
-     *    @param hostName nome do sistema computacional onde está localizado o servidor
-     *    @param port número do port de escuta do servidor
+     *  @param hostName nome do sistema computacional onde está localizado o servidor
+     *  @param port número do port de escuta do servidor
      */
     public OutsideWorld(String hostName, int port)
     {
@@ -108,6 +102,13 @@ public class OutsideWorld implements IOutsideWorld{
         ((Customer) Thread.currentThread()).setState(inMessage.getCustomerState());
     }
 
+    /**
+     * Comunicação com o servidor do OutsideWorld.
+     * Envia e recebe mensagem de resposta
+     *
+     * @param messageToSend mensagem a ser enviada para o servidor
+     * @return mensagem de resposta vinda do servidor
+     */
     private Message communicationWithServer(Message messageToSend)
     {
         ClientCom com = new ClientCom(serverHostName, serverPortNumb);

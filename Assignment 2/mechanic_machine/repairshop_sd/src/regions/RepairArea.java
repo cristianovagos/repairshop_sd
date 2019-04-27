@@ -8,20 +8,12 @@ import entities.Mechanic;
 import genclass.GenericIO;
 
 /**
- * Classe RepairArea (Área de Reparação)<br>
+ * Classe RepairArea (ligação com a RepairArea)<br>
  *
- * Esta classe é responsável pela criação da Área de Reparação, uma das
- * entidades passivas do problema.<br>
- *
- * A Área de Reparação é o local onde decorrem as reparações das viaturas,
- * por parte dos Mecânicos ({@link Mechanic}), sendo que é aqui onde eles irão
- * estar a maior parte do tempo, seja a reparar viaturas, seja à espera da
- * indicação do Gerente (Manager) de que há trabalho a fazer. Nesta área
- * existe um número de peças em stock para que os Mecânicos possam substituir
- * nas viaturas que necessitem de reparar, e caso estas porventura faltem, é
- * responsabilidade do Gerente obter mais peças e por sua vez restabelecer o
- * stock para que os Mecânicos voltem ao trabalho.<br>
- * Quando o Gerente dá o dia por terminado, todos os Mecânicos vão embora.<br>
+ * Esta classe é responsável pela comunicação com o servidor do serviço da Área de Reparação,
+ * uma região partilhada do problema, feita através de passagem de mensagens, atuando
+ * como um Stub para a classe real, sendo que são implementados os métodos do serviço
+ * propriamente dito, através da sua interface.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -38,12 +30,11 @@ public class RepairArea implements IRepairArea {
      */
     private int serverPortNumb;
 
-
     /**
      *  Instanciação do stub.
      *
-     *    @param hostName nome do sistema computacional onde está localizado o servidor
-     *    @param port número do port de escuta do servidor
+     *  @param hostName nome do sistema computacional onde está localizado o servidor
+     *  @param port número do port de escuta do servidor
      */
     public RepairArea(String hostName, int port)
     {
@@ -65,7 +56,7 @@ public class RepairArea implements IRepairArea {
 
         int mechanicID = ((Mechanic)Thread.currentThread()).getMechanicId();
         boolean firstRun = ((Mechanic) Thread.currentThread()).getFirstRun();
-         //criar mensagem
+        //criar mensagem
         outMessage = new Message(MessageType.REPAIR_AREA_READ_THE_PAPER_REQ, mechanicID, firstRun);
         //enviar e receber mensagem de resposta
         inMessage = communicationWithServer(outMessage);
@@ -209,6 +200,13 @@ public class RepairArea implements IRepairArea {
         ((Mechanic)Thread.currentThread()).setState(inMessage.getMechanicState());
     }
 
+    /**
+     * Comunicação com o servidor da RepairArea.
+     * Envia e recebe mensagem de resposta
+     *
+     * @param messageToSend mensagem a ser enviada para o servidor
+     * @return mensagem de resposta vinda do servidor
+     */
     private Message communicationWithServer(Message messageToSend)
     {
         ClientCom com = new ClientCom(serverHostName, serverPortNumb);

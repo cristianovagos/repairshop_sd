@@ -3,7 +3,7 @@ package comm;
 /**
  * Enumerado MessageType<br>
  *
- * Identifica os tipos de mensagens.
+ * Identifica os tipos de mensagens a serem enviadas durante a execução do problema.
  *
  * @author Miguel Bras
  * @author Cristiano Vagos

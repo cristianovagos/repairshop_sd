@@ -2,6 +2,15 @@ package regions;
 
 import entities.Mechanic;
 
+/**
+ * Interface IRepairArea (ligação à Área de Reparação)<br>
+ *
+ * Esta interface contém todos os métodos do serviço RepairArea, que
+ * serão invocados assim que necessário.<br>
+ *
+ * @author Miguel Bras
+ * @author Cristiano Vagos
+ */
 public interface IRepairArea {
 
     /**

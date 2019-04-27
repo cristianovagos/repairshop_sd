@@ -2,6 +2,15 @@ package regions;
 
 import entities.Mechanic;
 
+/**
+ * Interface IPark (ligação ao Parque de Estacionamento)<br>
+ *
+ * Esta interface contém todos os métodos do serviço Park, que
+ * serão invocados assim que necessário.<br>
+ *
+ * @author Miguel Bras
+ * @author Cristiano Vagos
+ */
 public interface IPark {
     /**
      * Operação getVehicle (chamada pelo {@link Mechanic})<br>

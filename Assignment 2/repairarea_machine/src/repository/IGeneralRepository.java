@@ -4,6 +4,15 @@ import model.CustomerState;
 import model.ManagerState;
 import model.MechanicState;
 
+/**
+ * Interface IGeneralRepository (ligação ao Repositório Geral)<br>
+ *
+ * Esta interface contém todos os métodos do serviço GeneralRepository, que
+ * serão invocados assim que necessário.<br>
+ *
+ * @author Miguel Bras
+ * @author Cristiano Vagos
+ */
 public interface IGeneralRepository {
     /**
      * Operação initializeCustomer<br>

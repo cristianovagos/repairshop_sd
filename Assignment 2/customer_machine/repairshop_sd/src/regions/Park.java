@@ -6,18 +6,13 @@ import comm.ClientCom;
 import comm.Message;
 import comm.MessageType;
 
-
 /**
- * Classe Park (Parque de Estacionamento)<br>
+ * Classe Park (ligação com o Parque de Estacionamento)<br>
  *
- * Esta classe é responsável pela criação do Parque de Estacionamento, uma
- * das entidades passivas do problema.<br>
- *
- * É aqui que estão inicialmente localizadas as viaturas de substituição, a
- * serem disponibilizadas aos Clientes ({@link Customer}) que queiram. Também
- * é o local onde os Clientes vão estacionar as suas próprias viaturas quando
- * se dirigem à Oficina para posterior reparação, onde após estar concluída
- * será novamente estacionada pelo Mecânico (Mechanic).<br>
+ * Esta classe é responsável pela comunicação com o servidor do serviço do Park,
+ * uma região partilhada do problema, feita através de passagem de mensagens, atuando
+ * como um Stub para a classe real, sendo que são implementados os métodos do serviço
+ * propriamente dito, através da sua interface.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -34,18 +29,18 @@ public class Park implements IPark {
      */
     private int serverPortNumb;
 
-
     /**
      *  Instanciação do stub.
      *
-     *    @param hostName nome do sistema computacional onde está localizado o servidor
-     *    @param port número do port de escuta do servidor
+     *  @param hostName nome do sistema computacional onde está localizado o servidor
+     *  @param port número do port de escuta do servidor
      */
     public Park(String hostName, int port)
     {
         serverHostName = hostName;
         serverPortNumb = port;
     }
+
     /**
      * Operação goToRepairShop (chamada pelo {@link Customer})<br>
      * <p>
@@ -141,6 +136,13 @@ public class Park implements IPark {
         ((Customer) Thread.currentThread()).setCarId(inMessage.getIntegerParam1());
     }
 
+    /**
+     * Comunicação com o servidor do Park.
+     * Envia e recebe mensagem de resposta
+     *
+     * @param messageToSend mensagem a ser enviada para o servidor
+     * @return mensagem de resposta vinda do servidor
+     */
     private Message communicationWithServer(Message messageToSend)
     {
         ClientCom com = new ClientCom(serverHostName, serverPortNumb);

@@ -7,28 +7,18 @@ import entities.*;
 import genclass.GenericIO;
 
 /**
- * Classe Lounge (Recepção)<br>
+ * Classe Lounge (ligação com o Lounge)<br>
  *
- * Esta classe é responsável pela criação da Recepção da Oficina, uma
- * das entidades passivas do problema.<br>
- *
- * É neste local que o maior número de interações acontece, uma vez que
- * é o principal local de trabalho do Gerente (Manager) da Oficina,
- * que a vai gerindo consoante as necessidades e tarefas que aparecerem.
- * Atender os Clientes (Customer) quando estes chegam, fornecer
- * chaves de substituição, entre outros.<br>
- * Os Clientes irão ter aqui um ponto de contacto com a Oficina, onde
- * estão na fila de espera para serem atendidos, ou estarão a aguardar uma
- * chave de substituição para a eventualmente receber, ou irão efetuar o
- * pagamento do serviço de reparação.<br>
- * Já os Mecânicos (Mechanic) irão aqui informar o Gerente tanto da
- * falta de peças para as reparações como para a conclusão de reparações por
- * ele pedidas anteriormente.<br>
+ * Esta classe é responsável pela comunicação com o servidor do serviço da Recepção,
+ * uma região partilhada do problema, feita através de passagem de mensagens, atuando
+ * como um Stub para a classe real, sendo que são implementados os métodos do serviço
+ * propriamente dito, através da sua interface.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
-public class Lounge implements ILounge{
+public class Lounge implements ILounge {
+
     /**
      *  Nome do sistema computacional onde está localizado o servidor.
      */
@@ -38,7 +28,6 @@ public class Lounge implements ILounge{
      *  Número do port de escuta do servidor.
      */
     private int serverPortNumb;
-
 
     /**
      *  Instanciação do stub.
@@ -51,7 +40,6 @@ public class Lounge implements ILounge{
         serverHostName = hostName;
         serverPortNumb = port;
     }
-
 
     /**
      * Operação letManagerKnow (chamada pelo {@link Mechanic})<br>
@@ -116,6 +104,13 @@ public class Lounge implements ILounge{
         ((Mechanic)Thread.currentThread()).setState(inMessage.getMechanicState());
     }
 
+    /**
+     * Comunicação com o servidor do Lounge.
+     * Envia e recebe mensagem de resposta
+     *
+     * @param messageToSend mensagem a ser enviada para o servidor
+     * @return mensagem de resposta vinda do servidor
+     */
     private Message communicationWithServer(Message messageToSend)
     {
         ClientCom com = new ClientCom(serverHostName, serverPortNumb);

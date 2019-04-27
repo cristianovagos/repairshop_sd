@@ -77,7 +77,7 @@ public class Message implements Serializable {
     private int[] integerArrayParam = {-1};
 
     /**
-     * Instanciação de uma mensagem (forma 1).
+     * Instanciação de uma mensagem (forma 1)
      *
      * @param type tipo da mensagem
      */
@@ -86,7 +86,7 @@ public class Message implements Serializable {
     }
 
     /**
-     * Instanciação de uma mensagem (forma 2): resposta appraiseSit.
+     * Instanciação de uma mensagem (forma 2)
      *
      * @param type tipo da mensagem
      * @param mState estado do manager
@@ -104,17 +104,17 @@ public class Message implements Serializable {
      * @param type tipo da mensagem
      * @param bool valor boolean a passar na mensagem
      */
-    public Message(MessageType type, boolean bool) {
+    public Message(MessageType type, Boolean bool) {
         messageType = type;
         booleanParam1 = bool;
     }
 
     /**
-     * Instanciação de uma mensagem (forma 4): resposta talk to customer
+     * Instanciação de uma mensagem (forma 4)
      *
      * @param type tipo da mensagem
-     * @param mState estado do manager
-     * @param cState estado do customer
+     * @param mState estado do manager a passar na mensagem
+     * @param cState estado do customer a passar na mensagem
      */
     public Message(MessageType type, ManagerState mState, CustomerState cState) {
         messageType = type;
@@ -126,7 +126,7 @@ public class Message implements Serializable {
      * Instanciação de uma mensagem (forma 5)
      *
      * @param type tipo da mensagem
-     * @param mState estado do manager
+     * @param mState estado do manager a passar na mensagem
      */
     public Message(MessageType type, ManagerState mState) {
         messageType = type;
@@ -161,7 +161,7 @@ public class Message implements Serializable {
      * Instanciação de uma mensagem (forma 8)
      *
      * @param type tipo da mensagem
-     * @param mechState estado do mechanic
+     * @param mechState estado do mechanic a passar na mensagem
      */
     public Message(MessageType type, MechanicState mechState) {
         messageType = type;
@@ -172,7 +172,7 @@ public class Message implements Serializable {
      * Instanciação de uma mensagem (forma 9)
      *
      * @param type tipo da mensagem
-     * @param cState estado do customer
+     * @param cState estado do customer a passar na mensagem
      */
     public Message(MessageType type, CustomerState cState) {
         messageType = type;
@@ -183,10 +183,10 @@ public class Message implements Serializable {
      * Instanciação de uma mensagem (forma 10)
      *
      * @param type tipo da mensagem
-     * @param integer inteiro a passar
-     * @param bool boolean a passar
+     * @param integer valor inteiro a passar na mensagem
+     * @param bool valor booleano a passar na mensagem
      */
-    public Message(MessageType type, int integer, boolean bool) {
+    public Message(MessageType type, int integer, Boolean bool) {
         messageType = type;
         integerParam1 = integer;
         booleanParam1 = bool;
@@ -196,8 +196,8 @@ public class Message implements Serializable {
      * Instanciação de uma mensagem (forma 11)
      *
      * @param type tipo da mensagem
-     * @param cState customer State a passar
-     * @param integer integer a passar
+     * @param cState estado do cliente a passar na mensagem
+     * @param integer valor inteiro a passar na mensagem
      */
     public Message(MessageType type, CustomerState cState, int integer) {
         messageType = type;
@@ -209,8 +209,8 @@ public class Message implements Serializable {
      * Instanciação de uma mensagem (forma 12)
      *
      * @param type tipo da mensagem
-     * @param integerArray array de inteiros a passar
-     * @param mState estado do manager a passar
+     * @param integerArray array de inteiros a passar na mensagem
+     * @param mState estado do manager a passar na mensagem
      */
     public Message(MessageType type, int [] integerArray, ManagerState mState) {
         messageType = type;
@@ -222,10 +222,10 @@ public class Message implements Serializable {
      * Instanciação de uma mensagem (forma 13)
      *
      * @param type tipo da mensagem
-     * @param mechState estado do mecanico a passar
-     * @param bool bool a passar
+     * @param mechState estado do mecanico a passar na mensagem
+     * @param bool valor booleano a passar na mensagem
      */
-    public Message(MessageType type, MechanicState mechState, boolean bool) {
+    public Message(MessageType type, MechanicState mechState, Boolean bool) {
         messageType = type;
         mechanicState = mechState;
         booleanParam1 = bool;
@@ -234,9 +234,9 @@ public class Message implements Serializable {
      * Instanciação de uma mensagem (forma 14)
      *
      * @param type tipo da mensagem
-     * @param integer1 inteiro 1 a passar
-     * @param integer2 inteiro 2 a passar
-     * @param integer3 inteiro 3 a passar
+     * @param integer1 valor inteiro a passar na mensagem
+     * @param integer2 valor inteiro a passar na mensagem
+     * @param integer3 valor inteiro a passar na mensagem
      */
     public Message(MessageType type, int integer1, int integer2, int integer3) {
         messageType = type;
@@ -249,11 +249,11 @@ public class Message implements Serializable {
      * Instanciação de uma mensagem (forma 15)
      *
      * @param type tipo da mensagem
-     * @param integer1 inteiro 1 a passar
-     * @param mechState estado de mecanico a passar
-     * @param bool boolean a passar
+     * @param integer1 valor inteiro a passar na mensagem
+     * @param mechState estado do mecanico a passar na mensagem
+     * @param bool valor booleano a passar na mensagem
      */
-    public Message(MessageType type, MechanicState mechState, int integer1, boolean bool) {
+    public Message(MessageType type, MechanicState mechState, int integer1, Boolean bool) {
         messageType = type;
         mechanicState = mechState;
         integerParam1 = integer1;
@@ -264,7 +264,7 @@ public class Message implements Serializable {
      * Instanciação de uma mensagem (forma 16)
      *
      * @param type tipo da mensagem
-     * @param integerArray array de inteiros a passar
+     * @param integerArray array de inteiros a passar na mensagem
      */
     public Message(MessageType type, int[] integerArray) {
         messageType = type;
@@ -272,40 +272,40 @@ public class Message implements Serializable {
     }
 
     /**
-     * Instanciação de uma mensagem (forma 17):readThePaper response
+     * Instanciação de uma mensagem (forma 17)
      *
      * @param type tipo da mensagem
-     * @param notendofday not end of day
-     * @param firstrun firstun
+     * @param notendofday indicação de fim do dia de trabalho a passar na mensagem
+     * @param firstrun indicação de primeira execução do programa a passar na mensagem
      */
-    public Message(MessageType type, boolean notendofday, boolean firstrun) {
+    public Message(MessageType type, Boolean notendofday, Boolean firstrun) {
         messageType = type;
         booleanParam1 = notendofday;
         booleanParam2 = firstrun;
     }
 
     /**
-     * Instanciação de uma mensagem (forma 18):readThePaper response
+     * Instanciação de uma mensagem (forma 18)
      *
      * @param type tipo da mensagem
-     * @param mState estado de manager
-     * @param firstrun firstun
+     * @param mState estado do manager a passar na mensagem
+     * @param firstrun indicação de primeira execução do programa a passar na mensagem
      */
-    public Message(MessageType type, ManagerState mState, boolean firstrun) {
+    public Message(MessageType type, ManagerState mState, Boolean firstrun) {
         messageType = type;
         managerState = mState;
         booleanParam1 = firstrun;
     }
 
     /**
-     * Instanciação de uma mensagem (forma 19): Repository setCustomerState
+     * Instanciação de uma mensagem (forma 19)
      *
      * @param type tipo da mensagem
-     * @param index indice do cliente
-     * @param cState novo estado do cliente
-     * @param print indica se atualiza o ficheiro de logging
+     * @param index indice do cliente a passar na mensagem
+     * @param cState novo estado do cliente a passar na mensagem
+     * @param print indica se a operação deve atualizar o ficheiro de logging
      */
-    public Message(MessageType type, int index, CustomerState cState, boolean print) {
+    public Message(MessageType type, int index, CustomerState cState, Boolean print) {
         messageType = type;
         integerParam1 = index;
         customerState = cState;
@@ -313,14 +313,14 @@ public class Message implements Serializable {
     }
 
     /**
-     * Instanciação de uma mensagem (forma 20): Repository setCustomerCar
+     * Instanciação de uma mensagem (forma 20)
      *
      * @param type tipo da mensagem
-     * @param index indice do cliente
-     * @param carId novo id do carro do cliente
-     * @param print indica se atualiza o ficheiro de logging
+     * @param index indice do cliente a passar na mensagem
+     * @param carId novo id do carro do cliente a passar na mensagem
+     * @param print indica se a operação deve atualizar o ficheiro de logging
      */
-    public Message(MessageType type, int index, int carId, boolean print) {
+    public Message(MessageType type, int index, int carId, Boolean print) {
         messageType = type;
         integerParam1 = index;
         integerParam2 = carId;
@@ -328,14 +328,14 @@ public class Message implements Serializable {
     }
 
     /**
-     * Instanciação de uma mensagem (forma 22): Repository setMechanicState
+     * Instanciação de uma mensagem (forma 21)
      *
      * @param type tipo da mensagem
-     * @param index indice do mecanico
-     * @param mState novo estado do mecanico
-     * @param print indica se atualiza o ficheiro de logging
+     * @param index indice do mecanico a passar na mensagem
+     * @param mState novo estado do mecanico a passar na mensagem
+     * @param print indica se a operação deve atualizar o ficheiro de logging
      */
-    public Message(MessageType type, int index, MechanicState mState, boolean print) {
+    public Message(MessageType type, int index, MechanicState mState, Boolean print) {
         messageType = type;
         integerParam1 = index;
         mechanicState = mState;
@@ -343,27 +343,27 @@ public class Message implements Serializable {
     }
 
     /**
-     * Instanciação de uma mensagem (forma 22): Repository setStockParts
+     * Instanciação de uma mensagem (forma 22)
      *
      * @param type tipo da mensagem
      * @param stockParts array de pecas em stock
-     * @param print indica se atualiza o ficheiro de logging
+     * @param print indica se a operação deve atualizar o ficheiro de logging
      */
-    public Message(MessageType type, int[] stockParts, boolean print) {
+    public Message(MessageType type, int[] stockParts, Boolean print) {
         messageType = type;
         integerArrayParam = stockParts;
         booleanParam1 = print;
     }
 
     /**
-     * Instanciação de uma mensagem (forma 23): Repository setMissingPartAlert
+     * Instanciação de uma mensagem (forma 23)
      *
      * @param type tipo da mensagem
-     * @param partIndex indice da peca
-     * @param value novo valor da peca
-     * @param print indica se atualiza o ficheiro de logging
+     * @param partIndex indice da peca a passar na mensagem
+     * @param value novo valor da peca a passar na mensagem
+     * @param print indica se a operação deve atualizar o ficheiro de logging
      */
-    public Message(MessageType type, int partIndex, boolean value, boolean print) {
+    public Message(MessageType type, int partIndex, Boolean value, Boolean print) {
         messageType = type;
         integerParam1 = partIndex;
         booleanParam1 = value;
@@ -371,11 +371,11 @@ public class Message implements Serializable {
     }
 
     /**
-     * Instanciação de uma mensagem (forma 24): Lounge appraiseSit response
+     * Instanciação de uma mensagem (forma 24)
      *
      * @param type tipo da mensagem
-     * @param state estado do manager
-     * @param task tarefa do manager
+     * @param state estado do manager a passar na mensagem
+     * @param task tarefa do manager a passar na mensagem
      * @param index indice do cliente a ser atendido
      */
     public Message(MessageType type, ManagerState state, ManagerTask task, int index) {
@@ -386,11 +386,11 @@ public class Message implements Serializable {
     }
 
     /**
-     * Instanciação de uma mensagem (forma 25): Lounge talkToCustomer response
+     * Instanciação de uma mensagem (forma 25)
      *
      * @param type tipo da mensagem
-     * @param mState estado do manager
-     * @param cState estado do cliente
+     * @param mState estado do manager a passar na mensagem
+     * @param cState estado do cliente a passar na mensagem
      * @param index indice do cliente a ser atendido
      */
     public Message(MessageType type, ManagerState mState, CustomerState cState, int index) {
@@ -401,14 +401,14 @@ public class Message implements Serializable {
     }
 
     /**
-     * Instanciação de uma mensagem (forma 26): RepairArea readThePaper response
+     * Instanciação de uma mensagem (forma 26)
      *
      * @param type tipo da mensagem
-     * @param mState estado do mecanico
+     * @param mState estado do mecanico a passar na mensagem
      * @param endOfDay indicacao se o dia de trabalho acabou
-     * @param firstRun indicacao se e a primeira execucao do programa
+     * @param firstRun indicacao se é a primeira execucao do programa
      */
-    public Message(MessageType type, MechanicState mState, boolean endOfDay, boolean firstRun) {
+    public Message(MessageType type, MechanicState mState, Boolean endOfDay, Boolean firstRun) {
         messageType = type;
         mechanicState = mState;
         booleanParam1 = endOfDay;
@@ -416,10 +416,10 @@ public class Message implements Serializable {
     }
 
     /**
-     * Instanciação de uma mensagem (forma 27): RepairArea startRepairProcedure response
+     * Instanciação de uma mensagem (forma 27)
      *
      * @param type tipo da mensagem
-     * @param mState estado do mecanico
+     * @param mState estado do mecanico a passar na mensagem
      * @param currentCarFixingId id do carro a ser arranjado
      */
     public Message(MessageType type, MechanicState mState, int currentCarFixingId) {
@@ -429,10 +429,10 @@ public class Message implements Serializable {
     }
 
     /**
-     * Instanciação de uma mensagem (forma 28): SupplierSite goToSupplier response
+     * Instanciação de uma mensagem (forma 28)
      *
      * @param type tipo da mensagem
-     * @param mState estado do manager
+     * @param mState estado do manager a passar na mensagem
      * @param newParts cesto de compras com novas pecas
      */
     public Message(MessageType type, ManagerState mState, int[] newParts) {
@@ -442,14 +442,14 @@ public class Message implements Serializable {
     }
 
     /**
-     * Instanciação de uma mensagem (forma 29): Lounge getNextTask response
+     * Instanciação de uma mensagem (forma 29)
      *
      * @param type tipo da mensagem
-     * @param mState estado do manager
+     * @param mState estado do manager a passar na mensagem
      * @param firstRun indicacao se e primeira execucao
      * @param endOfDay indicacao se o dia de trabalho terminou
      */
-    public Message(MessageType type, ManagerState mState, boolean firstRun, boolean endOfDay) {
+    public Message(MessageType type, ManagerState mState, Boolean firstRun, Boolean endOfDay) {
         messageType = type;
         managerState = mState;
         booleanParam1 = firstRun;

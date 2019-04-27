@@ -4,24 +4,16 @@ import regions.*;
 import utils.Constants;
 
 /**
- * Classe RepairShop (Oficina)<br>
+ * Cliente do Mechanic<br>
  *
- * Este tipo de dados simula o problema descrito no âmbito deste projeto,
- * que é as actividades de uma Oficina de Reparação de Automóveis.<br>
- * Aqui foi implementada uma solução concorrente baseada em monitores como
- * elementos de sincronização entre as entidades ativas (Cliente ({@link Customer}),
- * Mecânico ({@link Mechanic}) e Gerente ({@link Manager})) e as entidades passivas
- * (Mundo Exterior ({@link OutsideWorld}), Recepção ({@link Lounge}), Parque de
- * Estacionamento ({@link Park}), Área de Reparação ({@link RepairArea}) e Fornecedor
- * ({@link SupplierSite})).<br>
- * Durante a execução da simulação, todas as entidades passivas irão atualizar um
- * Repositório Geral de Dados ({@link GeneralRepository}), que irá escrever num ficheiro
- * de logging para um acompanhamento de todos os estados e transições do problema.
+ * Classe responsável pela criação do Cliente do {@link Mechanic}, uma das entidades
+ * do problema Repair Shop Activities.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
 public class ClientMechanic {
+
     /**
      * Operação main<br>
      *
@@ -31,7 +23,7 @@ public class ClientMechanic {
      */
     public static void main(String[] args) {
 
-        Mechanic [] mechanics = new Mechanic[Constants.NUM_MECHANICS];
+        Mechanic[] mechanics = new Mechanic[Constants.NUM_MECHANICS];
 
         /*Criar Stubs das regioes partilhadas*/
         //Criar General Repository
@@ -44,7 +36,6 @@ public class ClientMechanic {
         Park park = new Park(Constants.PARK_SERVER_HOST, Constants.PARK_SERVER_PORT);
 
         /*Criar threads dos mecanicos*/
-
         for(int i = 0; i < Constants.NUM_MECHANICS; i++)
         {
             mechanics[i] = new Mechanic(
@@ -63,8 +54,8 @@ public class ClientMechanic {
         //Aguarda pelo fim da simulação
         for(int i = 0; i < Constants.NUM_MECHANICS; i++) {
             while (mechanics[i].isAlive ()) {
-                mechanics[i].sendInterrupt();
-                Thread.yield ();
+                mechanics[i].sendInterrupt();       // envia pedido de interrupção para a RepairArea, onde o Mecânico
+                Thread.yield ();                    // aguarda mais trabalho para fazer. Só termina quando o Manager dá ordem
             }
             try {
                 mechanics[i].join();

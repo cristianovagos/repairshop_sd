@@ -4,19 +4,10 @@ import regions.*;
 import utils.Constants;
 
 /**
- * Classe RepairShop (Oficina)<br>
+ * Cliente do Cliente<br>
  *
- * Este tipo de dados simula o problema descrito no âmbito deste projeto,
- * que é as actividades de uma Oficina de Reparação de Automóveis.<br>
- * Aqui foi implementada uma solução concorrente baseada em monitores como
- * elementos de sincronização entre as entidades ativas (Cliente (Customer),
- * Mecânico (Mechanic) e Gerente (Manager)) e as entidades passivas
- * (Mundo Exterior (OutsideWorld), Recepção (Lounge), Parque de
- * Estacionamento (Park), Área de Reparação (RepairArea) e Fornecedor
- * (SupplierSite)).<br>
- * Durante a execução da simulação, todas as entidades passivas irão atualizar um
- * Repositório Geral de Dados (GeneralRepository), que irá escrever num ficheiro
- * de logging para um acompanhamento de todos os estados e transições do problema.
+ * Classe responsável pela criação do Cliente do {@link Customer}, uma das entidades
+ * do problema Repair Shop Activities.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -45,7 +36,6 @@ public class ClientCustomer {
         OutsideWorld outsideWorld = new OutsideWorld(Constants.OUTSIDE_WORLD_HOST, Constants.OUTSIDE_WORLD_PORT);
 
         /*Criar threads dos clientes */
-
         for (int i = 0; i < Constants.NUM_CUSTOMERS; i++) {
             customers[i] = new Customer(
                     i,

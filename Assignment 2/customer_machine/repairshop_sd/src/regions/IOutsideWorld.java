@@ -2,6 +2,15 @@ package regions;
 
 import entities.Customer;
 
+/**
+ * Interface IOutsideWorld (ligação ao Mundo Exterior)<br>
+ *
+ * Esta interface contém todos os métodos do serviço OutsideWorld, que
+ * serão invocados assim que necessário.<br>
+ *
+ * @author Miguel Bras
+ * @author Cristiano Vagos
+ */
 public interface IOutsideWorld {
 
     /**

@@ -6,7 +6,19 @@ import comm.MessageType;
 import entities.Manager;
 import genclass.GenericIO;
 
+/**
+ * Classe SupplierSite (ligação com a SupplierSite)<br>
+ *
+ * Esta classe é responsável pela comunicação com o servidor do serviço do Fornecedor,
+ * uma região partilhada do problema, feita através de passagem de mensagens, atuando
+ * como um Stub para a classe real, sendo que são implementados os métodos do serviço
+ * propriamente dito, através da sua interface.<br>
+ *
+ * @author Miguel Bras
+ * @author Cristiano Vagos
+ */
 public class SupplierSite implements ISupplierSite {
+
     /**
      *  Nome do sistema computacional onde está localizado o servidor.
      */
@@ -17,12 +29,11 @@ public class SupplierSite implements ISupplierSite {
      */
     private int serverPortNumb;
 
-
     /**
      *  Instanciação do stub.
      *
-     *    @param hostName nome do sistema computacional onde está localizado o servidor
-     *    @param port número do port de escuta do servidor
+     *  @param hostName nome do sistema computacional onde está localizado o servidor
+     *  @param port número do port de escuta do servidor
      */
     public SupplierSite(String hostName, int port)
     {
@@ -57,7 +68,6 @@ public class SupplierSite implements ISupplierSite {
             System.exit (1);
         }
 
-
         //retrieve state, and True/False from the message
         ((Manager) Thread.currentThread()).setState( inMessage.getManagerState());
         parts =  inMessage.getIntegerArrayParam();
@@ -65,6 +75,13 @@ public class SupplierSite implements ISupplierSite {
         return parts;
     }
 
+    /**
+     * Comunicação com o servidor do SupplierSite.
+     * Envia e recebe mensagem de resposta
+     *
+     * @param messageToSend mensagem a ser enviada para o servidor
+     * @return mensagem de resposta vinda do servidor
+     */
     private Message communicationWithServer(Message messageToSend)
     {
         ClientCom com = new ClientCom(serverHostName, serverPortNumb);

@@ -8,7 +8,17 @@ import genclass.GenericIO;
 import model.CustomerState;
 import model.ManagerTask;
 
-
+/**
+ * Classe Lounge (ligação com o Lounge)<br>
+ *
+ * Esta classe é responsável pela comunicação com o servidor do serviço da Recepção,
+ * uma região partilhada do problema, feita através de passagem de mensagens, atuando
+ * como um Stub para a classe real, sendo que são implementados os métodos do serviço
+ * propriamente dito, através da sua interface.<br>
+ *
+ * @author Miguel Bras
+ * @author Cristiano Vagos
+ */
 public class Lounge implements ILounge {
 
     /**
@@ -19,14 +29,13 @@ public class Lounge implements ILounge {
     /**
      *  Número do port de escuta do servidor.
      */
-   private int serverPortNumb;
-
+    private int serverPortNumb;
 
     /**
      *  Instanciação do stub.
      *
-     *    @param hostName nome do sistema computacional onde está localizado o servidor
-     *    @param port número do port de escuta do servidor
+     *  @param hostName nome do sistema computacional onde está localizado o servidor
+     *  @param port número do port de escuta do servidor
      */
     public Lounge(String hostName, int port)
     {
@@ -195,6 +204,13 @@ public class Lounge implements ILounge {
         ((Manager) Thread.currentThread()).setState(inMessage.getManagerState());
     }
 
+    /**
+     * Operação receivePayment (chamada pelo {@link Manager})<br>
+     *
+     * O Gerente recebe o pagamento do serviço por parte do Customer<br>
+     *
+     * @param customerToAttend o id do cliente a fazer pagamento
+     */
     @Override
     public void receivePayment(int customerToAttend) {
         Message inMessage;
@@ -217,6 +233,13 @@ public class Lounge implements ILounge {
         ((Manager) Thread.currentThread()).setState(inMessage.getManagerState());
     }
 
+    /**
+     * Comunicação com o servidor do Lounge.
+     * Envia e recebe mensagem de resposta
+     *
+     * @param messageToSend mensagem a ser enviada para o servidor
+     * @return mensagem de resposta vinda do servidor
+     */
     private Message communicationWithServer(Message messageToSend)
     {
         ClientCom com = new ClientCom(serverHostName, serverPortNumb);

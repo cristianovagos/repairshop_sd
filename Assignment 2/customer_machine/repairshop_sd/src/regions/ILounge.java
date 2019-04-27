@@ -2,6 +2,15 @@ package regions;
 
 import entities.Customer;
 
+/**
+ * Interface ILounge (ligação à Recepção)<br>
+ *
+ * Esta interface contém todos os métodos do serviço Lounge, que
+ * serão invocados assim que necessário.<br>
+ *
+ * @author Miguel Bras
+ * @author Cristiano Vagos
+ */
 public interface ILounge {
 
     /* CUSTOMER */

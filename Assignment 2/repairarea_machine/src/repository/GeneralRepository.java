@@ -9,15 +9,10 @@ import model.MechanicState;
 /**
  * Classe GeneralRepository (Repositório Geral)<br>
  *
- * Esta classe é reponsável pela criação e posterior atualização de um ficheiro
- * de logging que irá permitir visualizar os diferentes estados e valores
- * decorrentes da execução do problema.<br>
- *
- * Assim que necessário e pedido pelas diferentes entidades e regiões partilhadas
- * de dados deste problema, será acrescentado ao ficheiro de logging os valores
- * mais recentes para posterior acompanhamento, que serão atualizados nas variáveis
- * e estruturas de dados que nada mais são de que "fotocópias" dos dados que estão
- * a ser alterados e atualizados nas diferentes entidades ativas e passivas do problema.<br>
+ * Esta classe é responsável pela comunicação com o servidor do serviço do Repositório Geral de Dados,
+ * uma região partilhada do problema, feita através de passagem de mensagens, atuando
+ * como um Stub para a classe real, sendo que são implementados os métodos do serviço
+ * propriamente dito, através da sua interface.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -36,8 +31,8 @@ public class GeneralRepository implements IGeneralRepository {
     /**
      *  Instanciação do stub.
      *
-     *    @param hostName nome do sistema computacional onde está localizado o servidor
-     *    @param port número do port de escuta do servidor
+     *  @param hostName nome do sistema computacional onde está localizado o servidor
+     *  @param port número do port de escuta do servidor
      */
     public GeneralRepository(String hostName, int port) {
         serverHostName = hostName;
@@ -505,7 +500,6 @@ public class GeneralRepository implements IGeneralRepository {
         }
 
         //Message to Send
-        //CREATE MESSAGE
         fromUser = messageToSend;
 
         //Send Message
