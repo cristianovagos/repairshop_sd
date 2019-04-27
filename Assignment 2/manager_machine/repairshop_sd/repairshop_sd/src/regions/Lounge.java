@@ -39,7 +39,7 @@ public class Lounge implements ILounge {
      *
      * Caso hajam pedidos ao Gerente, este procede à realização
      * das tarefas pretendidas. Assim que não haja mais pedidos,
-     * a Oficina é fechada, e os Mecânicos ({@link Mechanic}) poderão
+     * a Oficina é fechada, e os Mecânicos (Mechanic) poderão
      * ir embora.<br>
      *
      * @return indicação se ainda há trabalho para fazer na Oficina
@@ -65,7 +65,6 @@ public class Lounge implements ILounge {
             System.exit (1);
         }
 
-
         //retrieve state, and True/False from the message
         ((Manager) Thread.currentThread()).setState(inMessage.getManagerState());
         ((Manager) Thread.currentThread()).setFirstRun(inMessage.getBooleanParam1());
@@ -81,8 +80,8 @@ public class Lounge implements ILounge {
      * O Gerente avalia a próxima tarefa a desempenhar, de acordo
      * com a seguinte prioridade:<br>
      * <ul>
-     *     <li>Reabastecimento de peças para os {@link Mechanic}
-     *     poderem trabalhar na {@link IRepairArea} através da {@link ISupplierSite}</li>
+     *     <li>Reabastecimento de peças para os Mechanic
+     *     poderem trabalhar na RepairArea através da SupplierSite</li>
      *     <li>Caso haja clientes em fila de espera para obter uma chave para
      *     viatura de substituição.</li>
      *     <li>Caso haja viaturas reparadas, o Gerente vai chamar os clientes
@@ -104,7 +103,6 @@ public class Lounge implements ILounge {
         //wait to receive message
         inMessage = communicationWithServer(messageToSend);
 
-
         //check if received message is valid
         if(inMessage.getMessageType() != MessageType.LOUNGE_APPRAISE_SIT_RESP)
         {
@@ -113,10 +111,12 @@ public class Lounge implements ILounge {
             System.exit (1);
         }
 
-
         //retrieve state, and True/False from the message
-        ((Manager) Thread.currentThread()).setState(  inMessage.getManagerState());
-        nextTask =  inMessage.getManagerTask();
+        ((Manager) Thread.currentThread()).setState(inMessage.getManagerState());
+        nextTask = inMessage.getManagerTask();
+
+        if(nextTask == ManagerTask.PHONE_CUSTOMER)
+            ((Manager) Thread.currentThread()).setCurrentlyAttendingCustomer(inMessage.getIntegerParam1());
 
         //return if manager's next task
         return nextTask;
@@ -125,7 +125,7 @@ public class Lounge implements ILounge {
     /**
      * Operação talkToCustomer (chamada pelo {@link Manager})<br>
      *
-     * O Gerente irá atender o cliente {@link Customer} para saber o que
+     * O Gerente irá atender o cliente para saber o que
      * este pretende, de uma das seguintes opções:<br>
      * <ul>
      *     <li>Reparar a sua viatura</li>
@@ -170,7 +170,7 @@ public class Lounge implements ILounge {
      * Operação handCarKey (chamada pelo {@link Manager})<br>
      *
      * O Gerente irá dar uma das chaves das viaturas de substituição
-     * disponíveis ao {@link Customer}.<br>
+     * disponíveis ao Customer.<br>
      */
     @Override
     public void handCarKey() {
@@ -192,7 +192,7 @@ public class Lounge implements ILounge {
         }
 
         //retrieve state, and True/False from the message
-        ((Manager) Thread.currentThread()).setState(  inMessage.getManagerState());
+        ((Manager) Thread.currentThread()).setState(inMessage.getManagerState());
     }
 
     @Override
@@ -213,9 +213,8 @@ public class Lounge implements ILounge {
             System.exit (1);
         }
 
-
         //retrieve state, and True/False from the message
-        ((Manager) Thread.currentThread()).setState(  inMessage.getManagerState());
+        ((Manager) Thread.currentThread()).setState(inMessage.getManagerState());
     }
 
     private Message communicationWithServer(Message messageToSend)

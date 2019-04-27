@@ -18,7 +18,6 @@ public class OutsideWorld implements IOutsideWorld {
      */
     private int serverPortNumb;
 
-
     /**
      *  Instanciação do stub.
      *
@@ -34,10 +33,10 @@ public class OutsideWorld implements IOutsideWorld {
     /**
      * Operação phoneCustomer (chamada pelo {@link Manager})<br>
      * <p>
-     * Aqui, o {@link Manager} irá notificar o {@link Customer} de que
+     * Aqui, o {@link Manager} irá notificar o Customer de que
      * o seu carro está pronto, ligando-lhe.<br>
      *
-     * @param customerId o id do {@link Customer}
+     * @param customerId o id do Customer
      */
     @Override
     public void phoneCustomer(int customerId) {

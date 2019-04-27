@@ -1,7 +1,6 @@
 package regions;
 
 import entities.Mechanic;
-import utils.MemFIFO;
 
 public interface IRepairArea {
 
@@ -12,7 +11,7 @@ public interface IRepairArea {
      *
      * @return estado do dia de trabalho
      */
-    public  boolean readThePaper() ;
+    boolean readThePaper() ;
 
     /**
      * Operação startRepairProcedure (chamada pelo {@link Mechanic})<br>
@@ -20,7 +19,7 @@ public interface IRepairArea {
      * O Mecânico vai à lista de espera dos clientes para saber qual a viatura
      * que vai arranjar.<br>
      */
-    public  void startRepairProcedure();
+    void startRepairProcedure();
 
     /**
      * Operação getRequiredPart (chamada pelo {@link Mechanic})<br>
@@ -31,7 +30,7 @@ public interface IRepairArea {
      * @param partId peça pretendida
      * @return indicação se a peça pretendida existe em stock
      */
-    public  boolean getRequiredPart(int partId);
+    boolean getRequiredPart(int partId);
 
     /**
      * Operação partAvailable (chamada pelo {@link Mechanic})<br>
@@ -40,7 +39,7 @@ public interface IRepairArea {
      *
      * @param partId a peça a obter
      */
-    public  void partAvailable(int partId);
+    void partAvailable(int partId);
 
     /**
      * Operação resumeRepairProcedure (chamada pelo {@link Mechanic})<br>
@@ -48,5 +47,5 @@ public interface IRepairArea {
      * Recomeço da reparação, agora que o Mecânico tem a peça pretendida para
      * substituição.<br>
      */
-    public  void resumeRepairProcedure();
+    void resumeRepairProcedure();
 }

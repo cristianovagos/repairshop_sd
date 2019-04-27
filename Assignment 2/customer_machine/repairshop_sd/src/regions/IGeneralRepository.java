@@ -10,5 +10,5 @@ public interface IGeneralRepository {
      * @param index índice do cliente
      * @param requiresReplacement indicação se requer viatura de substituição
      */
-    public void initializeCustomer(int index, boolean requiresReplacement);
+    void initializeCustomer(int index, boolean requiresReplacement);
 }

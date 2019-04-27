@@ -9,13 +9,13 @@ import utils.Constants;
  * Este tipo de dados simula o problema descrito no âmbito deste projeto,
  * que é as actividades de uma Oficina de Reparação de Automóveis.<br>
  * Aqui foi implementada uma solução concorrente baseada em monitores como
- * elementos de sincronização entre as entidades ativas (Cliente ({@link Customer}),
- * Mecânico ({@link Mechanic}) e Gerente ({@link Manager})) e as entidades passivas
- * (Mundo Exterior ({@link OutsideWorld}), Recepção ({@link Lounge}), Parque de
- * Estacionamento ({@link Park}), Área de Reparação ({@link RepairArea}) e Fornecedor
- * ({@link SupplierSite})).<br>
+ * elementos de sincronização entre as entidades ativas (Cliente (Customer),
+ * Mecânico (Mechanic) e Gerente (Manager)) e as entidades passivas
+ * (Mundo Exterior (OutsideWorld), Recepção (Lounge), Parque de
+ * Estacionamento (Park), Área de Reparação (RepairArea) e Fornecedor
+ * (SupplierSite)).<br>
  * Durante a execução da simulação, todas as entidades passivas irão atualizar um
- * Repositório Geral de Dados ({@link GeneralRepository}), que irá escrever num ficheiro
+ * Repositório Geral de Dados (GeneralRepository), que irá escrever num ficheiro
  * de logging para um acompanhamento de todos os estados e transições do problema.
  *
  * @author Miguel Bras
@@ -44,7 +44,7 @@ public class ClientCustomer {
         //Criar OutsideWorld
         OutsideWorld outsideWorld = new OutsideWorld(Constants.OUTSIDE_WORLD_HOST, Constants.OUTSIDE_WORLD_PORT);
 
-        /*Criar threads dos mecanicos*/
+        /*Criar threads dos clientes */
 
         for (int i = 0; i < Constants.NUM_CUSTOMERS; i++) {
             customers[i] = new Customer(
@@ -65,8 +65,7 @@ public class ClientCustomer {
         for (int i = 0; i < Constants.NUM_CUSTOMERS; i++) {
             try {
                 customers[i].join();
-            } catch (InterruptedException e) {
-            }
+            } catch (InterruptedException e) {}
             GenericIO.writelnString("O cliente " + i + " terminou.");
         }
         GenericIO.writelnString();

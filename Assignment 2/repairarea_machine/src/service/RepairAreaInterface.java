@@ -90,6 +90,10 @@ public class RepairAreaInterface {
             case REPAIR_AREA_MARK_END_OF_DAY_REQ:
                 // nothing to check
                 break;
+            case REPAIR_AREA_END_OPERATION_REQ:
+                if (inMessage.getIntegerParam1() < 0 || inMessage.getIntegerParam1() > Constants.NUM_MECHANICS)
+                    throw new MessageException("Id do mecanico invalido!", inMessage);
+                break;
             case NONE:
             default:
                 throw new MessageException("Tipo de mensagem invalida!", inMessage);
@@ -139,6 +143,10 @@ public class RepairAreaInterface {
                 repairArea.registerService(inMessage.getIntegerParam1());
                 ManagerState managerState2 = ((ClientProxy) Thread.currentThread()).getManagerState();
                 outMessage = new Message(MessageType.REPAIR_AREA_REGISTER_SERVICE_RESP, managerState2);
+                break;
+            case REPAIR_AREA_END_OPERATION_REQ:
+                repairArea.endOperation(inMessage.getIntegerParam1());
+                outMessage = new Message(MessageType.REPAIR_AREA_END_OPERATION_RESP);
                 break;
         }
 

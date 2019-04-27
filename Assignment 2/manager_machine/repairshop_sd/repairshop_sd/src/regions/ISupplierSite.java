@@ -1,16 +1,14 @@
 package regions;
 
-import entities.Manager;
-
 /**
  * Classe SupplierSite (Fornecedor)<br>
  *
  * Esta classe é responsável pela criação do Fornecedor, uma das entidades
  * passivas do problema.<br>
  *
- * O Fornecedor é o local onde o Gerente {@link Manager} irá obter novas peças
- * para serem posteriormente disponibilizadas na Área de Reparação {@link IRepairArea},
- * para que os Mecânicos {@link Mechanic} possam continuar a reparação das viaturas.<br>
+ * O Fornecedor é o local onde o Gerente irá obter novas peças
+ * para serem posteriormente disponibilizadas na Área de Reparação,
+ * para que os Mecânicos possam continuar a reparação das viaturas.<br>
  *
  * A abordagem que decidimos adotar neste caso foi ter um máximo para cada tipo de
  * peças que serão todas compradas assim que o Gerente venha comprar caso um tipo de
@@ -23,12 +21,12 @@ import entities.Manager;
 public interface ISupplierSite {
 
     /**
-     * Operação goToSupplier (chamada pelo {@link entities.Manager}
+     * Operação goToSupplier (chamada pelo Manager)
      *
      * O Manager irá dirigir-se ao fornecedor de peças, para comprar e posteriormente
-     * reabastecer a {@link IRepairArea} de peças, necessárias para a reparação das viaturas.
+     * reabastecer a RepairArea de peças, necessárias para a reparação das viaturas.
      *
      * @return carrinho de compras do Gerente
      */
-    public int[] goToSupplier();
+    int[] goToSupplier();
 }

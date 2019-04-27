@@ -12,12 +12,12 @@ import comm.MessageType;
  * Esta classe é responsável pela criação do Mundo Exterior, uma das entidades
  * passivas do problema.<br>
  *
- * É aqui que os Clientes ({@link Customer}) estão no início do problema, a fazer
+ * É aqui que os Clientes estão no início do problema, a fazer
  * a sua vida normal com a sua viatura. Após um dado tempo, a sua viatura avaria
  * e necessita de ser reparada. Aí, o Cliente dirige-se à Oficina.<br>
  * Quer queira uma viatura de substituição ou não, o Cliente volta a fazer a sua
  * vida normal assim que deixa a sua viatura na Oficina, e é notificado pelo
- * Gerente ({@link Manager}) assim que a reparação esteja concluída.<br>
+ * Gerente assim que a reparação esteja concluída.<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -51,7 +51,7 @@ public class OutsideWorld implements IOutsideWorld{
      * Operação backToWorkByBus (chamada pelo {@link Customer})<br>
      * <p>
      * Aqui, o cliente vai fazer a sua vida normal, ficando à espera
-     * de novidades por parte do {@link Manager}, que irá notificá-lo quando
+     * de novidades por parte do Manager, que irá notificá-lo quando
      * o seu carro pessoal estiver pronto.<br>
      */
     @Override
@@ -81,7 +81,7 @@ public class OutsideWorld implements IOutsideWorld{
      * <p>
      * Aqui, o cliente vai fazer a sua vida normal.
      * No caso de ter colocado a sua viatura para reparação na Oficina, fica à espera
-     * de novidades por parte do {@link Manager}, que irá notificá-lo quando
+     * de novidades por parte do Manager, que irá notificá-lo quando
      * o seu carro pessoal estiver pronto.<br>
      *
      * @param carRepaired indicação se a sua viatura já foi reparada

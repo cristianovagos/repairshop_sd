@@ -304,6 +304,16 @@ public enum MessageType {
      */
     REPAIR_AREA_REGISTER_SERVICE_RESP,
 
+    /**
+     * Pedido RepairArea endOperation
+     */
+    REPAIR_AREA_END_OPERATION_REQ,
+
+    /**
+     * Resposta RepairArea endOperation
+     */
+    REPAIR_AREA_END_OPERATION_RESP,
+
 
     /* REPOSITORY */
 

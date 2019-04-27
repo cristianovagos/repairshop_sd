@@ -17,13 +17,12 @@ import comm.MessageType;
  * serem disponibilizadas aos Clientes ({@link Customer}) que queiram. Também
  * é o local onde os Clientes vão estacionar as suas próprias viaturas quando
  * se dirigem à Oficina para posterior reparação, onde após estar concluída
- * será novamente estacionada pelo Mecânico ({@link Mechanic}).<br>
+ * será novamente estacionada pelo Mecânico (Mechanic).<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
-public class Park implements IPark{
-
+public class Park implements IPark {
 
     /**
      *  Nome do sistema computacional onde está localizado o servidor.
@@ -141,8 +140,6 @@ public class Park implements IPark{
         //set the current car ID
         ((Customer) Thread.currentThread()).setCarId(inMessage.getIntegerParam1());
     }
-
-
 
     private Message communicationWithServer(Message messageToSend)
     {

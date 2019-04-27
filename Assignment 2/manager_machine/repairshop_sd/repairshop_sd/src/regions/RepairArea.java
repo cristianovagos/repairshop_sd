@@ -33,14 +33,14 @@ public class RepairArea implements IRepairArea {
     /**
      * Operação markEndOfDay (chamada pelo {@link Manager})<br>
      * <p>
-     * Marca o encerramento do dia para o {@link Mechanic}.<br>
+     * Marca o encerramento do dia para o Mechanic.<br>
      */
     @Override
     public void markEndOfDay() {
         Message inMessage;      //input
         //Message to Send
         //CREATE MESSAGE
-        Message messageToSend = new Message(MessageType.REPAIR_AREA_MARK_END_OF_DAY_REQ );
+        Message messageToSend = new Message(MessageType.REPAIR_AREA_MARK_END_OF_DAY_REQ);
 
         //wait to receive message
         inMessage = communicationWithServer(messageToSend);
@@ -58,8 +58,8 @@ public class RepairArea implements IRepairArea {
      * Operação storePart (chamada pelo {@link Manager})<br>
      * <p>
      * O Manager irá guardar na Repair Area as peças que foi buscar à
-     * {@link ISupplierSite}, adicionar de novo os carros que tinham peças em
-     * falta para reparação na lista de espera, e acordar o {@link Mechanic}.<br>
+     * SupplierSite, adicionar de novo os carros que tinham peças em
+     * falta para reparação na lista de espera, e acordar o Mechanic.<br>
      *
      * @param newParts peças novas a serem incluídas no stock
      */
@@ -83,14 +83,14 @@ public class RepairArea implements IRepairArea {
         }
 
         //retrieve state, and True/False from the message
-        ((Manager) Thread.currentThread()).setState(  inMessage.getManagerState());
+        ((Manager) Thread.currentThread()).setState(inMessage.getManagerState());
     }
 
     /**
      * Operação registerService (chamada pelo {@link Manager})<br>
      * <p>
-     * O Manager irá registar um pedido de reparação da viatura do {@link Customer},
-     * e notificar os {@link Mechanic} de que existe um serviço disponível.<br>
+     * O Manager irá registar um pedido de reparação da viatura do Customer,
+     * e notificar os Mechanic de que existe um serviço disponível.<br>
      *
      * @param customerId id do cliente
      */

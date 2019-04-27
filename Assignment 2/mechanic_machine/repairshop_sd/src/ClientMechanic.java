@@ -57,21 +57,20 @@ public class ClientMechanic {
         }
 
         //Iniciar as threads
-        for(int i = 0; i <Constants.NUM_MECHANICS; i++)
-        {
+        for(int i = 0; i < Constants.NUM_MECHANICS; i++)
             mechanics[i].start();
-        }
 
         //Aguarda pelo fim da simulação
-        GenericIO.writelnString();
-
-        for(int i = 0; i <Constants.NUM_MECHANICS; i++)
-        {
+        for(int i = 0; i < Constants.NUM_MECHANICS; i++) {
+            while (mechanics[i].isAlive ()) {
+                mechanics[i].sendInterrupt();
+                Thread.yield ();
+            }
             try {
                 mechanics[i].join();
             }
             catch (InterruptedException e) {}
-            GenericIO.writelnString("Mecânico: " + i + " terminou.");
+            GenericIO.writelnString("O mecânico " + i + " terminou.");
         }
         GenericIO.writelnString();
     }

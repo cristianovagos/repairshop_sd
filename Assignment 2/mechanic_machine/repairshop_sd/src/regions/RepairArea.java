@@ -16,7 +16,7 @@ import genclass.GenericIO;
  * A Área de Reparação é o local onde decorrem as reparações das viaturas,
  * por parte dos Mecânicos ({@link Mechanic}), sendo que é aqui onde eles irão
  * estar a maior parte do tempo, seja a reparar viaturas, seja à espera da
- * indicação do Gerente ({@link Manager}) de que há trabalho a fazer. Nesta área
+ * indicação do Gerente (Manager) de que há trabalho a fazer. Nesta área
  * existe um número de peças em stock para que os Mecânicos possam substituir
  * nas viaturas que necessitem de reparar, e caso estas porventura faltem, é
  * responsabilidade do Gerente obter mais peças e por sua vez restabelecer o
@@ -26,7 +26,7 @@ import genclass.GenericIO;
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
-public class RepairArea implements  IRepairArea{
+public class RepairArea implements IRepairArea {
 
     /**
      *  Nome do sistema computacional onde está localizado o servidor.

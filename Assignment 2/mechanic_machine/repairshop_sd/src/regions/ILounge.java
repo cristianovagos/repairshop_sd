@@ -14,7 +14,7 @@ public interface ILounge {
      *
      * @param partRequired peça em falta
      */
-    public void letManagerKnow(int partRequired);
+    void letManagerKnow(int partRequired);
 
     /**
      * Operação repairConcluded (chamada pelo {@link Mechanic})<br>
@@ -23,5 +23,5 @@ public interface ILounge {
      * ({@link Manager}) que esta está pronta a ser levantada pelo seu proprietário,
      * o Cliente ({@link Customer}).<br>
      */
-    public void repairConcluded();
+    void repairConcluded();
 }

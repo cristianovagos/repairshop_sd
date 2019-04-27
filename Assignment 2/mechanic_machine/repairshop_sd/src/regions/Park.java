@@ -6,8 +6,6 @@ import comm.MessageType;
 import entities.Mechanic;
 import genclass.GenericIO;
 
-import java.util.Random;
-
 /**
  * Classe Park (Parque de Estacionamento)<br>
  *
@@ -15,7 +13,7 @@ import java.util.Random;
  * das entidades passivas do problema.<br>
  *
  * É aqui que estão inicialmente localizadas as viaturas de substituição, a
- * serem disponibilizadas aos Clientes ({@link Customer}) que queiram. Também
+ * serem disponibilizadas aos Clientes (Customer) que queiram. Também
  * é o local onde os Clientes vão estacionar as suas próprias viaturas quando
  * se dirigem à Oficina para posterior reparação, onde após estar concluída
  * será novamente estacionada pelo Mecânico ({@link Mechanic}).<br>
@@ -23,7 +21,7 @@ import java.util.Random;
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
-public class Park implements  IPark{
+public class Park implements IPark {
 
     /**
      *  Nome do sistema computacional onde está localizado o servidor.
@@ -52,7 +50,7 @@ public class Park implements  IPark{
     /**
      * Operação getVehicle (chamada pelo {@link Mechanic})<br>
      * <p>
-     * O Mecânico dirige-se ao Park para obter a viatura do {@link Customer}
+     * O Mecânico dirige-se ao Park para obter a viatura do Customer
      * e avalia qual a peça que deve substituir para a reparar.<br>
      *
      * @return a peça que necessita de substituição

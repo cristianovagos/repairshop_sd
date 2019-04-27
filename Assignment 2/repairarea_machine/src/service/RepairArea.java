@@ -4,6 +4,7 @@ import model.ManagerState;
 import model.MechanicState;
 import repository.GeneralRepository;
 import service.proxy.ClientProxy;
+import utils.Constants;
 import utils.MemFIFO;
 
 /**
@@ -58,6 +59,11 @@ public class RepairArea {
     private boolean endOfDay;
 
     /**
+     * Registo dos Mecânicos a dormir
+     */
+    private Thread[] mechanicsRegistry;
+
+    /**
      * Construtor da Área de Reparação (Repair Area)<br>
      *
      * Aqui será construído o objeto referente à Área de Reparação.<br>
@@ -81,6 +87,10 @@ public class RepairArea {
         }
 
         repository.setStockParts(stockParts, false);
+
+        mechanicsRegistry = new Thread[Constants.NUM_MECHANICS];
+        for (int i = 0; i < Constants.NUM_MECHANICS; i++)
+            mechanicsRegistry[i] = null;
     }
 
     /**
@@ -100,14 +110,17 @@ public class RepairArea {
 
         if(!endOfDay){
             while (nRequestedServices == 0) {
+                mechanicsRegistry[mechanicId] = Thread.currentThread();     // regista o thread mecânico
                 try {
                     wait();
                 } catch (InterruptedException e) {
+                    mechanicsRegistry[mechanicId] = null;                   // elimina o registo
                     return false;
                 }
             }
             nRequestedServices--;
         }
+        mechanicsRegistry[mechanicId] = null;                               // elimina o registo
         return !endOfDay;
     }
 
@@ -270,5 +283,16 @@ public class RepairArea {
 
         // notify them
         notifyAll();
+    }
+
+    /**
+     * Acordar intempestivamente um mecânico para sinalizar fim de operações.
+     * Apenas o faz quando o Manager dá como encerrado o dia de trabalho.<br>
+     *
+     * @param mechanicId id do Mecânico
+     */
+    public synchronized void endOperation(int mechanicId) {
+        if (mechanicsRegistry[mechanicId] != null && endOfDay)
+            mechanicsRegistry[mechanicId].interrupt();
     }
 }

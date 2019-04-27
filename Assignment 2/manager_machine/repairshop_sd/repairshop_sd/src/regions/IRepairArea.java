@@ -9,7 +9,7 @@ import entities.*;
  * entidades passivas do problema.<br>
  *
  * A Área de Reparação é o local onde decorrem as reparações das viaturas,
- * por parte dos Mecânicos ({@link Mechanic}), sendo que é aqui onde eles irão
+ * por parte dos Mecânicos (Mechanic), sendo que é aqui onde eles irão
  * estar a maior parte do tempo, seja a reparar viaturas, seja à espera da
  * indicação do Gerente ({@link Manager}) de que há trabalho a fazer. Nesta área
  * existe um número de peças em stock para que os Mecânicos possam substituir
@@ -26,28 +26,28 @@ public interface IRepairArea {
     /**
      * Operação markEndOfDay (chamada pelo {@link Manager})<br>
      *
-     * Marca o encerramento do dia para o {@link Mechanic}.<br>
+     * Marca o encerramento do dia para o Mechanic.<br>
      */
-    public void markEndOfDay();
+    void markEndOfDay();
 
     /**
      * Operação storePart (chamada pelo {@link Manager})<br>
      *
      * O Manager irá guardar na Repair Area as peças que foi buscar à
-     * {@link ISupplierSite}, adicionar de novo os carros que tinham peças em
-     * falta para reparação na lista de espera, e acordar o {@link Mechanic}.<br>
+     * SupplierSite, adicionar de novo os carros que tinham peças em
+     * falta para reparação na lista de espera, e acordar o Mechanic.<br>
      *
      * @param newParts peças novas a serem incluídas no stock
      */
-    public void storePart(int[] newParts);
+    void storePart(int[] newParts);
 
     /**
      * Operação registerService (chamada pelo {@link Manager})<br>
      *
-     * O Manager irá registar um pedido de reparação da viatura do {@link Customer},
-     * e notificar os {@link Mechanic} de que existe um serviço disponível.<br>
+     * O Manager irá registar um pedido de reparação da viatura do Customer,
+     * e notificar os Mechanic de que existe um serviço disponível.<br>
      *
      * @param customerId id do cliente
      */
-    public void registerService(int customerId);
+    void registerService(int customerId);
 }

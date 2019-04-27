@@ -1,8 +1,13 @@
 package entities;
 
 
+import comm.ClientCom;
+import comm.Message;
+import comm.MessageType;
+import genclass.GenericIO;
 import model.MechanicState;
 import regions.*;
+import utils.Constants;
 
 /**
  * Classe Mechanic (Mecânico)<br>
@@ -12,7 +17,7 @@ import regions.*;
  *
  * O Mecânico, quando chega ao local de trabalho, fica a aguardar
  * que haja tarefas para fazer, nomeadamente viaturas para reparar.
- * Assim que uma tarefa de reparação seja registada pelo Gerente ({@link Manager}),
+ * Assim que uma tarefa de reparação seja registada pelo Gerente (Manager),
  * o Mecânico é notificado de que existe trabalho para fazer, e de seguida
  * dirige ao Parque de Estacionamento ({@link Park}) para avaliar a viatura
  * e diagnosticar qual a peça danificada que necessita de substituição.
@@ -22,7 +27,7 @@ import regions.*;
  * reparação. Caso a peça esteja disponível, o Mecânico repara a viatura com a
  * peça, e assim que esta esteja reparada, coloca a viatura no Parque de
  * Estacionamento e informa o Gerente de que esta está pronta a ser levantada
- * pelo Cliente ({@link Customer}).<br>
+ * pelo Cliente (Customer).<br>
  *
  * @author Miguel Bras
  * @author Cristiano Vagos
@@ -36,7 +41,7 @@ public class Mechanic extends Thread {
      * O id da viatura que o Mecânico está a reparar de momento.<br>
      * Poderá ter os seguintes valores:<br>
      * <ul>
-     *  <li>o id do cliente {@link Customer}</li>
+     *  <li>o id do cliente</li>
      *  <li>-1, se nenhuma</li>
      * </ul>
      */
@@ -176,7 +181,7 @@ public class Mechanic extends Thread {
      * Marca a viatura que o Mecânico estiver a reparar de momento,
      * o id da viatura caso esteja a reparar uma viatura, -1 se nenhuma.<br>
      *
-     * @param carId o id da viatura (o mesmo que o do {@link Customer})
+     * @param carId o id da viatura (o mesmo que o do Customer)
      */
     public void setCurrentCarFixingId(int carId) {
         this.currentCarFixingId = carId;
@@ -188,7 +193,7 @@ public class Mechanic extends Thread {
      * Obtém a viatura que o Mecânico estiver a reparar de momento.
      * Devolve o id da viatura caso esteja a reparar uma viatura, -1 se nenhuma.<br>
      *
-     * @return o id da viatura (o mesmo que o do {@link Customer})
+     * @return o id da viatura (o mesmo que o do Customer)
      */
     public int getCurrentCarFixingId() {
         return this.currentCarFixingId;
@@ -204,5 +209,31 @@ public class Mechanic extends Thread {
             sleep ((long) (1 + 30 * Math.random()));
         }
         catch (InterruptedException e) {}
+    }
+
+    /**
+     *  Alertar o Mecânico do fim de operações (solicitação do serviço).
+     */
+    public void sendInterrupt()
+    {
+        ClientCom con = new ClientCom(Constants.REPAIR_SERVER_HOST, Constants.REPAIR_AREA_SERVER_PORT_NUMBER);
+        Message inMessage, outMessage;
+
+        while (!con.open ())                                  // aguarda ligação
+        {
+            try {
+                sleep ((long) (10));
+            }
+            catch (InterruptedException e) {}
+        }
+        outMessage = new Message (MessageType.REPAIR_AREA_END_OPERATION_REQ, mechanicId);   // alertar mecanico do fim de operações
+        con.writeObject (outMessage);
+        inMessage = (Message) con.readObject ();
+        if (inMessage.getMessageType() != MessageType.REPAIR_AREA_END_OPERATION_RESP)
+        { GenericIO.writelnString ("Thread " + getName () + ": Tipo inválido!");
+            GenericIO.writelnString (inMessage.toString ());
+            System.exit (1);
+        }
+        con.close ();
     }
 }

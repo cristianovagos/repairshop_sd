@@ -11,12 +11,12 @@ import regions.*;
  *
  * Inicialmente, o Cliente irá decidir por si próprio se pretende reparar a sua
  * viatura, e quando achar oportuno, dirige-se à Oficina, estacionando a sua viatura
- * no Parque de Estacionamento ({@link Park}), e dirige-se à Recepção ({@link Lounge}),
- * onde aguarda a sua vez para ser atendido pelo Gerente ({@link Manager}), que o
+ * no Parque de Estacionamento (Park), e dirige-se à Recepção (Lounge),
+ * onde aguarda a sua vez para ser atendido pelo Gerente (Manager), que o
  * irá atender tendo em vista a reparação da sua viatura própria. Caso queira, o
  * cliente poderá ter acesso a uma viatura de substituição, que caso esteja disponível,
  * ser-lhe-à dado uma chave, para que a possa levantar ao Parque de Estacionamento
- * e prosseguir com a sua vida normal no Mundo Exterior ({@link OutsideWorld}).<br>
+ * e prosseguir com a sua vida normal no Mundo Exterior (OutsideWorld).<br>
  * Assim que a reparação esteja concluída, o Gerente irá notificar o Cliente de que
  * a sua viatura está pronta a ser levantada. O Cliente assim volta à Oficina,
  * para pagar a reparação e levantar a sua viatura.<br>
@@ -90,7 +90,7 @@ public class Customer extends Thread {
      * Construtor de um Cliente<br>
      *
      * Aqui será construído o objeto referente a um Cliente.
-     * De seguida, o repositório {@link GeneralRepository} será informado de
+     * De seguida, o repositório será informado de
      * que o Cliente foi criado, mostrando o seu estado inicial.<br>
      *
      * @param id id do cliente

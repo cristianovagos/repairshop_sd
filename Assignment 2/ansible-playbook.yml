@@ -136,7 +136,7 @@
 
   - name: Copy customer jar file to customer machine
     copy: 
-      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/customer_machine/out/artifacts/customer_jar/customer.jar
+      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/customer_machine/out/artifacts/repairshop_sd_jar/repairshop_sd.jar
       dest: ./customer/
   
   # - name: Run customer jar
@@ -153,7 +153,7 @@
 
   - name: Copy mechanic jar file to mechanic machine
     copy: 
-      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/mechanic_machine/out/artifacts/mechanic_jar/mechanic.jar
+      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/mechanic_machine/out/artifacts/repairshop_sd_jar/repairshop_sd.jar
       dest: ./mechanic/
   
   # - name: Run mechanic jar
@@ -170,7 +170,7 @@
 
   - name: Copy manager jar file to manager machine
     copy: 
-      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/manager_machine/out/artifacts/manager_jar/manager.jar
+      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/manager_machine/out/artifacts/repairshop_sd_jar/repairshop_sd.jar
       dest: ./manager/
   
   # - name: Run manager jar

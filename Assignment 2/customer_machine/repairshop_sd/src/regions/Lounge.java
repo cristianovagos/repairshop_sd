@@ -115,6 +115,7 @@ public class Lounge implements ILounge {
 
         //set customer state
         ((Customer) Thread.currentThread()).setState(inMessage.getCustomerState());
+        ((Customer) Thread.currentThread()).setCarId(inMessage.getIntegerParam1());
     }
 
     /**
@@ -133,7 +134,7 @@ public class Lounge implements ILounge {
         int carKey;
         int customerID;
 
-        customerID = ((Customer)Thread.currentThread()).getCustomerId();
+        customerID = ((Customer) Thread.currentThread()).getCustomerId();
         //criar mensagem
         outMessage = new Message(MessageType.LOUNGE_COLLECT_KEY_REQ, customerID);
         //enviar e receber mensagem de resposta
@@ -149,6 +150,7 @@ public class Lounge implements ILounge {
 
         //set customer state
         ((Customer) Thread.currentThread()).setState(inMessage.getCustomerState());
+        ((Customer) Thread.currentThread()).setCarId(inMessage.getIntegerParam1());
         //get car key from the message
         carKey = inMessage.getIntegerParam1();
 

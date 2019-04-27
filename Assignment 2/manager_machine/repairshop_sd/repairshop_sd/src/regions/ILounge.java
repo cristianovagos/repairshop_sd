@@ -11,12 +11,12 @@ public interface ILounge {
      *
      * Caso hajam pedidos ao Gerente, este procede à realização
      * das tarefas pretendidas. Assim que não haja mais pedidos,
-     * a Oficina é fechada, e os Mecânicos ({@link Mechanic}) poderão
+     * a Oficina é fechada, e os Mecânicos (Mechanic) poderão
      * ir embora.<br>
      *
      * @return indicação se ainda há trabalho para fazer na Oficina
      */
-    public boolean getNextTask();
+    boolean getNextTask();
 
     /**
      * Operação appraiseSit (chamada pelo {@link Manager})<br>
@@ -24,8 +24,8 @@ public interface ILounge {
      * O Gerente avalia a próxima tarefa a desempenhar, de acordo
      * com a seguinte prioridade:<br>
      * <ul>
-     *     <li>Reabastecimento de peças para os {@link Mechanic}
-     *     poderem trabalhar na {@link IRepairArea} através da {@link ISupplierSite}</li>
+     *     <li>Reabastecimento de peças para os Mechanic
+     *     poderem trabalhar na RepairArea através da SupplierSite</li>
      *     <li>Caso haja clientes em fila de espera para obter uma chave para
      *     viatura de substituição.</li>
      *     <li>Caso haja viaturas reparadas, o Gerente vai chamar os clientes
@@ -35,12 +35,12 @@ public interface ILounge {
      *
      * @return a próxima tarefa a ser executada pelo Gerente
      */
-    public ManagerTask appraiseSit();
+    ManagerTask appraiseSit();
 
     /**
      * Operação talkToCustomer (chamada pelo {@link Manager})<br>
      *
-     * O Gerente irá atender o cliente {@link Customer} para saber o que
+     * O Gerente irá atender o cliente Customer para saber o que
      * este pretende, de uma das seguintes opções:<br>
      * <ul>
      *     <li>Reparar a sua viatura</li>
@@ -50,22 +50,22 @@ public interface ILounge {
      *
      * @return estado do cliente atual
      */
-    public CustomerState talkToCustomer();
+    CustomerState talkToCustomer();
 
     /**
      * Operação handCarKey (chamada pelo {@link Manager})<br>
      *
      * O Gerente irá dar uma das chaves das viaturas de substituição
-     * disponíveis ao {@link Customer}.<br>
+     * disponíveis ao Customer.<br>
      */
-    public void handCarKey();
+    void handCarKey();
 
     /**
      * Operação receivePayment (chamada pelo {@link Manager})<br>
      *
-     * O Gerente recebe o pagamento do serviço por parte do {@link Customer}<br>
+     * O Gerente recebe o pagamento do serviço por parte do Customer<br>
      *
      * @param customerToAttend o id do cliente a fazer pagamento
      */
-    public void receivePayment(int customerToAttend);
+    void receivePayment(int customerToAttend);
 }

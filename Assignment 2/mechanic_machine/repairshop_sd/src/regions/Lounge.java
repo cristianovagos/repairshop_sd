@@ -6,8 +6,6 @@ import comm.MessageType;
 import entities.*;
 import genclass.GenericIO;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 /**
  * Classe Lounge (Recepção)<br>
  *
@@ -15,15 +13,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * das entidades passivas do problema.<br>
  *
  * É neste local que o maior número de interações acontece, uma vez que
- * é o principal local de trabalho do Gerente ({@link Manager}) da Oficina,
+ * é o principal local de trabalho do Gerente (Manager) da Oficina,
  * que a vai gerindo consoante as necessidades e tarefas que aparecerem.
- * Atender os Clientes ({@link Customer}) quando estes chegam, fornecer
+ * Atender os Clientes (Customer) quando estes chegam, fornecer
  * chaves de substituição, entre outros.<br>
  * Os Clientes irão ter aqui um ponto de contacto com a Oficina, onde
  * estão na fila de espera para serem atendidos, ou estarão a aguardar uma
  * chave de substituição para a eventualmente receber, ou irão efetuar o
  * pagamento do serviço de reparação.<br>
- * Já os Mecânicos ({@link Mechanic}) irão aqui informar o Gerente tanto da
+ * Já os Mecânicos (Mechanic) irão aqui informar o Gerente tanto da
  * falta de peças para as reparações como para a conclusão de reparações por
  * ele pedidas anteriormente.<br>
  *
@@ -58,7 +56,7 @@ public class Lounge implements ILounge{
     /**
      * Operação letManagerKnow (chamada pelo {@link Mechanic})<br>
      * <p>
-     * O Mecânico informa o Gerente ({@link Manager}) de que não existem
+     * O Mecânico informa o Gerente (Manager) de que não existem
      * peças para que este possa reparar uma viatura.<br>
      *
      * @param partRequired peça em falta
@@ -90,8 +88,8 @@ public class Lounge implements ILounge{
      * Operação repairConcluded (chamada pelo {@link Mechanic})<br>
      * <p>
      * O Mecânico terminou de reparar uma viatura, e irá informar o Gerente
-     * ({@link Manager}) que esta está pronta a ser levantada pelo seu proprietário,
-     * o Cliente ({@link Customer}).<br>
+     * (Manager) que esta está pronta a ser levantada pelo seu proprietário,
+     * o Cliente (Customer).<br>
      */
     @Override
     public void repairConcluded() {

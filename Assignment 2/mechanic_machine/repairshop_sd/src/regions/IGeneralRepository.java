@@ -12,5 +12,5 @@ public interface IGeneralRepository {
      * @param newState o estado novo do mecânico
      * @param print indicação se será impressa a linha de estado no ficheiro de logging
      */
-    public void setMechanicState(int index, MechanicState newState, boolean print);
+    void setMechanicState(int index, MechanicState newState, boolean print);
 }
