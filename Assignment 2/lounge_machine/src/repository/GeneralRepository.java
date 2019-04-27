@@ -40,30 +40,6 @@ public class GeneralRepository implements IGeneralRepository {
     }
 
     /**
-     * Operação initializeCustomer<br>
-     *
-     * Inicializa o estado de cada um dos Customers<br>
-     *
-     * @param index índice do cliente
-     * @param requiresReplacement indicação se requer viatura de substituição
-     */
-    @Override
-    public void initializeCustomer(int index, boolean requiresReplacement) {
-        Message inMessage, outMessage;
-
-        // criar mensagem
-        outMessage = new Message(MessageType.REPOSITORY_INITIALIZE_CUSTOMER_REQ, index, requiresReplacement);
-        inMessage = communicationWithServer(outMessage);    // enviar e receber mensagem de resposta
-
-        // validar mensagem de resposta
-        if(inMessage.getMessageType() != MessageType.REPOSITORY_INITIALIZE_CUSTOMER_RESP) {
-            GenericIO.writelnString("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
-            GenericIO.writelnString(inMessage.toString());
-            System.exit(1);
-        }
-    }
-
-    /**
      * Operação setCustomerState<br>
      *
      * Altera o estado de um cliente em específico<br>
@@ -164,90 +140,6 @@ public class GeneralRepository implements IGeneralRepository {
     }
 
     /**
-     * Operação customerCarEntersPark<br>
-     *
-     * Indica que uma viatura de um cliente entrou no park<br>
-     */
-    @Override
-    public void customerCarEntersPark() {
-        Message inMessage, outMessage;
-
-        // criar mensagem
-        outMessage = new Message(MessageType.REPOSITORY_CUSTOMER_CAR_ENTERS_PARK_REQ);
-        inMessage = communicationWithServer(outMessage);    // enviar e receber mensagem de resposta
-
-        // validar mensagem de resposta
-        if(inMessage.getMessageType() != MessageType.REPOSITORY_CUSTOMER_CAR_ENTERS_PARK_RESP) {
-            GenericIO.writelnString("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
-            GenericIO.writelnString(inMessage.toString());
-            System.exit(1);
-        }
-    }
-
-    /**
-     * Operação customerCarLeavesPark<br>
-     *
-     * Indica que uma viatura de um cliente saiu do park<br>
-     */
-    @Override
-    public void customerCarLeavesPark() {
-        Message inMessage, outMessage;
-
-        // criar mensagem
-        outMessage = new Message(MessageType.REPOSITORY_CUSTOMER_CAR_LEAVES_PARK_REQ);
-        inMessage = communicationWithServer(outMessage);    // enviar e receber mensagem de resposta
-
-        // validar mensagem de resposta
-        if(inMessage.getMessageType() != MessageType.REPOSITORY_CUSTOMER_CAR_LEAVES_PARK_RESP) {
-            GenericIO.writelnString("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
-            GenericIO.writelnString(inMessage.toString());
-            System.exit(1);
-        }
-    }
-
-    /**
-     * Operação replacementCarEntersPark<br>
-     *
-     * Indica que uma viatura de substituição entrou no park<br>
-     */
-    @Override
-    public void replacementCarEntersPark() {
-        Message inMessage, outMessage;
-
-        // criar mensagem
-        outMessage = new Message(MessageType.REPOSITORY_REPLACEMENT_CAR_ENTERS_PARK_REQ);
-        inMessage = communicationWithServer(outMessage);    // enviar e receber mensagem de resposta
-
-        // validar mensagem de resposta
-        if(inMessage.getMessageType() != MessageType.REPOSITORY_REPLACEMENT_CAR_ENTERS_PARK_RESP) {
-            GenericIO.writelnString("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
-            GenericIO.writelnString(inMessage.toString());
-            System.exit(1);
-        }
-    }
-
-    /**
-     * Operação replacementCarLeavesPark<br>
-     *
-     * Indica que uma viatura de substituição saiu do park<br>
-     */
-    @Override
-    public void replacementCarLeavesPark() {
-        Message inMessage, outMessage;
-
-        // criar mensagem
-        outMessage = new Message(MessageType.REPOSITORY_REPLACEMENT_CAR_LEAVES_PARK_REQ);
-        inMessage = communicationWithServer(outMessage);    // enviar e receber mensagem de resposta
-
-        // validar mensagem de resposta
-        if(inMessage.getMessageType() != MessageType.REPOSITORY_REPLACEMENT_CAR_LEAVES_PARK_RESP) {
-            GenericIO.writelnString("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
-            GenericIO.writelnString(inMessage.toString());
-            System.exit(1);
-        }
-    }
-
-    /**
      * Operação setCustomersInQueue<br>
      *
      * Altera o valor dos clientes na fila no Lounge<br>
@@ -318,96 +210,6 @@ public class GeneralRepository implements IGeneralRepository {
     }
 
     /**
-     * Operação managerRequestedService<br>
-     *
-     * Incrementa o número de serviços pedidos pelo Manager na RepairArea<br>
-     */
-    @Override
-    public void managerRequestedService() {
-        Message inMessage, outMessage;
-
-        // criar mensagem
-        outMessage = new Message(MessageType.REPOSITORY_MANAGER_REQUESTED_SERVICE_REQ);
-        inMessage = communicationWithServer(outMessage);    // enviar e receber mensagem de resposta
-
-        // validar mensagem de resposta
-        if(inMessage.getMessageType() != MessageType.REPOSITORY_MANAGER_REQUESTED_SERVICE_RESP) {
-            GenericIO.writelnString("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
-            GenericIO.writelnString(inMessage.toString());
-            System.exit(1);
-        }
-    }
-
-    /**
-     * Operação setStockParts<br>
-     *
-     * Altera o array referente ao número de peças em stock na RepairArea<br>
-     *
-     * @param stockParts lista com número de peças em stock
-     */
-    @Override
-    public void setStockParts(int[] stockParts, boolean print) {
-        Message inMessage, outMessage;
-
-        // criar mensagem
-        outMessage = new Message(MessageType.REPOSITORY_SET_STOCK_PARTS_REQ, stockParts, print);
-        inMessage = communicationWithServer(outMessage);    // enviar e receber mensagem de resposta
-
-        // validar mensagem de resposta
-        if(inMessage.getMessageType() != MessageType.REPOSITORY_SET_STOCK_PARTS_RESP) {
-            GenericIO.writelnString("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
-            GenericIO.writelnString(inMessage.toString());
-            System.exit(1);
-        }
-    }
-
-    /**
-     * Operação addMissingPart<br>
-     *
-     * Marca uma dada peça como inexistente no stock da RepairArea<br>
-     *
-     * @param partIndex o índice da peça
-     */
-    @Override
-    public void addMissingPart(int partIndex) {
-        Message inMessage, outMessage;
-
-        // criar mensagem
-        outMessage = new Message(MessageType.REPOSITORY_ADD_MISSING_PART_REQ, partIndex);
-        inMessage = communicationWithServer(outMessage);    // enviar e receber mensagem de resposta
-
-        // validar mensagem de resposta
-        if(inMessage.getMessageType() != MessageType.REPOSITORY_ADD_MISSING_PART_RESP) {
-            GenericIO.writelnString("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
-            GenericIO.writelnString(inMessage.toString());
-            System.exit(1);
-        }
-    }
-
-    /**
-     * Operação removeMissingPart<br>
-     *
-     * Marca uma dada peça como existente no stock da RepairArea<br>
-     *
-     * @param partIndex o índice da peça
-     */
-    @Override
-    public void removeMissingPart(int partIndex) {
-        Message inMessage, outMessage;
-
-        // criar mensagem
-        outMessage = new Message(MessageType.REPOSITORY_REMOVE_MISSING_PART_REQ, partIndex);
-        inMessage = communicationWithServer(outMessage);    // enviar e receber mensagem de resposta
-
-        // validar mensagem de resposta
-        if(inMessage.getMessageType() != MessageType.REPOSITORY_REMOVE_MISSING_PART_RESP) {
-            GenericIO.writelnString("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
-            GenericIO.writelnString(inMessage.toString());
-            System.exit(1);
-        }
-    }
-
-    /**
      * Operação setPartMissingAlert<br>
      *
      * Altera o valor de um dado índice do array de alerta de peças em falta<br>
@@ -426,29 +228,6 @@ public class GeneralRepository implements IGeneralRepository {
 
         // validar mensagem de resposta
         if(inMessage.getMessageType() != MessageType.REPOSITORY_SET_MISSING_PART_ALERT_RESP) {
-            GenericIO.writelnString("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
-            GenericIO.writelnString(inMessage.toString());
-            System.exit(1);
-        }
-    }
-
-    /**
-     * Operação setSoldParts<br>
-     *
-     * Altera o valor do array referente ao número de peças vendidas pela SupplierSite<br>
-     *
-     * @param soldParts array com o total de peças vendidas
-     */
-    @Override
-    public void setSoldParts(int[] soldParts) {
-        Message inMessage, outMessage;
-
-        // criar mensagem
-        outMessage = new Message(MessageType.REPOSITORY_SET_SOLD_PARTS_REQ, soldParts);
-        inMessage = communicationWithServer(outMessage);    // enviar e receber mensagem de resposta
-
-        // validar mensagem de resposta
-        if(inMessage.getMessageType() != MessageType.REPOSITORY_SET_SOLD_PARTS_RESP) {
             GenericIO.writelnString("Thread " + ( Thread.currentThread()).getName()+ ": Tipo inválido!");
             GenericIO.writelnString(inMessage.toString());
             System.exit(1);

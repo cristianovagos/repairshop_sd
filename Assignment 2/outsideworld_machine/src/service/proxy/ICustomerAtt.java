@@ -36,40 +36,4 @@ public interface ICustomerAtt {
      * @return o id do Cliente
      */
     int getCustomerId();
-
-    /**
-     * Altera o id do carro do Cliente
-     * @param carId novo id do carro do Cliente
-     */
-    void setCustomerCarId(int carId);
-
-    /**
-     * Obtém o id do carro do Cliente
-     * @return id do carro do Cliente
-     */
-    int getCustomerCarId();
-
-    /**
-     * Altera a indicação se o Cliente pretende viatura de substituição
-     * @param wantsReplacementCar indicação se o Cliente pretende viatura de substituição
-     */
-    void setWantsReplacementCar(boolean wantsReplacementCar);
-
-    /**
-     * Obtém a indicação se o Cliente pretende viatura de substituição
-     * @return indicação se o Cliente pretende viatura de substituição
-     */
-    boolean getWantsReplacementCar();
-
-    /**
-     * Altera a chave do carro do cliente
-     * @param key chave do carro do cliente
-     */
-    void setKey(int key);
-
-    /**
-     * Obtém a chave do carro do cliente
-     * @return chave do carro do cliente
-     */
-    int getKey();
 }

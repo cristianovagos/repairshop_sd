@@ -1,6 +1,5 @@
 package repository;
 
-import model.CustomerState;
 import model.ManagerState;
 import model.MechanicState;
 
@@ -14,38 +13,6 @@ import model.MechanicState;
  * @author Cristiano Vagos
  */
 public interface IGeneralRepository {
-    /**
-     * Operação initializeCustomer<br>
-     *
-     * Inicializa o estado de cada um dos Customers<br>
-     *
-     * @param index índice do cliente
-     * @param requiresReplacement indicação se requer viatura de substituição
-     */
-    void initializeCustomer(int index, boolean requiresReplacement);
-
-    /**
-     * Operação setCustomerState<br>
-     *
-     * Altera o estado de um cliente em específico<br>
-     *
-     * @param index o índice do cliente em questão
-     * @param newState o estado novo do cliente
-     * @param print indicação se será impressa a linha de estado no ficheiro de logging
-     */
-    void setCustomerState(int index, CustomerState newState, boolean print);
-
-    /**
-     * Operação setCustomerCar<br>
-     *
-     * Altera a viatura atual de um cliente em específico<br>
-     *
-     * @param index o índice do cliente em questão
-     * @param carId o identificador da viatura
-     *              (-1 se nenhuma, id do customer se a própria, ou 100..102 para viatura de substituição)
-     * @param print indicação se será impressa a linha de estado no ficheiro de logging
-     */
-    void setCustomerCar(int index, int carId, boolean print);
 
     /**
      * Operação setManagerState<br>
@@ -67,62 +34,6 @@ public interface IGeneralRepository {
      * @param print indicação se será impressa a linha de estado no ficheiro de logging
      */
     void setMechanicState(int index, MechanicState newState, boolean print);
-
-    /**
-     * Operação customerCarEntersPark<br>
-     *
-     * Indica que uma viatura de um cliente entrou no park<br>
-     */
-    void customerCarEntersPark();
-
-    /**
-     * Operação customerCarLeavesPark<br>
-     *
-     * Indica que uma viatura de um cliente saiu do park<br>
-     */
-    void customerCarLeavesPark();
-
-    /**
-     * Operação replacementCarEntersPark<br>
-     *
-     * Indica que uma viatura de substituição entrou no park<br>
-     */
-    void replacementCarEntersPark();
-
-    /**
-     * Operação replacementCarLeavesPark<br>
-     *
-     * Indica que uma viatura de substituição saiu do park<br>
-     */
-    void replacementCarLeavesPark();
-
-    /**
-     * Operação setCustomersInQueue<br>
-     *
-     * Altera o valor dos clientes na fila no Lounge<br>
-     *
-     * @param customersInQueue número de clientes na fila no Lounge
-     * @param print indicação se será impressa a linha de estado no ficheiro de logging
-     */
-    void setCustomersInQueue(int customersInQueue, boolean print);
-
-    /**
-     * Operação setCustomersInQueueForKey<br>
-     *
-     * Altera o valor dos clientes na fila para obter uma chave para viatura de substituição no Lounge<br>
-     *
-     * @param customersInQueueForKey número de clientes na fila à espera de chave para viatura de substituição
-     */
-    void setCustomersInQueueForKey(int customersInQueueForKey);
-
-    /**
-     * Operação setTotalRepairedCars<br>
-     *
-     * Altera o valor do total de carros reparados<br>
-     *
-     * @param repairedCars total de carros reparados
-     */
-    void setTotalRepairedCars(int repairedCars);
 
     /**
      * Operação managerRequestedService<br>
@@ -168,22 +79,4 @@ public interface IGeneralRepository {
      * @param print indicação se será impressa a linha de estado no ficheiro de logging
      */
     void setPartMissingAlert(int partIndex, boolean value, boolean print);
-
-    /**
-     * Operação setSoldParts<br>
-     *
-     * Altera o valor do array referente ao número de peças vendidas pela SupplierSite<br>
-     *
-     * @param soldParts array com o total de peças vendidas
-     */
-    void setSoldParts(int[] soldParts);
-
-    /**
-     * Operação setCustomerCarRepaired<br>
-     *
-     * Marca um dado carro como reparado
-     *
-     * @param carIndex o índice do carro
-     */
-    void setCustomerCarRepaired(int carIndex);
 }

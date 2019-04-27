@@ -36,28 +36,4 @@ public interface IManagerAtt {
      * @return indicação de primeira execução
      */
     boolean getFirstRun();
-
-    /**
-     * Altera o cesto de compras do Manager
-     * @param partsBasket novo cesto de compras do Manager
-     */
-    void setPartsBasket(int[] partsBasket);
-
-    /**
-     * Obtém o cesto de compras do Manager
-     * @return cesto de compras do Manager
-     */
-    int[] getPartsBasket();
-
-    /**
-     * Altera o Cliente a ser atendido de momento pelo Manager
-     * @param customer id do cliente
-     */
-    void setCurrentlyAttendingCustomer(int customer);
-
-    /**
-     * Obtém o id do cliente que está a ser atendido de momento pelo Manager
-     * @return id do cliente
-     */
-    int getCurrentlyAttendingCustomer();
 }

@@ -219,42 +219,6 @@ public class ClientProxy extends Thread implements IManagerAtt, ICustomerAtt, IM
     }
 
     /**
-     * Altera a indicação se o Cliente pretende viatura de substituição
-     * @param wantsReplacementCar indicação se o Cliente pretende viatura de substituição
-     */
-    @Override
-    public void setWantsReplacementCar(boolean wantsReplacementCar) {
-        this.wantsReplacementCar = wantsReplacementCar;
-    }
-
-    /**
-     * Obtém a indicação se o Cliente pretende viatura de substituição
-     * @return indicação se o Cliente pretende viatura de substituição
-     */
-    @Override
-    public boolean getWantsReplacementCar() {
-        return wantsReplacementCar;
-    }
-
-    /**
-     * Altera a chave do carro do cliente
-     * @param key chave do carro do cliente
-     */
-    @Override
-    public void setKey(int key) {
-        this.key = key;
-    }
-
-    /**
-     * Obtém a chave do carro do cliente
-     * @return chave do carro do cliente
-     */
-    @Override
-    public int getKey() {
-        return key;
-    }
-
-    /**
      * Altera o estado interno do Manager
      * @param managerState estado novo do Manager
      */
@@ -288,24 +252,6 @@ public class ClientProxy extends Thread implements IManagerAtt, ICustomerAtt, IM
     @Override
     public boolean getFirstRun() {
         return firstRun;
-    }
-
-    /**
-     * Altera o cesto de compras do Manager
-     * @param partsBasket novo cesto de compras do Manager
-     */
-    @Override
-    public void setPartsBasket(int[] partsBasket) {
-        this.partsBasket = partsBasket;
-    }
-
-    /**
-     * Obtém o cesto de compras do Manager
-     * @return cesto de compras do Manager
-     */
-    @Override
-    public int[] getPartsBasket() {
-        return partsBasket;
     }
 
     /**

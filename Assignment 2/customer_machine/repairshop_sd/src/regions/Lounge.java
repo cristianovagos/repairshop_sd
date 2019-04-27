@@ -152,7 +152,6 @@ public class Lounge implements ILounge {
     @Override
     public void payForTheService() {
         Message inMessage, outMessage;
-        int carKey = -1;
         int customerID;
 
         customerID = ((Customer)Thread.currentThread()).getCustomerId();
