@@ -8,4 +8,4 @@ This README will be updated throughout the development of the stages of project.
 
 ### Developers and collaborators:
 - [Cristiano Vagos](http://github.com/cristianovagos)
-- [Miguel Bras](http://github.com/blaziusadler)
+- [Miguel Bras](http://github.com/miguelbras)

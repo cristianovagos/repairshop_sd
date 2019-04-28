@@ -34,11 +34,8 @@
 
   - name: Copy repository jar file to repository machine
     copy: 
-      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/generalrepository_machine/out/artifacts/generalrepository_jar/generalrepository.jar
+      src: "{{ playbook_dir }}/generalrepository_machine/repository.jar"
       dest: ./repository/
-  
-  # - name: Run repository jar
-  #   command: java -jar ./repository/generalrepository.jar
 
 # LOUNGE
 
@@ -51,11 +48,8 @@
 
   - name: Copy lounge jar file to lounge machine
     copy: 
-      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/lounge_machine/out/artifacts/lounge_jar/lounge.jar
+      src: "{{ playbook_dir }}/lounge_machine/lounge.jar"
       dest: ./lounge/
-  
-  # - name: Run lounge jar
-  #   command: java -jar ./lounge/lounge.jar
 
 # OUTSIDE WORLD
 
@@ -68,11 +62,8 @@
 
   - name: Copy OutsideWorld jar file to OutsideWorld machine
     copy: 
-      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/outsideworld_machine/out/artifacts/outsideworld_jar/outsideworld.jar
+      src: "{{ playbook_dir }}/outsideworld_machine/outsideworld.jar"
       dest: ./outsideworld/
-  
-  # - name: Run outsideworld jar
-  #   command: java -jar ./outsideworld/outsideworld.jar
 
 # PARK
 
@@ -85,11 +76,8 @@
 
   - name: Copy Park jar file to Park machine
     copy: 
-      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/park_machine/out/artifacts/park_jar/park.jar
+      src: "{{playbook_dir}}/park_machine/park.jar"
       dest: ./park/
-  
-  # - name: Run park jar
-  #   command: java -jar ./park/park.jar
 
 # SUPPLIER SITE
 
@@ -102,11 +90,8 @@
 
   - name: Copy SupplierSite jar file to SupplierSite machine
     copy: 
-      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/suppliersite_machine/out/artifacts/suppliersite_jar/suppliersite.jar
+      src: "{{playbook_dir}}/suppliersite_machine/suppliersite.jar"
       dest: ./suppliersite/
-  
-  # - name: Run suppliersite jar
-  #   command: java -jar ./suppliersite/suppliersite.jar
 
 # REPAIR AREA
 
@@ -119,11 +104,8 @@
 
   - name: Copy repairarea jar file to repairarea machine
     copy: 
-      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/repairarea_machine/out/artifacts/repairarea_jar/repairarea.jar
+      src: "{{playbook_dir}}/repairarea_machine/repairarea.jar"
       dest: ./repairarea/
-  
-  # - name: Run suppliersite jar
-  #   command: java -jar ./repairarea/repairarea.jar
 
 # CUSTOMER
 
@@ -136,11 +118,8 @@
 
   - name: Copy customer jar file to customer machine
     copy: 
-      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/customer_machine/out/artifacts/repairshop_sd_jar/repairshop_sd.jar
+      src: "{{playbook_dir}}/customer_machine/customer.jar"
       dest: ./customer/
-  
-  # - name: Run customer jar
-  #   command: java -jar ./customer/customer.jar
 
 # MECHANIC
 
@@ -153,11 +132,8 @@
 
   - name: Copy mechanic jar file to mechanic machine
     copy: 
-      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/mechanic_machine/out/artifacts/repairshop_sd_jar/repairshop_sd.jar
+      src: "{{playbook_dir}}/mechanic_machine/mechanic.jar"
       dest: ./mechanic/
-  
-  # - name: Run mechanic jar
-  #   command: java -jar ./mechanic/mechanic.jar
 
 # MANAGER
 
@@ -170,8 +146,5 @@
 
   - name: Copy manager jar file to manager machine
     copy: 
-      src: /home/cvagos/Área de Trabalho/SD/Projeto/Repo/repairshop_sd/Assignment 2/manager_machine/out/artifacts/repairshop_sd_jar/repairshop_sd.jar
+      src: "{{playbook_dir}}/manager_machine/manager.jar"
       dest: ./manager/
-  
-  # - name: Run manager jar
-  #   command: java -jar ./manager/manager.jar
