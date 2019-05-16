@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="repairarea:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/repairarea_jar</output-path>
+    <root id="archive" name="repairarea.jar">
+      <element id="module-output" name="repairarea" />
+    </root>
+  </artifact>
+</component>

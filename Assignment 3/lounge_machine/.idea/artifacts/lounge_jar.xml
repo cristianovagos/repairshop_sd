@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="lounge:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/lounge_jar</output-path>
+    <root id="archive" name="lounge.jar">
+      <element id="module-output" name="lounge" />
+    </root>
+  </artifact>
+</component>

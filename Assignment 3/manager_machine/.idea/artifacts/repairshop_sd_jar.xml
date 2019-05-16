@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="repairshop_sd:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/repairshop_sd_jar</output-path>
+    <root id="archive" name="repairshop_sd.jar">
+      <element id="module-output" name="repairshop_sd" />
+    </root>
+  </artifact>
+</component>
