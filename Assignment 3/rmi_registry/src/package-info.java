@@ -4,4 +4,3 @@
  *  Communication is based in Java RMI.
  */
 
-package registry;
