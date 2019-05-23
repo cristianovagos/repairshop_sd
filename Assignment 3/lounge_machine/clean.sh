@@ -1,7 +1,4 @@
 #!/bin/bash
 
-# delete classes directory
-rm -rf classes/
-
-# delete jar generated
-rm lounge.jar
+# delete dir_lounge_machine directory
+rm -rf dir_lounge_machine/

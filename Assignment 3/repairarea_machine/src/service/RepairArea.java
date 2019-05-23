@@ -113,19 +113,18 @@ public class RepairArea {
 //        ((ClientProxy) Thread.currentThread()).setMechanicState(MechanicState.WAITING_FOR_WORK);
         repository.setMechanicState(mechanicId, MechanicState.WAITING_FOR_WORK, !firstRun);
 
-        if(!endOfDay){
-            while (nRequestedServices == 0) {
-                mechanicsRegistry[mechanicId] = Thread.currentThread();     // regista o thread mecânico
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    mechanicsRegistry[mechanicId] = null;                   // elimina o registo
-                    return false;
-                }
+        while (nRequestedServices == 0 && !endOfDay) {
+            mechanicsRegistry[mechanicId] = Thread.currentThread();     // regista o thread mecânico
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                mechanicsRegistry[mechanicId] = null;                   // elimina o registo
+                return false;
             }
-            nRequestedServices--;
         }
+        nRequestedServices--;
         mechanicsRegistry[mechanicId] = null;                               // elimina o registo
+
         return !endOfDay;
     }
 
@@ -305,6 +304,7 @@ public class RepairArea {
     }
 
     /**
+     * (Chamado pelo Mecânico)
      * Acordar intempestivamente um mecânico para sinalizar fim de operações.
      * Apenas o faz quando o Manager dá como encerrado o dia de trabalho.<br>
      *

@@ -1,7 +1,4 @@
 #!/bin/bash
 
-# delete classes directory
-rm -rf classes/
-
-# delete jar generated
-rm repairarea.jar
+# delete dir_repairarea_machine directory
+rm -rf dir_repairarea_machine/

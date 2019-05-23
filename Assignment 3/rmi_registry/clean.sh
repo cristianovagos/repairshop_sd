@@ -1,7 +1,4 @@
 #!/bin/bash
 
-# delete classes directory
-rm -rf classes/
-
-# delete jar generated
-rm rmi_registry.jar
+# delete dir_rmi_registry directory
+rm -rf dir_rmi_registry/

@@ -1,7 +1,4 @@
 #!/bin/bash
 
-# delete classes directory
-rm -rf classes/
-
-# delete jar generated
-rm customer.jar
+# delete dir_customer_machine directory
+rm -rf dir_customer_machine/

@@ -1,7 +1,4 @@
 #!/bin/bash
 
-# delete classes directory
-rm -rf classes/
-
-# delete jar generated
-rm mechanic.jar
+# delete dir_mechanic_machine directory
+rm -rf dir_mechanic_machine/

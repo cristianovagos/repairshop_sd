@@ -1,7 +1,4 @@
 #!/bin/bash
 
-# delete classes directory
-rm -rf classes/
-
-# delete jar generated
-rm outsideworld.jar
+# delete dir_outsideworld_machine directory
+rm -rf dir_outsideworld_machine/

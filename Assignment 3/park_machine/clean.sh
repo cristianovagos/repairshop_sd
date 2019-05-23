@@ -1,7 +1,4 @@
 #!/bin/bash
 
-# delete classes directory
-rm -rf classes/
-
-# delete jar generated
-rm park.jar
+# delete dir_park_machine directory
+rm -rf dir_park_machine/

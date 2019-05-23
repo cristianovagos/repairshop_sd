@@ -1,7 +1,4 @@
 #!/bin/bash
 
-# delete classes directory
-rm -rf classes/
-
-# delete jar generated
-rm repository.jar
+# delete dir_generalrepository_machine directory
+rm -rf dir_generalrepository_machine/
