@@ -54,8 +54,7 @@ public class ClientMechanic {
         //Aguarda pelo fim da simulação
         for(int i = 0; i < Constants.NUM_MECHANICS; i++) {
             while (mechanics[i].isAlive ()) {
-                mechanics[i].sendInterrupt();       // envia pedido de interrupção para a RepairArea, onde o Mecânico
-                Thread.yield ();                    // aguarda mais trabalho para fazer. Só termina quando o Manager dá ordem
+                Thread.yield ();
             }
             try {
                 mechanics[i].join();

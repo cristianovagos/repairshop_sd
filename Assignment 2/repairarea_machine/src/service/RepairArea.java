@@ -108,8 +108,8 @@ public class RepairArea {
         ((ClientProxy) Thread.currentThread()).setMechanicState(MechanicState.WAITING_FOR_WORK);
         repository.setMechanicState(mechanicId, MechanicState.WAITING_FOR_WORK, !firstRun);
 
-        if(!endOfDay){
-            while (nRequestedServices == 0) {
+//        if(!endOfDay){
+            while (nRequestedServices == 0 && !endOfDay) {
                 mechanicsRegistry[mechanicId] = Thread.currentThread();     // regista o thread mecânico
                 try {
                     wait();
@@ -119,7 +119,7 @@ public class RepairArea {
                 }
             }
             nRequestedServices--;
-        }
+//        }
         mechanicsRegistry[mechanicId] = null;                               // elimina o registo
         return !endOfDay;
     }
