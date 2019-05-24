@@ -84,12 +84,6 @@ public class Park implements IPark {
      */
     public synchronized void goToRepairShop(int customerId, int carId) throws RemoteException {
         // update Customer state
-//        ((ClientProxy) Thread.currentThread()).setCustomerState(CustomerState.PARK);
-
-//        int customerId = ((ClientProxy) Thread.currentThread()).getCustomerId();
-//        int carId = ((ClientProxy) Thread.currentThread()).getCustomerCarId();
-
-        // update interfaces
         repository.setCustomerState(customerId, CustomerState.PARK, false);
 
         if(customerId != carId) {
@@ -114,17 +108,10 @@ public class Park implements IPark {
      * @exception RemoteException se a invocação do método remoto falhar
      */
     public synchronized void findCar(int replacementCar, int customerId) throws RemoteException {
-        // update Customer state
-//        ((ClientProxy) Thread.currentThread()).setCustomerState(CustomerState.PARK);
-
-        // update Customer current car ID
-//        ((ClientProxy) Thread.currentThread()).setCustomerCarId(replacementCar);
-
         // Replacement car is not on Park
         replacementCars[replacementCar - 100] = false;
 
-        // update interfaces
-//        int customerId = ((ClientProxy) Thread.currentThread()).getCustomerId();
+        // update Customer state
         repository.setCustomerState(customerId, CustomerState.PARK, false);
         repository.setCustomerCar(customerId, replacementCar, false);
         repository.replacementCarLeavesPark();
@@ -139,15 +126,10 @@ public class Park implements IPark {
      * @exception RemoteException se a invocação do método remoto falhar
      */
     public synchronized void collectCar(int customerId) throws RemoteException {
-        // update Customer state
-//        ((ClientProxy) Thread.currentThread()).setCustomerState(CustomerState.PARK);
-
-        // Customer car is not on Park, updating values
-//        int customerId = ((ClientProxy) Thread.currentThread()).getCustomerId();
-//        ((ClientProxy) Thread.currentThread()).setCustomerCarId(customerId);
+        // Customer car is not on Park
         customerCars[customerId] = false;
 
-        // update interfaces
+        // update Customer state
         repository.setCustomerState(customerId, CustomerState.PARK, false);
         repository.setCustomerCar(customerId, customerId, false);
         repository.customerCarLeavesPark();
@@ -165,7 +147,6 @@ public class Park implements IPark {
      */
     public synchronized int getVehicle(int customerId) throws RemoteException {
         // Customer car is not on Park
-//        int customerId = ((ClientProxy) Thread.currentThread()).getCurrentCarFixingId();
         customerCars[customerId] = false;
 
         // update interfaces
@@ -185,7 +166,6 @@ public class Park implements IPark {
      */
     public synchronized void returnVehicle(int customerId) throws RemoteException {
         // Customer car is now on Park
-//        int customerId = ((ClientProxy) Thread.currentThread()).getCurrentCarFixingId();
         customerCars[customerId] = true;
 
         // update interfaces

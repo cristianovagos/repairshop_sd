@@ -45,7 +45,7 @@ public class SupplierSite implements ISupplierSite {
 
     /**
      * Referência para o Repositório
-     * @see GeneralRepository
+     * @see IGeneralRepository
      */
     private IGeneralRepository repository;
 
@@ -57,7 +57,7 @@ public class SupplierSite implements ISupplierSite {
      * @param nParts número de tipos de peças
      * @param nMaxParts número máximo de peças unitárias a serem
      *                  incluídas no carrinho de compras
-     * @param repo referência para o Repositório {@link GeneralRepository}
+     * @param repo referência para o Repositório {@link IGeneralRepository}
      */
     public SupplierSite (int nParts, int nMaxParts, IGeneralRepository repo) {
         this.repository = repo;
@@ -79,7 +79,6 @@ public class SupplierSite implements ISupplierSite {
      */
     public synchronized int[] goToSupplier() throws RemoteException {
         // Update Manager state
-//        ((ClientProxy) Thread.currentThread()).setManagerState(ManagerState.GETTING_NEW_PARTS);
         repository.setManagerState(ManagerState.GETTING_NEW_PARTS, false);
 
         /* Fill up the Manager shopping cart with parts.

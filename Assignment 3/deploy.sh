@@ -24,7 +24,6 @@ bash build.sh
 printf "Transferring the files into each machine...\n"
 
 printf "\nTransferring the files into RMI_REGISTRY server...\n"
-# ssh $rmi_registry 'mkdir -p /home/$user/Public/classes'
 ssh $rmi_registry 'mkdir -p rmi_registry; mkdir -p Public/classes/utils'
 scp -r ./rmi_registry/dir_rmi_registry/interfaces/ $rmi_registry:/home/$user/Public/classes/
 scp -r ./lounge_machine/dir_lounge_machine/interfaces/ ./lounge_machine/dir_lounge_machine/model/ $rmi_registry:/home/$user/Public/classes/

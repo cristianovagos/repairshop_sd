@@ -181,7 +181,6 @@ public class Lounge implements ILounge {
      */
     public synchronized void queueIn(boolean repairCompleted, int customerId) throws RemoteException {
         // customer is in repair shop queue
-//        int customerId = ((ClientProxy) Thread.currentThread()).getCustomerId();
         customerQueue.write(customerId);
         numCustomerQueue++;
         repository.setCustomersInQueue(numCustomerQueue, false);
@@ -191,7 +190,6 @@ public class Lounge implements ILounge {
         notifyAll();
 
         // customer is at reception
-//        ((ClientProxy) Thread.currentThread()).setCustomerState(CustomerState.RECEPTION);
         repository.setCustomerState(customerId, CustomerState.RECEPTION, true);
 
         if (repairCompleted) {
@@ -227,15 +225,10 @@ public class Lounge implements ILounge {
      * @exception RemoteException se a invocação do método remoto falhar
      */
     public synchronized void talkWithManager(int customerId) throws RemoteException {
-        // talk with manager
-
-        // update state and interfaces
-//        int customerId = ((ClientProxy) Thread.currentThread()).getCustomerId();
-//        ((ClientProxy) Thread.currentThread()).setCustomerState(CustomerState.RECEPTION_TALK_WITH_MANAGER);
+        // update state
         repository.setCustomerState(customerId, CustomerState.RECEPTION_TALK_WITH_MANAGER, false);
 
         // give manager the customers car key
-//        ((ClientProxy) Thread.currentThread()).setCustomerCarId(-1);
         repository.setCustomerCar(customerId, -1, true);
     }
 
@@ -252,8 +245,6 @@ public class Lounge implements ILounge {
      */
     public synchronized int collectKey(int customerId) throws RemoteException {
         // update state and interfaces
-//        int customerId = ((ClientProxy) Thread.currentThread()).getCustomerId();
-//        ((ClientProxy) Thread.currentThread()).setCustomerState(CustomerState.WAITING_FOR_REPLACE_CAR);
         repository.setCustomerState(customerId, CustomerState.WAITING_FOR_REPLACE_CAR, false);
 
         // customer is on the queue waiting for a replacement car key
@@ -274,7 +265,6 @@ public class Lounge implements ILounge {
 
         // get the replacement car assigned
         int replacementCarKey = customerWithReplacementKey[customerId];
-//        ((ClientProxy) Thread.currentThread()).setCustomerCarId(replacementCarKey);
         repository.setCustomerCar(customerId, replacementCarKey, true);
 
         return replacementCarKey;
@@ -292,8 +282,6 @@ public class Lounge implements ILounge {
      */
     public synchronized void payForTheService(int customerId) throws RemoteException {
         // update state and interfaces
-//        int customerId = ((ClientProxy) Thread.currentThread()).getCustomerId();
-//        ((ClientProxy) Thread.currentThread()).setCustomerState(CustomerState.RECEPTION_PAYING);
         repository.setCustomerState(customerId, CustomerState.RECEPTION_PAYING, true);
     }
 
@@ -312,9 +300,6 @@ public class Lounge implements ILounge {
      */
     public synchronized boolean getNextTask(boolean firstRun) throws RemoteException {
         // update state and interfaces
-//        ((ClientProxy) Thread.currentThread()).setManagerState(ManagerState.CHECKING_WHAT_TO_DO);
-//        boolean firstRun = ((ClientProxy) Thread.currentThread()).getFirstRun();
-//        if (firstRun) ((ClientProxy) Thread.currentThread()).setFirstRun(false);
         repository.setManagerState(ManagerState.CHECKING_WHAT_TO_DO, !firstRun);
 
         //manager will mark end of the day
@@ -361,7 +346,6 @@ public class Lounge implements ILounge {
         else if (numCarsRepairedQueue > 0) {
             int customerToCall = (int) carsRepairedQueue.read();
             numCarsRepairedQueue--;
-//            ((ClientProxy) Thread.currentThread()).setCurrentlyAttendingCustomer(customerToCall);
             return new Pair<>(ManagerTask.PHONE_CUSTOMER, customerToCall);
         }
         else if (numCustomerQueue > 0)
@@ -386,7 +370,6 @@ public class Lounge implements ILounge {
      */
     public synchronized Pair talkToCustomer() throws RemoteException {
         // update state and interfaces
-//        ((ClientProxy) Thread.currentThread()).setManagerState(ManagerState.ATTENDING_CUSTOMER);
         repository.setManagerState(ManagerState.ATTENDING_CUSTOMER, false);
 
         if (numReplacementCarsAvailable > 0 && numCustomerReplacementCarKeyQueue > 0) {
@@ -405,13 +388,11 @@ public class Lounge implements ILounge {
             if (waitForPayment[customerToAttend]) {
                 // customer wants to pay
                 waitForPayment[customerToAttend] = false;
-//                ((ClientProxy) Thread.currentThread()).setCurrentlyAttendingCustomer(customerToAttend);
                 notifyAll();
                 return new Pair<>(CustomerState.RECEPTION_PAYING, customerToAttend);
             } else if (waitForRepair[customerToAttend]) {
                 // customer wants to repair his car
                 waitForRepair[customerToAttend] = false;
-//                ((ClientProxy) Thread.currentThread()).setCurrentlyAttendingCustomer(customerToAttend);
                 notifyAll();
                 return new Pair<>(CustomerState.RECEPTION_REPAIR, customerToAttend);
             }
@@ -429,7 +410,6 @@ public class Lounge implements ILounge {
      */
     public synchronized void handCarKey() throws RemoteException {
         // update state and interfaces
-//        ((ClientProxy) Thread.currentThread()).setManagerState(ManagerState.ATTENDING_CUSTOMER);
         repository.setManagerState(ManagerState.ATTENDING_CUSTOMER, false);
 
         // get first customer in queue waiting for replacement car
@@ -453,7 +433,6 @@ public class Lounge implements ILounge {
      */
     public synchronized void receivePayment(int customerToAttend) throws RemoteException {
         // update state and interfaces
-//        ((ClientProxy) Thread.currentThread()).setManagerState(ManagerState.ATTENDING_CUSTOMER);
         repository.setManagerState(ManagerState.ATTENDING_CUSTOMER, true);
 
         // let customer know that he needs to pay
@@ -483,8 +462,6 @@ public class Lounge implements ILounge {
      */
     public synchronized void letManagerKnow(int partRequired, int mechanicId) throws RemoteException {
         // update state and interfaces
-//        int mechanicId = ((ClientProxy) Thread.currentThread()).getMechanicId();
-//        ((ClientProxy) Thread.currentThread()).setMechanicState(MechanicState.ALERTING_MANAGER_FOR_PARTS);
         repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER_FOR_PARTS, false);
 
         // mark part as needed to replenish
@@ -509,12 +486,9 @@ public class Lounge implements ILounge {
      */
     public synchronized void repairConcluded(int mechanicId, int carFixed) throws RemoteException {
         // update state and interfaces
-//        int mechanicId = ((ClientProxy) Thread.currentThread()).getMechanicId();
-//        ((ClientProxy) Thread.currentThread()).setMechanicState(MechanicState.ALERTING_MANAGER_REPAIR_CONCLUDED);
         repository.setMechanicState(mechanicId, MechanicState.ALERTING_MANAGER_REPAIR_CONCLUDED, false);
 
         // add car to the repaired cars queue
-//        int carFixed = ((ClientProxy) Thread.currentThread()).getCurrentCarFixingId();
         repository.setCustomerCarRepaired(carFixed);
         carsRepairedQueue.write(carFixed);
         numCarsRepairedQueue++;

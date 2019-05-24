@@ -6,7 +6,6 @@ import interfaces.ILounge;
 import interfaces.IPark;
 import interfaces.IRepairArea;
 import model.MechanicState;
-import utils.Constants;
 
 import java.rmi.RemoteException;
 
@@ -121,9 +120,9 @@ public class Mechanic extends Thread {
                 int partRequired = park.getVehicle(currentCarFixingId);
 
                 boolean hasPart = repairArea.getRequiredPart(partRequired, mechanicId, currentCarFixingId);
-                currentCarFixingId = -1;
                 setState(MechanicState.CHECKING_STOCK);
                 if(!hasPart) {
+                    currentCarFixingId = -1;
                     lounge.letManagerKnow(partRequired, mechanicId);
                     setState(MechanicState.ALERTING_MANAGER_FOR_PARTS);
                     setState(MechanicState.WAITING_FOR_WORK);

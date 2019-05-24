@@ -107,11 +107,7 @@ public class RepairArea implements IRepairArea {
      * @exception RemoteException se a invocação do método remoto falhar
      */
     public synchronized boolean readThePaper(int mechanicId, boolean firstRun) throws RemoteException {
-        // update mechanic state and interfaces
-//        int mechanicId = ((ClientProxy) Thread.currentThread()).getMechanicId();
-//        boolean firstRun = ((ClientProxy) Thread.currentThread()).getFirstRun();
-//        if (firstRun) ((ClientProxy) Thread.currentThread()).setFirstRun(false);
-//        ((ClientProxy) Thread.currentThread()).setMechanicState(MechanicState.WAITING_FOR_WORK);
+        // update mechanic state
         repository.setMechanicState(mechanicId, MechanicState.WAITING_FOR_WORK, !firstRun);
 
         while (nRequestedServices == 0 && !endOfDay) {
@@ -154,11 +150,6 @@ public class RepairArea implements IRepairArea {
         int carId = (int) customerFirstRepairQueue.read();
 
         // update Mechanic state
-//        ((ClientProxy) Thread.currentThread()).setCurrentCarFixingId(carId);
-//        ((ClientProxy) Thread.currentThread()).setMechanicState(MechanicState.FIXING_THE_CAR);
-
-        // update interfaces
-//        int mechanicId = ((ClientProxy) Thread.currentThread()).getMechanicId();
         repository.setMechanicState(mechanicId, MechanicState.FIXING_THE_CAR, true);
         return carId;
     }
@@ -177,10 +168,6 @@ public class RepairArea implements IRepairArea {
      */
     public synchronized boolean getRequiredPart(int partId, int mechanicId, int carId) throws RemoteException {
         // update Mechanic state
-//        ((ClientProxy) Thread.currentThread()).setMechanicState(MechanicState.CHECKING_STOCK);
-
-        // update interfaces
-//        int mechanicId = ((ClientProxy) Thread.currentThread()).getMechanicId();
         repository.setMechanicState(mechanicId, MechanicState.CHECKING_STOCK, false);
 
         // check if part is in stock
@@ -188,14 +175,10 @@ public class RepairArea implements IRepairArea {
             return true;
 
         // add Customer car to the queue of cars with missing parts
-//        int carId = ((ClientProxy) Thread.currentThread()).getCurrentCarFixingId();
         customerMissingPartQueue[partId].write(carId);
 
         // update interfaces with missing part
         repository.addMissingPart(partId);
-
-        // Mechanic now is not fixing any car
-//        ((ClientProxy) Thread.currentThread()).setCurrentCarFixingId(-1);
 
         return false;
     }
@@ -212,9 +195,7 @@ public class RepairArea implements IRepairArea {
     public synchronized void partAvailable(int partId, int mechanicId) throws RemoteException {
         stockParts[partId]--;
 
-        // update state and interfaces
-//        int mechanicId = ((ClientProxy) Thread.currentThread()).getMechanicId();
-//        ((ClientProxy) Thread.currentThread()).setMechanicState(MechanicState.CHECKING_STOCK);
+        // update state
         repository.setMechanicState(mechanicId, MechanicState.CHECKING_STOCK, false);
         repository.setStockParts(stockParts, true);
     }
@@ -229,11 +210,7 @@ public class RepairArea implements IRepairArea {
      * @exception RemoteException se a invocação do método remoto falhar
      */
     public synchronized void resumeRepairProcedure(int mechanicId) throws RemoteException {
-        // update Mechanic state
-//        ((ClientProxy) Thread.currentThread()).setMechanicState(MechanicState.FIXING_THE_CAR);
-
         // update interfaces
-//        int mechanicId = ((ClientProxy) Thread.currentThread()).getMechanicId();
         repository.setMechanicState(mechanicId, MechanicState.FIXING_THE_CAR, true);
     }
 
@@ -249,7 +226,6 @@ public class RepairArea implements IRepairArea {
      */
     public synchronized void storePart(int[] newParts) throws RemoteException {
         // update Manager state and interfaces
-//        ((ClientProxy) Thread.currentThread()).setManagerState(ManagerState.REPLENISH_STOCK);
         repository.setManagerState(ManagerState.REPLENISH_STOCK, false);
 
         for (int part = 0; part < stockParts.length; part++) {
@@ -289,9 +265,6 @@ public class RepairArea implements IRepairArea {
     public synchronized void registerService(int customerId) throws RemoteException {
         // add Customer to the repair queue
         customerFirstRepairQueue.write(customerId);
-
-        // update Manager state
-//        ((ClientProxy) Thread.currentThread()).setManagerState(ManagerState.POSTING_JOB);
 
         // update interfaces
         repository.setManagerState(ManagerState.POSTING_JOB, false);

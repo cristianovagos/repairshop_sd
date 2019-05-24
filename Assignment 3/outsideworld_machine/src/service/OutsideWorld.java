@@ -56,12 +56,7 @@ public class OutsideWorld implements IOutsideWorld {
      * @exception RemoteException se a invocação do método remoto falhar
      */
     public synchronized void backToWorkByBus(int customerId) throws RemoteException {
-//        int customerId = ((ClientProxy) Thread.currentThread()).getCustomerId();
-
-        // change customer state
-//        ((ClientProxy) Thread.currentThread()).setCustomerState(CustomerState.NORMAL_LIFE_WITHOUT_CAR);
-
-        // update interfaces
+        // update Customer state
         repository.setCustomerState(customerId, CustomerState.NORMAL_LIFE_WITHOUT_CAR, true);
 
         // block on condition variable
@@ -85,10 +80,7 @@ public class OutsideWorld implements IOutsideWorld {
      * @exception RemoteException se a invocação do método remoto falhar
      */
     public synchronized void backToWorkByCar(boolean carRepaired, int customerId) throws RemoteException {
-//        int customerId = ((ClientProxy) Thread.currentThread()).getCustomerId();
-
-        // change customer state, and interfaces
-//        ((ClientProxy) Thread.currentThread()).setCustomerState(CustomerState.NORMAL_LIFE_WITH_CAR);
+        // update Customer state
         repository.setCustomerState(customerId, CustomerState.NORMAL_LIFE_WITH_CAR, true);
 
         if(carRepaired)
@@ -100,7 +92,6 @@ public class OutsideWorld implements IOutsideWorld {
                 wait();
             } catch (InterruptedException e) { }
         }
-
     }
 
     /**
@@ -113,10 +104,7 @@ public class OutsideWorld implements IOutsideWorld {
      * @exception RemoteException se a invocação do método remoto falhar
      */
     public synchronized void phoneCustomer(int customerId) throws RemoteException {
-        // change manager state
-//        ((ClientProxy) Thread.currentThread()).setManagerState(ManagerState.ALERTING_CUSTOMER);
-
-        // update interfaces
+        // update Manager state
         repository.setManagerState(ManagerState.ALERTING_CUSTOMER, true);
 
         // signal condition variable

@@ -30,11 +30,8 @@ public class ClientCustomer {
      * @param args argumentos da função (não usados)
      */
     public static void main(String[] args) {
-        /* create and install the security manager */
-        if (System.getSecurityManager() == null)
-            System.setSecurityManager(new SecurityManager());
-        GenericIO.writelnString("Security Manager was installed!");
-
+        
+        /* get location of the RMI registry service */
         Registry registry = null;
         try {
             registry = LocateRegistry.getRegistry(Constants.RMI_REGISTRY_HOSTNAME, Constants.RMI_REGISTRY_PORT);

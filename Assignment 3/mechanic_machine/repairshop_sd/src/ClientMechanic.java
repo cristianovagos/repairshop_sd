@@ -30,11 +30,8 @@ public class ClientMechanic {
      * @param args argumentos da função (não usados)
      */
     public static void main(String[] args) {
-        /* create and install the security manager */
-        if (System.getSecurityManager() == null)
-            System.setSecurityManager(new SecurityManager());
-        GenericIO.writelnString("Security Manager was installed!");
-
+        
+        /* get location of the RMI registry service */
         Registry registry = null;
         try {
             registry = LocateRegistry.getRegistry(Constants.RMI_REGISTRY_HOSTNAME, Constants.RMI_REGISTRY_PORT);
@@ -123,9 +120,7 @@ public class ClientMechanic {
         //Aguarda pelo fim da simulação
         for (int i = 0; i < Constants.NUM_MECHANICS; i++) {
             while (mechanics[i].isAlive ()) {
-                // todo - o prof vai explicar na proxima aula
-//                mechanics[i].sendInterrupt();       // envia pedido de interrupção para a RepairArea, onde o Mecânico
-                Thread.yield ();                    // aguarda mais trabalho para fazer. Só termina quando o Manager dá ordem
+                Thread.yield();
             }
             try {
                 mechanics[i].join();
