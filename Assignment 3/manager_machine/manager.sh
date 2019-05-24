@@ -1,1 +1,1 @@
-java ClientManager $1
+java ClientManager

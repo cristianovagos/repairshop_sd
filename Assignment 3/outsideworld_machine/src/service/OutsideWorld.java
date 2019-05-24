@@ -1,6 +1,7 @@
 package service;
 
 import interfaces.IGeneralRepository;
+import interfaces.IOutsideWorld;
 import model.CustomerState;
 import model.ManagerState;
 
@@ -22,7 +23,7 @@ import java.rmi.RemoteException;
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
-public class OutsideWorld {
+public class OutsideWorld implements IOutsideWorld {
 
     /**
      * Variável de condição (waitForCarRepair)<br>

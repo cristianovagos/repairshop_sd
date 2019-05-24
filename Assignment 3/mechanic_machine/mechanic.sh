@@ -1,1 +1,1 @@
-java ClientMechanic $1
+java ClientMechanic

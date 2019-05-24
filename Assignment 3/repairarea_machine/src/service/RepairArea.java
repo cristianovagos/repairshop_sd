@@ -1,6 +1,7 @@
 package service;
 
 import interfaces.IGeneralRepository;
+import interfaces.IRepairArea;
 import model.ManagerState;
 import model.MechanicState;
 import utils.Constants;
@@ -27,7 +28,7 @@ import java.rmi.RemoteException;
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
-public class RepairArea {
+public class RepairArea implements IRepairArea {
 
     /**
      * Repositório Geral de dados

@@ -1,6 +1,7 @@
 package service;
 
 import interfaces.IGeneralRepository;
+import interfaces.ISupplierSite;
 import model.ManagerState;
 
 import java.rmi.RemoteException;
@@ -23,7 +24,7 @@ import java.rmi.RemoteException;
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
-public class SupplierSite {
+public class SupplierSite implements ISupplierSite {
 
     /**
      * Type of parts available in the SupplierSite.

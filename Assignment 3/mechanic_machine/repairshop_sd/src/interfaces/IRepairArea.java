@@ -27,8 +27,9 @@ public interface IRepairArea extends Remote {
      * Operação markEndOfDay (chamada pelo Manager)<br>
      *
      * Marca o encerramento do dia para o Mechanic.<br>
+     * @exception RemoteException se a invocação do método remoto falhar
      */
-    void markEndOfDay();
+    void markEndOfDay() throws RemoteException;
 
     /**
      * Operação startRepairProcedure (chamada pelo Mechanic)<br>
@@ -105,6 +106,7 @@ public interface IRepairArea extends Remote {
      * Apenas o faz quando o Manager dá como encerrado o dia de trabalho.<br>
      *
      * @param mechanicId id do Mecânico
+     * @exception RemoteException se a invocação do método remoto falhar
      */
-    void endOperation(int mechanicId);
+    void endOperation(int mechanicId) throws RemoteException;
 }

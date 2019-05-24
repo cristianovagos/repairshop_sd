@@ -1,5 +1,6 @@
 package service;
 
+import interfaces.ILounge;
 import model.CustomerState;
 import model.ManagerState;
 import model.ManagerTask;
@@ -33,7 +34,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
-public class Lounge {
+public class Lounge implements ILounge {
 
     /**
      * Numero de clientes que existem no total.

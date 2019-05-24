@@ -1,12 +1,11 @@
 import genclass.GenericIO;
 import service.GeneralRepository;
-import service.Register;
-import service.IGeneralRepository;
+import interfaces.Register;
+import interfaces.IGeneralRepository;
 import utils.Constants;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -39,7 +38,7 @@ public class ServerGeneralRepository {
 
         try {
             generalRepositoryInter = (IGeneralRepository) UnicastRemoteObject
-                    .exportObject((Remote) repository, Constants.GENERAL_REPOSITORY_SERVER_PORT_NUMBER);
+                    .exportObject(repository, Constants.GENERAL_REPOSITORY_SERVER_PORT_NUMBER);
         } catch (RemoteException e) {
             GenericIO.writelnString("GeneralRepository stub generation exception: " + e.getMessage());
             e.printStackTrace();

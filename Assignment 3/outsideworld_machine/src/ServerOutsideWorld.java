@@ -2,7 +2,7 @@ import genclass.GenericIO;
 import interfaces.IGeneralRepository;
 import interfaces.Register;
 import service.OutsideWorld;
-import service.IOutsideWorld;
+import interfaces.IOutsideWorld;
 import utils.Constants;
 
 import java.rmi.AlreadyBoundException;
@@ -52,7 +52,7 @@ public class ServerOutsideWorld {
 
         try {
             outsideWorldInterface = (IOutsideWorld) UnicastRemoteObject
-                    .exportObject((Remote) outsideWorld, Constants.OUTSIDE_WORLD_SERVER_PORT_NUMBER);
+                    .exportObject(outsideWorld, Constants.OUTSIDE_WORLD_SERVER_PORT_NUMBER);
         } catch (RemoteException e) {
             GenericIO.writelnString("OutsideWorld stub generation exception: " + e.getMessage());
             e.printStackTrace();

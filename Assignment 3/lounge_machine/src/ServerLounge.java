@@ -2,7 +2,7 @@ import genclass.GenericIO;
 import interfaces.IGeneralRepository;
 import interfaces.Register;
 import service.Lounge;
-import service.ILounge;
+import interfaces.ILounge;
 import utils.Constants;
 
 import java.rmi.AlreadyBoundException;
@@ -52,7 +52,7 @@ public class ServerLounge {
 
         try {
             loungeInterface = (ILounge) UnicastRemoteObject
-                    .exportObject((Remote) lounge, Constants.LOUNGE_SERVER_PORT_NUMBER);
+                    .exportObject(lounge, Constants.LOUNGE_SERVER_PORT_NUMBER);
         } catch (RemoteException e) {
             GenericIO.writelnString("Lounge stub generation exception: " + e.getMessage());
             e.printStackTrace();

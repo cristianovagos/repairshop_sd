@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/rmi_registry.iml" filepath="$PROJECT_DIR$/.idea/rmi_registry.iml" />
       <module fileurl="file://$PROJECT_DIR$/rmi_registry.iml" filepath="$PROJECT_DIR$/rmi_registry.iml" />
     </modules>
   </component>

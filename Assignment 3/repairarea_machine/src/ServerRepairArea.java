@@ -2,7 +2,7 @@ import genclass.GenericIO;
 import interfaces.IGeneralRepository;
 import interfaces.Register;
 import service.RepairArea;
-import service.IRepairArea;
+import interfaces.IRepairArea;
 import utils.Constants;
 
 import java.rmi.AlreadyBoundException;
@@ -51,7 +51,7 @@ public class ServerRepairArea {
         try {
             RepairArea repairArea = new RepairArea(Constants.NUM_CUSTOMERS, Constants.NUM_PARTS, repositoryInterface);
             repairAreaInterface = (IRepairArea) UnicastRemoteObject
-                    .exportObject((Remote) repairArea, Constants.REPAIR_AREA_SERVER_PORT_NUMBER);
+                    .exportObject(repairArea, Constants.REPAIR_AREA_SERVER_PORT_NUMBER);
         } catch (RemoteException e) {
             GenericIO.writelnString("RepairArea stub generation exception: " + e.getMessage());
             e.printStackTrace();

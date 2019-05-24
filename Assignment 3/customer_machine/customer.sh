@@ -1,1 +1,1 @@
-java ClientCustomer $1
+java ClientCustomer

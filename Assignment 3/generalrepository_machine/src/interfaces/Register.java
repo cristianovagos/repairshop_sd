@@ -1,4 +1,4 @@
-package service;
+package interfaces;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;

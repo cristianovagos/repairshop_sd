@@ -2,7 +2,7 @@ import genclass.GenericIO;
 import interfaces.IGeneralRepository;
 import interfaces.Register;
 import service.SupplierSite;
-import service.ISupplierSite;
+import interfaces.ISupplierSite;
 import utils.Constants;
 
 import java.rmi.AlreadyBoundException;
@@ -52,7 +52,7 @@ public class ServerSupplierSite {
 
         try {
             supplierSiteInterface = (ISupplierSite) UnicastRemoteObject
-                    .exportObject((Remote) supplierSite, Constants.SUPPLIER_SITE_SERVER_PORT_NUMBER);
+                    .exportObject(supplierSite, Constants.SUPPLIER_SITE_SERVER_PORT_NUMBER);
         } catch (RemoteException e) {
             GenericIO.writelnString("SupplierSite stub generation exception: " + e.getMessage());
             e.printStackTrace();

@@ -1,6 +1,7 @@
 package service;
 
 import interfaces.IGeneralRepository;
+import interfaces.IPark;
 import model.CustomerState;
 
 import java.rmi.RemoteException;
@@ -21,7 +22,7 @@ import java.util.Random;
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
-public class Park {
+public class Park implements IPark {
 
     /**
      * Número de tipos de peças disponíveis

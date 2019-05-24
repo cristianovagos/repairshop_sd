@@ -2,12 +2,11 @@ import genclass.GenericIO;
 import interfaces.IGeneralRepository;
 import interfaces.Register;
 import service.Park;
-import service.IPark;
+import interfaces.IPark;
 import utils.Constants;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -52,7 +51,7 @@ public class ServerPark {
 
         try {
             parkInterface = (IPark) UnicastRemoteObject
-                    .exportObject((Remote) park, Constants.PARK_SERVER_PORT_NUMBER);
+                    .exportObject(park, Constants.PARK_SERVER_PORT_NUMBER);
         } catch (RemoteException e) {
             GenericIO.writelnString("Park stub generation exception: " + e.getMessage());
             e.printStackTrace();

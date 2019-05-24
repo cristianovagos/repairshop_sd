@@ -2,6 +2,7 @@ package service;
 
 import genclass.GenericIO;
 import genclass.TextFile;
+import interfaces.IGeneralRepository;
 import model.CustomerState;
 import model.ManagerState;
 import model.MechanicState;
@@ -24,7 +25,7 @@ import java.text.DecimalFormat;
  * @author Miguel Bras
  * @author Cristiano Vagos
  */
-public class GeneralRepository {
+public class GeneralRepository implements IGeneralRepository {
 
     /**
      * Nome do ficheiro de Logging

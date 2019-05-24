@@ -1,7 +1,4 @@
-package service;
-
-import model.CustomerState;
-import model.ManagerState;
+package interfaces;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

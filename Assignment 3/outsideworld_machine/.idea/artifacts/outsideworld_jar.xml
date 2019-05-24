@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="outsideworld:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/outsideworld_jar</output-path>
-    <root id="archive" name="outsideworld.jar">
-      <element id="module-output" name="outsideworld" />
-    </root>
-  </artifact>
-</component>
